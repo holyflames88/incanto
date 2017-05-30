@@ -1,0 +1,23 @@
+<!-- Created using vQmod XML Generator by UKSB - http://uksb.github.com/vqgen/ //-->
+<modification>
+	<id><![CDATA[Acute Category Manager +]]></id>
+	<version><![CDATA[1.2.3]]></version>
+	<vqmver><![CDATA[2.1.6]]></vqmver>
+	<author><![CDATA[tabook]]></author>
+	<file path="admin/view/template/common/" name="header.tpl">
+		<operation>
+			<search position="after" error="log"><![CDATA[<li><a href="<?php echo $category; ?>"><?php echo $text_category; ?></a></li>]]></search>
+			<add><![CDATA[<li><a href="<?php echo $category_mgr; ?>"><?php echo $category_mgr_heading_title; ?></a></li>]]></add>
+		</operation>
+	</file>
+	<file path="admin/controller/common/" name="header.php">
+		<operation>
+			<search position="ibefore"><![CDATA[$this->data['home'] = $this->url->link('common/home', 'token=' . $this->session->data['token'], 'SSL');]]></search>
+			<add><![CDATA[
+$this->data['category_mgr'] = $this->url->link('catalog/category_mgr', 'token=' . $this->session->data['token'], 'SSL');
+
+$this->load->language('catalog/category_mgr');
+$this->data['category_mgr_heading_title'] = $this->language->get('category_mgr_heading_title');]]></add>
+		</operation>
+	</file>
+</modification>

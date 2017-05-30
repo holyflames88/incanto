@@ -1,0 +1,20 @@
+<modification>
+	<id><![CDATA[Paladin -  shopencart news blog]]></id>
+	<version><![CDATA[1.0]]></version>
+	<vqmver><![CDATA[1.1.1]]></vqmver>
+	<author><![CDATA[Tymkiv Roman]]></author>
+	<file name="system/config/ssb_library/catalog/controller/common/ssb_seo_url.php">
+		<operation>			<search position="after" error="log"><![CDATA[foreach ($parts as $part) {]]></search>			<add><![CDATA[
+					/* default article seo urls */					if (strpos($part, 'blogcat') === 0) {						$ncatid = (int)str_replace("blogcat", "", $part);						if (!isset($this->request->get['ncat'])) {							$this->request->get['ncat'] = $ncatid;						} else {							$this->request->get['ncat'] .= '_' . $ncatid;						}					}					if (strpos($part, 'blogart') === 0) {						$this->request->get['news_id'] = (int)str_replace("blogart", "", $part);					}					if (strpos($part, 'blogauthor') === 0) {						$this->request->get['author'] = (int)str_replace("blogauthor", "", $part);					}					/* end of default article urls */
+					]]></add>		</operation>				<operation>			<search position="before" error="log"><![CDATA[if ($url[0] == 'category_id') {]]></search>			<add><![CDATA[
+					/* custom article urls */					if ($url[0] == 'news_id') {						$this->query_data['news_id'] = $this->request->get['news_id'] = $url[1];					}
+					if ($url[0] == 'nauthor_id') {						$this->query_data['author'] = $this->request->get['author'] = $url[1];					}
+					if ($url[0] == 'ncategory_id') {						if (!isset($this->request->get['ncat'])) {							$this->query_data['ncat'] = $this->request->get['ncat'] = $url[1];						} else {							$this->query_data['ncat'] = $this->request->get['ncat']  .= '_' . $url[1];						}					}					/* end of custom article urls */
+					]]></add>		</operation>
+		<operation>			<search position="before" error="log"><![CDATA[} elseif (isset($this->request->get['information_id'])) {]]></search>			<add><![CDATA[
+			} elseif (isset($this->request->get['news_id'])) {				$this->request->get['route'] = 'news/article';			} elseif (isset($this->request->get['ncat']) || isset($this->request->get['author']) || $this->request->get['_route_'] ==  'blog-section') {				$this->request->get['route'] = 'news/ncategory';
+			]]></add>		</operation>
+		<operation>			<search position="replace" error="log"><![CDATA[} elseif ($key == 'path') {]]></search>			<add><![CDATA[
+			} elseif ($data['route'] == 'news/article' && $key == 'news_id') { 				$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($key . '=' . (int)$value) . "'");				if ($query->num_rows) {					$url .= '/' . $query->row['keyword'];					unset($data[$key]);				} else {					$url .= '/blogart' . (int)$value;						unset($data[$key]);				}			} elseif ($data['route'] == 'news/ncategory' && $key == 'author') { 				$realkey = "nauthor_id";				$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($realkey . '=' . (int)$value) . "'");				if ($query->num_rows) {					$url .= '/' . $query->row['keyword'];					unset($data[$key]);				} else {					$url .= '/blogauthor' . (int)$value;						unset($data[$key]);				}			} elseif ($key == 'ncat') {				$ncategories = explode('_', $value);
+				foreach ($ncategories as $ncategory) {					$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = 'ncategory_id=" . (int)$ncategory . "'");					if ($query->num_rows) {						$url .= '/' . $query->row['keyword'];					} else {						$url .= '/blogcat' . $ncategory;					}				}				unset($data[$key]);			} elseif ((isset($data['route']) && $data['route'] == 'news/ncategory' && $key != 'ncat' && $key != 'author' && $key != 'page') || (isset($data['route']) && $data['route'] == 'news/article' && $key != 'page')) { 				$url .=  '/blog-section';			} elseif ($key == 'path') {]]></add>
+		</operation>	</file></modification>

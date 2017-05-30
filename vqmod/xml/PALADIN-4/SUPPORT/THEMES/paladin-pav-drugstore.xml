@@ -1,0 +1,28 @@
+<modification>
+<id><![CDATA[Paladin SEO Manager]]></id>
+<version>1.0.0</version>
+<vqmver>1.0.0</vqmver>
+<author><![CDATA[ ROMAN TYMKIV http://smartshopbox.com ]]></author>
+
+<file name="catalog/view/theme/*/template/product/product_collection.tpl">
+	<operation>
+		<search position="after"><![CDATA[<?php echo $pagination; ?>]]></search>
+		<add><![CDATA[
+		<!-- ssb-inject -->
+				<?php if (isset($tags) AND $tags) { ?>
+				<div class="tags gen-area gen-tags"><b><?php echo $text_tags; ?></b>
+				<?php for ($i = 0; $i < count($tags); $i++) { ?>
+				<?php if ($i < (count($tags) - 1)) { ?>
+				<a href="<?php echo $tags[$i]['href']; ?>"><?php echo $tags[$i]['tag']; ?></a>,
+				<?php } else { ?>
+				<a href="<?php echo $tags[$i]['href']; ?>"><?php echo $tags[$i]['tag']; ?></a>
+				<?php } ?>
+				<?php } ?>
+				</div>
+				<?php } ?>
+		<!-- ssb-inject -->	
+		]]></add>
+	</operation>	
+</file>
+
+</modification>

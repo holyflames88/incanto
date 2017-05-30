@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Paladin-autormodule-generatorofkeywords</id>
+	<version>1.0.0</version>
+	<vqmver>1.0.0</vqmver>
+	<author>Tymkiv Roman</author>	
+	
+	<file name="/admin/controller/catalog/author.php">
+		<operation>
+			<search position="before">
+			<![CDATA[ private function getList() {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/** auto generate keywords **/
+			public function setKeywords() {
+				require_once DIR_CONFIG .'ssb_library/admin/transliteration/transliteration.php';
+				$transliteration = transliteration::getInstance();	
+				
+				$this->load->model('catalog/author');
+				$results = $this->model_catalog_author->getAuthors(array('start' => 0, 'limit' => 1500));
+				
+				foreach ($results as $result) {
+					$seoURL = $transliteration->get($result['name']);
+					
+					//echo $seoURL . '</br>';
+					
+					$this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE query = 'author_id=" . (int)$result['author_id'] . "'");
+					
+					$this->db->query("INSERT INTO " . DB_PREFIX . "url_alias SET query = 'author_id=" . (int)$result['author_id'] . "', keyword = '" . $this->db->escape($seoURL) . "'");
+				}
+				
+				$this->cache->delete('author');
+				$this->session->data['success'] = 'Was created SEO urls for all authors';
+				$this->response->redirect($this->url->link('catalog/author', 'token=' . $this->session->data['token'], 'SSL'));
+			 }
+			/** auto generate keywords **/
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="after">
+			<![CDATA[private function getList() {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/** auto generate keywords **/
+			$data['action_setKeywords'] = $this->url->link('catalog/author/setKeywords', 'token=' . $this->session->data['token'], 'SSL');	
+			/** auto generate keywords **/
+			]]>
+			</add>
+		</operation>
+	</file>
+	<file name="/admin/view/template/catalog/author_list.tpl">
+		<operation>
+			<search position="replace">
+			<![CDATA[<div class="buttons"><a onclick="location = '<?php echo $insert; ?>'" class="button"><span><?php echo $button_insert; ?></span></a><a onclick="$('#form').submit();" class="button"><span><?php echo $button_delete; ?></span></a></div>]]>
+			</search>
+			<add>
+			<![CDATA[
+	<div class="buttons"><a onclick="location = '<?php echo $action_setKeywords; ?>'" class="button"><span>Generate SEO URLs</span></a><a onclick="location = '<?php echo $insert; ?>'" class="button"><span><?php echo $button_insert; ?></span></a><a onclick="$('#form').submit();" class="button"><span><?php echo $button_delete; ?></span></a></div>				
+			]]>
+			</add>
+		</operation>
+	</file>
+</modification>

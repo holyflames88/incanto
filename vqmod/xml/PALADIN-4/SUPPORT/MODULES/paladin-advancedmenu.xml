@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Paladin-advancedmenu</id>
+	<version>1.0.0</version>
+	<vqmver>1.0.0</vqmver>
+	<author>Tymkiv Roman</author>	
+	
+	<file name="system/config/ssb_library/catalog/controller/common/ssb_seo_url.php">
+		<operation>
+		  <search position="replace">
+			<![CDATA[$this->request->get['route'] = 'product/category';]]>
+		  </search>
+		  <add>
+			<![CDATA[//FULL lAYERED MENU WITH SEO
+			  if(isset($this->request->get['dnd'])){
+
+				$this->request->get['route'] = 'module/supercategorymenuadvancedseemore';
+
+				}elseif (isset($this->request->get['filter']) or isset($this->request->get['PRICERANGE']) or $this->request->get['path']==0){
+
+				$this->request->get['route'] = 'product/asearch';
+
+				}else{
+					$this->request->get['route'] = 'product/category';
+				}
+			  ]]>
+		  </add>
+		</operation>   
+		<operation>
+		  <search position="replace">
+			<![CDATA[$this->request->get['route'] = 'product/manufacturer/info';]]>
+		  </search>
+		  <add>
+			<![CDATA[//FULL lAYERED MENU WITH SEO
+			 if(isset($this->request->get['dnd'])){
+				
+				$this->request->get['route'] = 'module/supercategorymenuadvancedseemore';
+				}elseif (isset($this->request->get['filter']) or isset($this->request->get['PRICERANGE']) or $this->request->get['manufacturer_id']==0){
+				$this->request->get['route'] = 'product/asearch';
+
+				}else{
+				$this->request->get['route'] = 'product/manufacturer/info';
+				}
+			  ]]>
+		  </add>
+		</operation> 		
+		<operation>
+		  <search position="before">
+			<![CDATA[} elseif ($key == 'route' AND $value != 'product/product' AND $value != 'product/category') {]]>
+		  </search>
+		  <add>
+			<![CDATA[//FULL lAYERED MENU WITH SEO
+				} elseif ($data['route'] == 'product/asearch' && $key == 'manufacturer_id') {
+					if($data['route'] == 'product/product' && $key == 'manufacturer_id'){
+						unset($data[$key]);
+						continue;
+					}
+					
+					$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($key . '=' . (int)$value) . "' AND language_id = '". $l_id ."'");
+				
+					if ($query->num_rows) {
+							$url .= '/' . $query->rows[0]['keyword'];
+						
+						unset($data[$key]);
+					}
+			  ]]>
+		  </add>
+		</operation> 	
+		<operation>
+		  <search position="after">
+			<![CDATA[$this->curPageURL = $this->curPageURL();]]>
+		  </search>
+		  <add>
+			<![CDATA[//FULL lAYERED MENU WITH SEO
+				$url_info = parse_url(str_replace('&amp;', '&', $this->curPageURL));
+				if(isset($url_info['query']) AND strpos($url_info['query'], 'route=') === false){
+					$real_path = explode("&", $url_info['path'] );
+					$real_path = explode("?", $real_path['0'] );
+					$this->request->get['_route_'] = trim($real_path[0], '/') ;
+				}
+				
+			  ]]>
+		  </add>
+		</operation> 
+	</file>
+</modification>

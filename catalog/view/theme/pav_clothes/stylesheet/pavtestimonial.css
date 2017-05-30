@@ -1,0 +1,109 @@
+.pavtestimonial {
+	position:relative;
+	margin:0;
+}
+.pavtestimonial .carousel-inner{
+	position:relative;
+	max-width: 1000px;
+float: right;
+}
+
+.pavtestimonial .banner-info{
+	position:absolute;
+	bottom:25%;
+	left:10%;
+	z-index:4;
+	background:#ccc;
+	width:300px;
+	padding:12px;
+	min-height:40px;
+	opacity:0.7;
+  filter: alpha(opacity=70);
+}
+
+.pavtestimonial .carousel-indicators{
+	position:absolute;
+	bottom:10px;
+	left:20px;
+
+}
+.pavtestimonial .carousel-indicators li{ display:block;float:left;	z-index:20;
+	padding:10px; 
+	margin:3px; background:red; }
+.pavtestimonial .carousel-indicators li.active{ background:#000 }	
+
+.pavtestimonial  .thumb-indicators li {text-indent:0; 
+	display: block;
+    float: left;
+    height: 97px;
+    margin: 3px;
+    padding: 3px;
+    width: 23%;
+    z-index: 20;
+}
+
+.pavtestimonial .carousel-inner .item{
+ 
+    margin-bottom: 25px;
+}
+
+.pavtestimonial   .testimonial{
+        border-radius: 25px;
+        padding: 20px 20px 20px 30px;
+		border:solid 1px #fff;
+		max-width: 800px;
+float: right;
+background: rgba(255, 255, 255, 0.3);
+background: url('../../pav_clothes/image/bg4.jpg');
+box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.15);
+margin: 8px 10px 8px 8px;
+}
+.testimonial-wrapper{
+margin-bottom: 20px;
+max-width: 900px;
+}
+.testimonial-wrapper:nth-child(odd){
+float: left;
+}
+.testimonial-wrapper:nth-child(even){
+float: right;
+}
+.testimonial-item {
+    position: relative;	
+}
+.user-testimonial{
+	float:right;
+	text-align: center;
+	width: 180px;
+	border: solid 1px #ddd;
+    padding: 5px;
+    border-radius:20px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+.testimonial:before{
+    /*border-left: 17px solid rgba(0, 0, 0, 0);
+    border-right: 0px solid rgba(0, 0, 0, 0);
+    border-top: 23px solid #fff;
+    bottom: -23px;
+    content: "";
+    display: inline-block;
+    position: absolute;
+    left:100px;*/
+}
+.testimonial  p{
+    font-size: 21px;
+    font-family: "Bad Script";
+	color: #898989;
+}
+
+.t-avatar{
+    margin:10px;
+	float: none !important;
+}
+.t-avatar img{
+   /* border-radius: 500px;*/
+}
+.pavtestimonial .profile{
+    margin-left: 10px;
+    margin-top: 20px;
+}

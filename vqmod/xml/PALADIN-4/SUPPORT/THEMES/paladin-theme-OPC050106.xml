@@ -1,0 +1,22 @@
+<modification>
+<id><![CDATA[Paladin SEO Manager - theme OPC050106]]></id>
+<version>1.0.0</version>
+<vqmver>1.0.0</vqmver>
+<author><![CDATA[ ROMAN TYMKIV http://smartshopbox.com ]]></author>
+
+<file name="/catalog/controller/common/header.php">
+	<operation>
+		<search position="replace"><![CDATA[if (empty($current_path) || $current_path['route'] == 'common/home') {]]></search>
+		<add><![CDATA[
+		if (empty($current_path) || (isset($current_path['route']) AND $current_path['route'] == 'common/home')) {
+		]]></add>
+	</operation>
+	<operation>
+		<search position="before"><![CDATA[$body_class = explode('/', str_replace('product/', '', $current_path['route']));]]></search>
+		<add><![CDATA[
+		$current_path['route'] = isset($current_path['route'])? $current_path['route'] : '';
+		]]></add>
+	</operation>
+</file>
+
+</modification>

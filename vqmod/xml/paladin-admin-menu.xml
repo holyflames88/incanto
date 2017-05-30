@@ -1,0 +1,69 @@
+<modification>
+    <id><![CDATA[Paladin Admin Menu]]></id>
+    <version>1.0.0</version>
+    <vqmver>1.0.0</vqmver>
+    <author>
+        <![CDATA[ ROMAN TYMKIV http://smartshopbox.com ]]>
+    </author>
+    <file name="admin/controller/common/*.php">
+        <operation  error = "skip">
+            <search position="before" >
+                <![CDATA[$this->data['stores'] = array();]]>
+            </search>
+            <add>
+                <![CDATA[ 	
+					/* = */
+					$this->load->model('setting/setting');
+					$this->data['paladin_modules']['psm'] = $this->model_setting_setting->getSetting('superseobox') ? $this->url->link('module/superseobox', 'token=' . $this->session->data['token'], 'SSL') : false;
+					$this->data['paladin_modules']['prm'] = $this->model_setting_setting->getSetting('prmod') ? $this->url->link('module/paladinrm', 'token=' . $this->session->data['token'], 'SSL') : false;
+					$this->data['paladin_modules']['psg'] = $this->model_setting_setting->getSetting('paladinSiteMapGenerator') ? 		$this->url->link('module/psmsitemapgenerator', 'token=' . $this->session->data['token'], 'SSL') : false;
+					/* = */
+					]]>
+            </add>
+        </operation>
+    </file>
+	<file name="admin/controller/common/*.php">
+        <operation error = "skip">
+            <search position="before">
+                <![CDATA[return $this->load->view('common/menu.tpl']]>
+            </search>
+            <add>
+                <![CDATA[
+				/* = */
+					$this->load->model('setting/setting');
+					$data['paladin_modules']['psm'] = $this->model_setting_setting->getSetting('superseobox') ? $this->url->link('module/superseobox', 'token=' . $this->session->data['token'], 'SSL') : false;
+					$data['paladin_modules']['prm'] = $this->model_setting_setting->getSetting('prmod') ? $this->url->link('module/paladinrm', 'token=' . $this->session->data['token'], 'SSL') : false;
+					$data['paladin_modules']['psg'] = $this->model_setting_setting->getSetting('paladinSiteMapGenerator') ? 		$this->url->link('module/psmsitemapgenerator', 'token=' . $this->session->data['token'], 'SSL') : false;
+				/* = */
+				]]>
+            </add>
+        </operation>
+    </file>
+    <file name="admin/view/template/common/*.tpl">
+        <operation error = "skip" >
+            <search position="after">
+                <![CDATA[<li><a href="<?php echo $module; ?>"><?php echo $text_module; ?></a></li>]]>
+            </search>
+            <add>
+                <![CDATA[		
+				<!-- *=* -->	
+				<li><a class="parent">Paladin's modules</a>
+					<ul>
+						<?php if($paladin_modules['psm']){ ?>
+						<li><a href="<?php echo $paladin_modules['psm']; ?>">SEO Manager</a></li>
+						<?php } ?>
+						<?php if($paladin_modules['prm']){ ?> 
+						<li><a href="<?php echo $paladin_modules['prm']; ?>">Redirect Manager</a></li>
+						<?php } ?>
+						<?php if($paladin_modules['psg']){ ?>
+						<li><a href="<?php echo $paladin_modules['psg']; ?>">Sitemap Generator</a></li>
+						<?php } ?>
+						<li><a href="http://www.opencart.com/index.php?route=extension/extension&filter_username=RomarioT">Get More</a></li>
+					</ul>
+				</li>
+				<!-- *=* -->
+				]]>
+            </add>
+        </operation>
+    </file>
+</modification>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Paladin-brainyfilter</id>
+	<version>1.0.0</version>
+	<vqmver>1.0.0</vqmver>
+	<author>Tymkiv Roman</author>	
+	
+	<file name="system/library/pagination.php">
+		<operation>
+			<search position="before"><![CDATA[$output = '';]]></search>
+			<add><![CDATA[
+				/* = */
+				$url_info = parse_url(str_replace('&amp;', '&', $this->curPageURL()));
+				
+				if(isset($url_info['query']) AND strpos($url_info['query'], 'ajaxfilter') !== false){
+					$query_array = explode('&', $url_info['query']);
+				
+					$url_info = parse_url(str_replace('&amp;', '&', $this->url));
+					$condition_array = array('route=', 'path=', 'count=', 'price=', 'curRoute=');
+					
+					foreach($query_array as $value){
+						$add = true;
+						
+						foreach($condition_array as $condition){
+							//echo $value . ' => ' . $condition;
+							if(strpos($value, $condition) !== false){
+								$add = false;
+							}
+						}
+						
+						if($add){
+							$new_query = $value . '&';
+						}
+					}
+					$url_info['query'] = rtrim($new_query, "&");
+				}
+				/* = */
+				]]>
+			</add>
+		</operation>
+	</file>
+</modification>

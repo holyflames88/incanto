@@ -1,0 +1,38 @@
+<modification>
+<id><![CDATA[Paladin - Pav support]]></id>
+<version>1.8.0</version>
+<vqmver>1.0.0</vqmver>
+<author><![CDATA[ ROMAN TYMKIV http://smartshopbox.com ]]></author>
+
+<file name="catalog/view/theme/*/template/common/footer.tpl">
+	<operation>
+		<search position="before"><![CDATA[</footer>]]></search>
+		<add><![CDATA[
+
+		<?php require_once DIR_CONFIG .'ssb_library/ssb_data.php';
+				$this->ssb_data = ssb_data::getInstance();
+				$tools = $this->ssb_data->getSetting('tools');
+				if($tools){
+					if($tools['qr_code']['status'] OR $tools['soc_buttons']['status']){
+						$soc_buttons = $tools['soc_buttons'];
+						$qr_code = $tools['qr_code'];
+						require_once DIR_CONFIG .'ssb_library/catalog/tools/tool.php';
+						$this->tool = tool::getInstance();
+						$curPageURL = $this->tool->curPageURL();
+						if($tools['qr_code']['status']){
+							$qr_image_path = $this->tool->get_qr($curPageURL);
+							$qr_image = "<img class='count' src='" . $qr_image_path . "' />";
+						}
+						include_once DIR_CONFIG .'ssb_library/catalog/tools/panel_bar.tpl';
+					}
+				}
+		?>
+			]]></add>
+	</operation>
+</file>
+
+</modification>
+
+
+
+

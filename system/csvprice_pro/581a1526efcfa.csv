@@ -1,0 +1,205 @@
+_ID_;_MODEL_;_STATUS_;_OPTIONS_
+12240;"Dobranocka 6012 TM k sale";1;"select|Размер|M(38)|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Лазурный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/lazurnyj.jpg"
+12242;"Eldar catherine mk sale";1;"select|Размер|S(36)|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg"
+12243;"Eldar margaret top sale";1;"select|Размер|L|1|1|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg"
+12244;"Eldar pamela top sale";1;"image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg
+select|Размер|S(36)|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12245;"Eldar roma k sale";1;"select|Размер|S(36)|1|1|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|M(38)|1|1|0|+|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Черный|1|5|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg
+image|Цвет|Темно-синий 2|1|5|0|+|0.0000|+|0|+|0.00000000|data/colors/dark_blue1.jpg"
+12246;"Gatta Venus 20 white sale";1;"select|Размер|1-2|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Белый|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/white.jpg"
+12257;"Eldar BETSY k sale";1;"image|Цвет|Черный|1|10|0|+|0.0000|+|0|+|0.00000000|data/colors/black.jpg
+select|Размер|S(36)|1|10|0|+|0.0000|+|0|+|0.00000000|no_image.jpg"
+12258;"Eldar PAOLA top sale";1;"image|Цвет|Черный|1|10|0|+|0.0000|+|0|+|0.00000000|data/colors/black.jpg
+select|Размер|S(36)|1|10|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|M(38)|1|10|1|+|0.0000|+|0|+|0.00000000|no_image.jpg"
+12260;"Key LPR 097 B5 slip sale";1;"select|Размер|S(36)|1|10|0|+|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|L|1|1|1|+|0.0000|+|0|+|0.00000000|no_image.jpg"
+12261;"Key LPR 535 B5 slip sale";1;"select|Размер|M(38)|1|1|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|L|1|1|1|+|0.0000|+|0|+|0.00000000|no_image.jpg"
+12262;"Key LPR 575 B5 slip sale";1;select|Размер|S(36)|1|10|0|+|0.0000|+|0|+|0.00000000|no_image.jpg
+12263;"Key LPR 585 B5 slip sale";1;select|Размер|S(36)|1|10|0|+|0.0000|+|0|+|0.00000000|no_image.jpg
+12264;"Key LPR 909 B5 slip sale";1;"select|Размер|S|1|1|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|L|1|1|1|+|0.0000|+|0|+|0.00000000|no_image.jpg"
+12265;"Key LPC 010 slip sale";0;"image|Цвет|Черный|1|10|0|+|0.0000|+|0|+|0.00000000|data/colors/black.jpg
+select|Размер|M(38)|1|10|0|+|0.0000|+|0|+|0.00000000|no_image.jpg"
+12267;"Envie ARKAS brown x sale";0;select|Размер|XL/XXL|1|10|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+12268;"Envie POLO ROSES p sale";0;select|Размер|M(38)|1|10|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+12271;"Eldar ROXANA top sale";1;"select|Размер|M(38)|1|10|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Черный|1|10|0|+|0.0000|+|0|+|0.00000000|data/colors/black.jpg"
+12273;"Envie ACTION p grey sale";0;
+12274;"Envie ENDU p blue sale";0;
+12275;"Envie SPORTING p sale";0;
+12277;"Corin Eva 53851 k sale";1;select|Размер|S(36)|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+12278;"Eldar selena f micro sale";1;"select|Размер|L|1|1|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg"
+12280;"Zaffiro sale";1;"select|Размер|90C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg"
+12281;"Ava 740 b Intimo sale";1;"image|Цвет|Черный|1|1|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg
+image|Цвет|Белый|1|2|0|-|0.0000|+|0|+|0.00000000|data/colors/white.jpg
+select|Размер|80C|1|2|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|75D|1|1|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12282;"Corin Naomi 15829 b sale";1;select|Размер|85B|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+12284;"Alles Calais b sale";1;"select|Размер|85C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70D|1|10|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70B|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12286;"Alles Mama II/B soft sale";1;"select|Размер|85C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg"
+12287;"KEY TBC 601 B4 bra pink  sale";1;select|Размер|70BB|1|10|0|+|0.0000|+|0|+|0.00000000|no_image.jpg
+12288;"Key TBC 601 B4 bra violet sale";1;"select|Размер|75AA|1|10|0|+|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70BB|1|10|0|+|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70AA|1|10|0|+|0.0000|+|0|+|0.00000000|no_image.jpg"
+12289;"Key TBS 540 A4 bra sale";1;"image|Цвет|Розовый|1|10|0|+|0.0000|+|0|+|0.00000000|data/colors/rozovyj.jpg
+image|Цвет|Белый|1|10|0|+|0.0000|+|0|+|0.00000000|data/colors/white.jpg
+select|Размер|75AA|1|10|0|+|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70BB|1|10|0|+|0.0000|+|0|+|0.00000000|no_image.jpg"
+12294;"Alles Mama Cubana soft sale";0;"image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg
+select|Размер|85D|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12295;"Alles Mama Fruit m sale";0;select|Размер|85C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+12300;"Corin Florence skin 11827 m sale";1;select|Размер|90D|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+12301;"Corin Florence skin 12827 m sale";1;"select|Размер|90E|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|85F|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|75F|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12302;"Corin Karen 12845 semi-soft sale";1;"select|Размер|85G|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|80G|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|75G|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|75F|1|10|1|+|0.0000|+|0|+|0.00000000|no_image.jpg"
+12303;"Corin Rosalie pink 12826 m sale";1;select|Размер|85F|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+12313;"Corin Rosalie pink 11826 m sale";1;"select|Размер|85F|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|85E|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12320;"Alles Calais p-up sale";1;select|Размер|70B|1|1|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+12321;"Alles Carla p-up sale";1;select|Размер|70C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+12323;"Alles Garden push-up granat sale";1;select|Размер|75B|1|10|0|+|0.0000|+|0|+|0.00000000|no_image.jpg
+12324;"Alles Infini p-up sale";1;select|Размер|80B|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+12325;"Alles Isabella p-up sale";1;select|Размер|70C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+12326;"Alles Izis p-up sale";1;"select|Размер|80B|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|75C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12327;"Alles Latino p-up sale";1;"image|Цвет|Черный|1|2|0|+|0.0000|+|0|+|0.00000000|data/colors/black.jpg
+image|Цвет|Белый|1|4|0|+|0.0000|+|0|+|0.00000000|data/colors/white.jpg
+select|Размер|75C|1|2|0|+|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70B|1|2|0|+|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70A|1|2|0|+|0.0000|+|0|+|0.00000000|no_image.jpg"
+12328;"Alles Monserat p-up sale";1;"select|Размер|70B|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Светло-розовый|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/light_pink.jpg"
+12329;"Alles Obsession p-up sale";0;select|Размер|70C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+12333;"Corin Bella 14860 black p-up sale";1;"image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg
+select|Размер|75B|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12334;"Corin Jenny 14862 red p-up sale";1;"select|Размер|70C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Красный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/red.jpg"
+12352;"Gatta koszulka sport top sale";1;"image|Цвет|Черный|1|10|1|+|0.0000|+|0|+|0.00000000|data/colors/black.jpg
+select|Размер|M(38)|1|10|1|+|0.0000|+|0|+|0.00000000|no_image.jpg"
+12353;"Alles Padme 02 p-up sale";1;"image|Цвет|Белый|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/white.jpg
+select|Размер|80C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12355;"Ava 1156 Cambrai p-up sale";1;"select|Размер|80B|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Белый|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/white.jpg"
+12357;"Alles Candy Party full cup sale";1;"select|Размер|70F|1|10|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70E|1|10|1|+|0.0000|+|0|+|0.00000000|no_image.jpg"
+12360;"Alles Dubai  p-up sale";1;"select|Размер|80D|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70C|1|9|1|+|0.0000|+|0|+|0.00000000|no_image.jpg"
+12362;"Alles Elena u black sale";1;"image|Цвет|Черный|1|0|0|+|0.0000|+|0|+|0.00000000|data/colors/black.jpg
+select|Размер|75B|1|0|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12363;"Alles Garden full cup granat sale";1;select|Размер|75B|1|10|0|+|0.0000|+|0|+|0.00000000|no_image.jpg
+12364;"Alles Isabella full cup sale";1;"select|Размер|75H|1|10|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|75F|1|10|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|75C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12365;"Alles Izis full cup sale";1;select|Размер|90D|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+12367;"Latino black full cup sale";0;"select|Размер|70E|1|10|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg"
+12369;"Alles Mama Kelly u sale";0;"image|Цвет|Бежевый|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/beige.jpg
+select|Размер|75D|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12370;"Alles Obsession u sale";1;select|Размер|80G|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+12371;"Alles Vienna u sale";1;select|Размер|70C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+12372;"Alles Vienna 01 u sale";1;"select|Размер|80B|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70F|1|10|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70C|1|9|1|+|0.0000|+|0|+|0.00000000|no_image.jpg"
+12374;"Alles Tony b black sale";1;"select|Размер|75F|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg"
+12381;"Gelatto sale";1;"image|Цвет|Темно-синий 2|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/dark_blue1.jpg
+select|Размер|L|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12382;"Savoyardi sale";1;"select|Размер|S|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|M|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|L|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Белый|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/white.jpg"
+12383;"Semifreddo sale";1;"image|Цвет|Белый|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/white.jpg
+select|Размер|S|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|L|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12384;"AKRP 101204 sale";1;"image|Цвет|Коричневый|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/korichnevyj.jpg
+select|Размер|116-122|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12387;"Enigma sale";1;"select|Размер|S/M|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Темно-серый|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/temnoseriy1.jpg"
+12390;"Gatta Capri 40 sale";0;"select|Размер|3|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|2|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg"
+12391;"Gatta Riyo 60 sale";1;select|Размер|3|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+12393;"Charmante Daevis 20 sale";1;"image|Цвет|Grigio|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/grigio_2.jpg
+select|Размер|S/M|1|10|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|L/XL|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12394;"Garigliano 20 sale";1;"image|Цвет|Черный|1|0|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg
+select|Размер|1/2|1|0|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12395;"Ivy 20 sale";1;"image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg
+select|Размер|3|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12396;"Nastra 20 sale";1;"image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg
+select|Размер|4|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|3|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|1/2|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12397;"Ramoscello 20 sale";1;"image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg
+select|Размер|1/2|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12398;"Savuti 40 sale";1;select|Размер|1/2|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+12399;"Sieve 40 sale";1;select|Размер|1/2|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+12400;"SP Love sale";1;"select|Размер|4|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Белый|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/white.jpg"
+12401;"Charmante SP Neorin 20 sale";1;"select|Размер|S/M|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Белый|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/white.jpg"
+12402;"Charmante Pontia 20 sale";1;select|Размер|L/XL|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+12403;"Charmante Sempera 20 sale";1;"select|Размер|L/XL|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg"
+12404;"Piruetta 60 sale";1;select|Размер|116-122|1|0|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+12405;"Cipresso 80 sale";1;"image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg
+select|Размер|3|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12406;"Mirta 80 sale";1;select|Размер|1/2|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+12407;"Tapioca 80 sale";1;"image|Цвет|Темно-серый|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/temnoseriy1.jpg
+image|Цвет|Коричневый|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/korichnevyj.jpg
+select|Размер|1/2|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12409;"Charmante ROMBO PRADA sale";1;"image|Цвет|Темно-серый|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/temnoseriy1.jpg
+select|Размер|1/2|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12410;"Charmante SP Sandby 20 sale";1;"select|Размер|S/M|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Белый|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/white.jpg"
+12411;"Dolce vb 150 sale";1;"select|Размер|4|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg"
+12412;"Fata 150 sale";1;"select|Размер|5-XL|1|1|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg"
+12414;"Gatta Girl-Up 12 sale";1;"image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg
+select|Размер|4|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12420;"Adrian Kiara 20 sale";0;"image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg
+select|Размер|5|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12421;"Adrian Perla 40 sale";0;"select|Размер|6|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|5|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Черный|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/black.jpg"
+12422;"Alles Calais komp p-up sale";0;"select|Размер|XL(42)|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|S(36)|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70B|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12423;"Alles Calais komp bardotka sale";0;"select|Размер|XL(42)|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|S(36)|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|85C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|75F|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70D|1|10|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70B|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12426;"Alles Elena full cup  komp white sale";0;"select|Размер|80D|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+image|Цвет|Белый|1|10|0|-|0.0000|+|0|+|0.00000000|data/colors/white.jpg"
+12428;"Alles Isabella komp full cup sale";0;"select|Размер|S(36)|1|1|1|+|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|75H|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|75F|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|75C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12429;"Alles Isabella komp p-up sale";0;"select|Размер|S(36)|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"
+12432;"Alles Obsession komp p-up sale";0;"select|Размер|S(36)|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|M(38)|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg
+select|Размер|70C|1|10|0|-|0.0000|+|0|+|0.00000000|no_image.jpg"

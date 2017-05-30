@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Paladin-blogsystem</id>
+	<version>1.0.0</version>
+	<vqmver>1.0.0</vqmver>
+	<author>Tymkiv Roman</author>	
+	
+	<file name="system/config/ssb_library/catalog/controller/common/ssb_seo_url.php">
+		<operation>
+			<search position="before">
+			<![CDATA[if ($url[0] == 'manufacturer_id') {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/**blog_system START (1)**/
+			if ($url[0] == 'blog_category_id') {
+				if (!isset($this->request->get['blogpath'])) {
+					$this->request->get['blogpath'] = $url[1];
+				} else {
+					$this->request->get['blogpath'] .= '_' . $url[1];
+				}
+			}
+			
+			if ($url[0] == 'blog_id') {
+				$this->request->get['blog_id'] = $url[1];
+			}
+			
+			if ($url[0] == 'post_category_id') {
+				if (!isset($this->request->get['postpath'])) {
+					$this->request->get['postpath'] = $url[1];
+				} else {
+					$this->request->get['postpath'] .= '_' . $url[1];
+				}
+			}
+			/**blog_system END**/
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="before">
+			<![CDATA[} elseif (isset($this->request->get['information_id'])) {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/**blog_system START (2)**/
+			} elseif (isset($this->request->get['blogpath'])) {
+				$this->request->get['route'] = 'extras/blog/getblogcategory';
+			} elseif (isset($this->request->get['blog_id'])) {
+				$this->request->get['route'] = 'extras/blog/getblog';	
+			/**blog_system END**/	
+			]]>
+			</add>
+		</operation>	
+		<operation>
+			<search position="replace">
+			<![CDATA[if (($data['route'] == 'product/product' && $key == 'product_id') || (($data['route'] == 'product/manufacturer/info' || $data['route'] == 'product/product') && $key == 'manufacturer_id') || ($data['route'] == 'information/information' && $key == 'information_id')) {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/**blog_system START (3)**/
+			if (($data['route'] == 'product/product' && $key == 'product_id') || (($data['route'] == 'product/manufacturer/info' || $data['route'] == 'product/product') && $key == 'manufacturer_id') || ($data['route'] == 'information/information' && $key == 'information_id') || ($data['route'] == 'extras/blog/getblog' && $key == 'blog_id')) {	
+			/**blog_system END**/	
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="before">
+			<![CDATA[} elseif ($key == 'path') {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/**blog_system START (4)**/
+			} elseif ($key == 'blogpath') {
+				$blog_categories = explode('_', $value);
+				foreach ($blog_categories as $blog_category) {
+					$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = 'blog_category_id=" . (int)$blog_category . "'");
+			
+					if ($query->num_rows) {
+						$url .= '/' . $query->row['keyword'];
+			
+					}							
+				}
+				unset($data[$key]);		
+			/**blog_system END**/	
+			]]>
+			</add>
+		</operation>
+	</file>
+	
+	<file name="system/config/ssb_library/catalog/controller/feed/ssb_site_map.php">
+		<operation>
+			<search position="before">
+			<![CDATA[$output .= '</urlset>';]]>
+			</search>
+			<add>
+			<![CDATA[
+			/**blog_system START**/
+			if($this->config->get('blog_setting_blog_per_page')){
+				$this->load->model('extras/blog');
+				$blogs = $this->model_extras_blog->getBlogs(0, 1000);
+				foreach ($blogs as $blog) {
+					$output .= '<url>';
+					$output .= '<loc>' . htmlspecialchars($this->url->link('extras/blog/getblog', 'blog_id=' . $blog['blog_id'])) . '</loc>';
+					$output .= '<changefreq>weekly</changefreq>';
+					$output .= '<priority>1</priority>';
+					$output .= '</url>';   
+				}
+			}
+			/**blog_system END**/
+			]]>
+			</add>
+		</operation>
+	</file>
+</modification>

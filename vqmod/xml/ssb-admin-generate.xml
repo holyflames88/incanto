@@ -1,0 +1,828 @@
+<modification>
+    <id><![CDATA[Paladin SEO Manager]]></id>
+    <version>4.8.0 -1x</version>
+    <vqmver>1.0.0</vqmver>
+    <author>
+        <![CDATA[ ROMAN TYMKIV http://smartshopbox.com ]]>
+    </author>
+    <file name="admin/model/catalog/product.php">
+        <operation error="skip">
+            <search position="after">
+                <![CDATA[ $this->cache->delete('product'); ]]>
+            </search>
+            <add>
+                <![CDATA[								
+				/* = */
+				if (isset($data['product_category'])) {
+					foreach ($data['product_category'] as $category_id) {
+						$this->db->query("UPDATE " . DB_PREFIX . "category SET date_modified = NOW() WHERE category_id = '" . (int)$category_id . "'");
+					}
+				}
+				require_once DIR_CONFIG .'ssb_library/ssb_data.php';				$this->ssb_data = ssb_data::getInstance();				$ssb_setting = $this->ssb_data->getSetting();				if(isset($data['seodata']) AND is_array($data['seodata']) AND $ssb_setting){										$this->model_catalog_product->setDescripProduct($product_id, $data['seodata'], $data['product_description']);					include_once DIR_CONFIG .'ssb_library/ssb_autogen.php';					$ssb_autogen = ssb_autogen::getInstance();					$ssb_autogen->genAutoSeo('product', $product_id);				}							
+				/* = */
+				]]>
+            </add>
+        </operation>
+        <operation error = "skip">
+            <search position="after">
+                <![CDATA[ class ModelCatalogProduct extends Model { ]]>
+            </search>
+            <add>
+                <![CDATA[			
+				/* = */
+				public function getDescripProduct($product_id) {
+				$seodata = array();$sql = "SELECT language_id, seo_title, seo_h1, seo_h2, seo_h3, meta_description, meta_keyword, description, alt_image, title_image, meta_seo_data FROM " . DB_PREFIX . "product_description WHERE product_id = '" . (int)$product_id . "'";$query = $this->db->query($sql);
+				if(count($query->rows)){
+					$_SESSION['current_meta_seo_data'] = array();
+				}else{
+					unset($_SESSION['current_meta_seo_data']);
+				}
+				foreach ($query->rows as $result) {
+					$seodata[$result['language_id']] = array('seo_title' => $result['seo_title'],'seo_h1' => $result['seo_h1'],'seo_h2' => $result['seo_h2'],'seo_h3' => $result['seo_h3'], 'alt_image'=> $result['alt_image'], 'title_image'=> $result['title_image']);
+					$_SESSION['current_meta_seo_data'][$result['language_id']] = $result;
+				}return $seodata;}
+				
+				public function setDescripProduct($product_id, $data = array(), $oc_data = array()){
+				if(!count($data)){$this->load->model('localisation/language');$languages = $this->model_localisation_language->getLanguages();$data = array();foreach ($languages as $l_code => $l_val) {$data[$l_val['language_id']] = array('seo_title'=> '','seo_h1'=> '','seo_h2'=> '','seo_h3'=> '');}}
+				
+				foreach($data as $language_id => $val){
+				$val['meta_description'] = $oc_data[$language_id]['meta_description'];
+				$val['meta_keyword'] = $oc_data[$language_id]['meta_keyword'];
+				$val['description'] = $oc_data[$language_id]['description'];
+				
+				$query = $this->db->query("SELECT product_id FROM " . DB_PREFIX . "product_description WHERE product_id = '" . (int)$product_id . "' AND language_id = '". (int)$language_id ."';");
+				if(count($query->rows)){
+				$meta_seo_data = $this->getSeoMetaData($val, $language_id);
+				$meta_seo_data = "meta_seo_data = '" . $meta_seo_data . "'";
+				
+				$sql = "UPDATE " . DB_PREFIX . "product_description SET seo_title = '". $this->db->escape($val['seo_title']) ."', seo_h1 = '". $this->db->escape($val['seo_h1']) ."', seo_h2 = '". $this->db->escape($val['seo_h2']) ."', seo_h3 = '". $this->db->escape($val['seo_h3']) ."', alt_image = '". $this->db->escape($val['alt_image']) ."', title_image = '". $this->db->escape($val['title_image']) ."', ". $meta_seo_data ."  WHERE product_id = '" . (int)$product_id . "' AND language_id = '". (int)$language_id ."'";}else{$sql = "INSERT INTO " . DB_PREFIX . "product_description SET product_id = '". (int)$product_id ."', seo_h1 = '". $this->db->escape($val['seo_h1']) ."', seo_h2 = '". $this->db->escape($val['seo_h2']) ."', seo_h3 = '". $this->db->escape($val['seo_h3']) ."', seo_title = '". $this->db->escape($val['seo_title']) ."', alt_image = '". $this->db->escape($val['alt_image']) ."', title_image = '". $this->db->escape($val['title_image']) ."';";}$this->db->query($sql);}
+				unset($_SESSION['current_meta_seo_data']);
+				}
+				
+				private function getSeoMetaData($new_data, $language_id){
+					if(!isset($_SESSION['current_meta_seo_data'][$language_id])) return '';
+					$meta_seo_data = json_decode($_SESSION['current_meta_seo_data'][$language_id]['meta_seo_data'], true);
+					$old_data = $_SESSION['current_meta_seo_data'][$language_id];
+					
+					if($meta_seo_data && is_array($meta_seo_data)){
+						foreach($old_data as $key => $val){
+							if(isset($new_data[$key]) AND $this->db->escape($new_data[$key]) != $val AND isset($meta_seo_data[$key])){
+								if($val !='' AND $meta_seo_data[$key] == 'ag' AND $new_data[$key] != ''){
+									$meta_seo_data[$key] = 'et'; // edited
+								}elseif($val !='' AND $meta_seo_data[$key] == 'et' AND $new_data[$key] != ''){
+									/*empty*/
+								}else{
+									unset($meta_seo_data[$key]);
+								}
+							}elseif(isset($new_data[$key]) AND $this->db->escape($new_data[$key]) == '' AND isset($meta_seo_data[$key])){
+								unset($meta_seo_data[$key]);
+							}
+						}
+					}else{
+						$meta_seo_data = '';
+					}
+					return !$meta_seo_data ? "" : $this->db->escape(json_encode($meta_seo_data));
+				}
+				/* = */
+				]]>
+            </add>
+        </operation>
+        <operation error = "skip">
+            <search position="replace">
+                <![CDATA[ query = 'product_id=" . (int)$product_id . "') ]]>
+            </search>
+            <add>
+                <![CDATA[						query = 'product_id=" . (int)$product_id . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "')					]]>
+            </add>
+        </operation>
+        <operation error = "skip">
+            <search index="1" position="replace">
+                <![CDATA[ $this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE query = 'product_id=" . (int)$product_id. "'"); ]]>
+            </search>
+            <add>
+                <![CDATA[ 
+				/* = */
+				$this->db->query("ALTER TABLE " . DB_PREFIX . "url_alias CHANGE `language_id` `language_id` int(11) NOT NULL DEFAULT '". (int)$this->config->get('config_language_id') ."';");
+				$this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE query = 'product_id=" . (int)$product_id. "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+				
+				$urls = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE query = 'product_id=" . (int)$product_id. "'");
+				$languages_duplicat = array();
+				foreach($urls->rows as $url){
+					if (in_array($url['language_id'], $languages_duplicat)) {
+						$this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE url_alias_id = " . $url['url_alias_id']);
+					}else{
+						$languages_duplicat[] = $url['language_id'];
+					}
+				}
+				/* = */
+				]]>
+            </add>
+        </operation>
+    </file>
+    <file name="admin/model/catalog/category.php">
+        <operation error="skip">
+            <search position="after">
+                <![CDATA[ $this->cache->delete('category'); ]]>
+            </search>
+            <add>
+                <![CDATA[								
+				/* = */
+				require_once DIR_CONFIG .'ssb_library/ssb_data.php';				$this->ssb_data = ssb_data::getInstance();				$ssb_setting = $this->ssb_data->getSetting();				if(isset($data['seodata']) AND is_array($data['seodata']) AND $ssb_setting){					$this->model_catalog_category->setDescripCategory($category_id, $data['seodata'], $data['category_description']);					include_once DIR_CONFIG .'ssb_library/ssb_autogen.php';					$ssb_autogen = ssb_autogen::getInstance();					$ssb_autogen->genAutoSeo('category', $category_id);				}							
+				/* = */
+				]]>
+            </add>
+        </operation>
+        <operation error = "skip">
+            <search position="after">
+                <![CDATA[ class ModelCatalogCategory extends Model { ]]>
+            </search>
+            <add>
+                <![CDATA[			
+				/* = */
+				public function getDescripCategory($category_id) {
+				$seodata = array();$sql = "SELECT language_id, tag, seo_title, seo_h1, seo_h2, seo_h3, meta_description, meta_keyword, description, alt_image, title_image, meta_seo_data FROM " . DB_PREFIX . "category_description WHERE category_id = '" . (int)$category_id . "'";$query = $this->db->query($sql);
+				if(count($query->rows)){
+					$_SESSION['current_meta_seo_data'] = array();
+				}else{
+					unset($_SESSION['current_meta_seo_data']);
+				}
+				foreach ($query->rows as $result) {
+					$seodata[$result['language_id']] = array('seo_title' => $result['seo_title'],'seo_h1' => $result['seo_h1'],'seo_h2' => $result['seo_h2'],'seo_h3' => $result['seo_h3'],'tag'=> $result['tag'], 'alt_image'=> $result['alt_image'], 'title_image'=> $result['title_image']);
+					$_SESSION['current_meta_seo_data'][$result['language_id']] = $result;
+				}return $seodata;
+				}
+				
+				public function setDescripCategory($category_id, $data = array(), $oc_data = array()) {
+				if(!count($data)){
+					$this->load->model('localisation/language');$languages = $this->model_localisation_language->getLanguages();$data = array();
+					foreach ($languages as $l_code => $l_val) {
+						$data[$l_val['language_id']] = array('seo_title'=> '','seo_h1'=> '','seo_h2'=> '','seo_h3'=> '','tag'=> '');
+					}
+				}
+				foreach($data as $language_id => $val){
+				$val['meta_description'] = $oc_data[$language_id]['meta_description'];
+				$val['meta_keyword'] = $oc_data[$language_id]['meta_keyword'];
+				$val['description'] = $oc_data[$language_id]['description'];
+				
+				$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "category_description WHERE category_id = '" . (int)$category_id . "' AND language_id = '". (int)$language_id ."';");
+				if(count($query->rows)){
+				$meta_seo_data = $this->getSeoMetaData($val, $language_id);
+				$meta_seo_data = "meta_seo_data = '" . $meta_seo_data . "'";
+				
+				$sql = "UPDATE " . DB_PREFIX . "category_description SET tag = '" . $this->db->escape($val['tag']) . "', seo_title = '". $this->db->escape($val['seo_title']) ."', seo_h1 = '". $this->db->escape($val['seo_h1']) ."', seo_h2 = '". $this->db->escape($val['seo_h2']) ."', seo_h3 = '". $this->db->escape($val['seo_h3']) ."', alt_image = '". $this->db->escape($val['alt_image']) ."', title_image = '". $this->db->escape($val['title_image']) ."', ". $meta_seo_data ."  WHERE category_id = '" . (int)$category_id . "' AND language_id = '". (int)$language_id ."'";}else{$sql = "INSERT INTO " . DB_PREFIX . "category_description SET category_id = '". (int)$category_id ."', tag = '" . $this->db->escape($val['tag']) . "', seo_h1 = '" . $this->db->escape($val['seo_h1']) . "', seo_h2 = '" . $this->db->escape($val['seo_h2']) . "', seo_h3 = '" . $this->db->escape($val['seo_h3']) . "', seo_title = '". $this->db->escape($val['seo_title']) ."', alt_image = '". $this->db->escape($val['alt_image']) ."', title_image = '". $this->db->escape($val['title_image']) ."';";}$this->db->query($sql);}
+				unset($_SESSION['current_meta_seo_data']);
+				}
+				
+				private function getSeoMetaData($new_data, $language_id){
+					if(!isset($_SESSION['current_meta_seo_data'][$language_id])) return '';
+					$meta_seo_data = json_decode($_SESSION['current_meta_seo_data'][$language_id]['meta_seo_data'], true);
+					$old_data = $_SESSION['current_meta_seo_data'][$language_id];
+
+					if($meta_seo_data && is_array($meta_seo_data)){
+						foreach($old_data as $key => $val){
+							if(isset($new_data[$key]) AND $this->db->escape($new_data[$key]) != $val AND isset($meta_seo_data[$key])){
+								if($val !='' AND $meta_seo_data[$key] == 'ag' AND $new_data[$key] != ''){
+									$meta_seo_data[$key] = 'et'; // edited
+								}elseif($val !='' AND $meta_seo_data[$key] == 'et' AND $new_data[$key] != ''){
+									/*empty*/
+								}else{
+									unset($meta_seo_data[$key]);
+								}
+							}elseif(isset($new_data[$key]) AND $this->db->escape($new_data[$key]) == '' AND isset($meta_seo_data[$key])){
+								unset($meta_seo_data[$key]);
+							}
+						}
+					}else{
+						$meta_seo_data = '';
+					}
+					return !$meta_seo_data ? "" : $this->db->escape(json_encode($meta_seo_data));
+				}
+				/* = */
+				]]>
+            </add>
+        </operation>
+        <operation error = "skip">
+            <search position="replace">
+                <![CDATA[ (int)$category_id . "') ]]>
+            </search>
+            <add>
+                <![CDATA[						(int)$category_id . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "')					]]>
+            </add>
+        </operation>
+        <operation error = "skip">
+            <search index="1" position="replace">
+                <![CDATA[ $this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE query = 'category_id=" . (int)$category_id. "'"); ]]>
+            </search>
+            <add>
+                <![CDATA[ 
+				/* = */
+				$this->db->query("ALTER TABLE " . DB_PREFIX . "url_alias CHANGE `language_id` `language_id` int(11) NOT NULL DEFAULT '". (int)$this->config->get('config_language_id') ."';");
+				$this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE query = 'category_id=" . (int)$category_id. "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+				
+				$urls = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE query = 'category_id=" . (int)$category_id. "'");
+				$languages_duplicat = array();
+				foreach($urls->rows as $url){
+					if (in_array($url['language_id'], $languages_duplicat)) {
+						$this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE url_alias_id = " . $url['url_alias_id']);
+					}else{
+						$languages_duplicat[] = $url['language_id'];
+					}
+				}
+				/* = */
+				]]>
+            </add>
+        </operation>
+    </file>
+    <file name="admin/model/catalog/manufacturer.php">
+        <operation  error="skip">
+            <search position="after">
+                <![CDATA[ $this->cache->delete('manufacturer'); ]]>
+            </search>
+            <add>
+                <![CDATA[								
+				/* = */
+				require_once DIR_CONFIG .'ssb_library/ssb_data.php';				$this->ssb_data = ssb_data::getInstance();				$ssb_setting = $this->ssb_data->getSetting();				if(isset($data['seodata']) AND is_array($data['seodata']) AND $ssb_setting){					$this->model_catalog_manufacturer->setDescripManufacturer($manufacturer_id, $data['seodata']);					include_once DIR_CONFIG .'ssb_library/ssb_autogen.php';					$ssb_autogen = ssb_autogen::getInstance();					$ssb_autogen->genAutoSeo('brand', $manufacturer_id);				} 							
+				/* = */
+				]]>
+            </add>
+        </operation>
+        <operation error="skip">
+            <search position="after">
+                <![CDATA[ public function deleteManufacturer($manufacturer_id) ]]>
+            </search>
+            <add>
+                <![CDATA[									
+				/* = */
+				require_once DIR_CONFIG .'ssb_library/ssb_data.php';					$this->ssb_data = ssb_data::getInstance();					$ssb_setting = $this->ssb_data->getSetting();					if($ssb_setting){						$this->delDescripManufacturer($manufacturer_id);					}							
+				/* = */
+				]]>
+            </add>
+        </operation>
+        <operation error = "skip">
+            <search position="after">
+                <![CDATA[ class ModelCatalogManufacturer extends Model { ]]>
+            </search>
+            <add>
+                <![CDATA[			
+				/* = */
+				public function getDescripManufacturer($manufacturer_id) {
+				$seodata = array();$sql = "SELECT language_id, seo_title, seo_h1,seo_h2,seo_h3, meta_keyword, meta_description, description, tag, meta_seo_data FROM " . DB_PREFIX . "manufacturer_description WHERE manufacturer_id = '" . (int)$manufacturer_id . "'";$query = $this->db->query($sql);if(!count($query->rows)){return false;}
+				if(count($query->rows)){
+					$_SESSION['current_meta_seo_data'] = array();
+				}else{
+					unset($_SESSION['current_meta_seo_data']);
+				}
+				foreach ($query->rows as $result) {
+				$seodata[$result['language_id']] = array('description'=> $result['description'],'seo_title' => $result['seo_title'],'seo_h1' => $result['seo_h1'],'seo_h2' => $result['seo_h2'],'seo_h3' => $result['seo_h3'],'meta_keyword' => $result['meta_keyword'],'meta_description'=> $result['meta_description'],'tag'=> $result['tag']);
+				$_SESSION['current_meta_seo_data'][$result['language_id']] = $result;
+				}return $seodata;}
+				
+				public function setDescripManufacturer($manufacturer_id, $data = array(), $onlyEmpty = false){
+				$this->load->model('localisation/language');$languages = $this->model_localisation_language->getLanguages();if($onlyEmpty){$man_descrip = $this->getDescripManufacturer($manufacturer_id);if($man_descrip){foreach ($languages as $l_code => $l_val) {$description = isset($man_descrip[$l_val['language_id']]['description']) ? $man_descrip[$l_val['language_id']]['description'] : '';$seo_title = isset($man_descrip[$l_val['language_id']]['seo_title']) ? $man_descrip[$l_val['language_id']]['seo_title'] : '';
+				
+				$seo_h1 = isset($man_descrip[$l_val['language_id']]['seo_h1']) ? $man_descrip[$l_val['language_id']]['seo_h1'] : '';
+				$seo_h2 = isset($man_descrip[$l_val['language_id']]['seo_h2']) ? $man_descrip[$l_val['language_id']]['seo_h2'] : '';
+				$seo_h3 = isset($man_descrip[$l_val['language_id']]['seo_h3']) ? $man_descrip[$l_val['language_id']]['seo_h3'] : '';
+				
+				$meta_keyword = isset($man_descrip[$l_val['language_id']]['meta_keyword']) ? $man_descrip[$l_val['language_id']]['meta_keyword'] : '';$meta_description = isset($man_descrip[$l_val['language_id']]['meta_description']) ? $man_descrip[$l_val['language_id']]['meta_description'] : '';$tag = isset($man_descrip[$l_val['language_id']]['tag']) ? $man_descrip[$l_val['language_id']]['tag'] : '';}}}if(!count($data)){$data = array();foreach ($languages as $l_code => $l_val) {$data[$l_val['language_id']] = array('description'=> isset($description) ? $description : '','seo_title' => isset($seo_title) ? $seo_title : '',
+				'seo_h1' => isset($seo_h1) ? $seo_h1 : '',
+				'seo_h2' => isset($seo_h2) ? $seo_h2 : '',
+				'seo_h3' => isset($seo_h3) ? $seo_h3 : '',
+				'meta_keyword' => isset($meta_keyword) ? $meta_keyword : '','meta_description'=> isset($meta_description) ? $meta_description : '','tag'=> isset($tag) ? $tag : '');}}
+				$this->delDescripManufacturer($manufacturer_id);
+				foreach($data as $language_id => $val){
+				
+				$meta_seo_data = $this->getSeoMetaData($val, $language_id);
+				$meta_seo_data = "meta_seo_data = '" . $meta_seo_data . "'";
+				
+				$sql = "INSERT INTO " . DB_PREFIX . "manufacturer_description SET manufacturer_id = '" . (int)$manufacturer_id . "', language_id = '" . (int)$language_id . "', seo_title = '" . $this->db->escape($val['seo_title']) . "', seo_h1 = '" . $this->db->escape($val['seo_h1']) . "', seo_h2 = '" . $this->db->escape($val['seo_h2']) . "', seo_h3 = '" . $this->db->escape($val['seo_h3']) . "', ". $meta_seo_data .", meta_keyword = '" . $this->db->escape($val['meta_keyword']) . "', meta_description = '" . $this->db->escape($val['meta_description']) . "', description = '" . $this->db->escape($val['description']) . "', tag = '" . $this->db->escape($val['tag']) . "'";$this->db->query($sql);}
+				unset($_SESSION['current_meta_seo_data']);
+				}
+				
+				public function delDescripManufacturer($manufacturer_id) {$this->db->query("DELETE FROM " . DB_PREFIX . "manufacturer_description WHERE manufacturer_id = '" . (int)$manufacturer_id . "'");}
+				
+				private function getSeoMetaData($new_data, $language_id){
+					if(!isset($_SESSION['current_meta_seo_data'][$language_id])) return '';
+					$meta_seo_data = json_decode($_SESSION['current_meta_seo_data'][$language_id]['meta_seo_data'], true);
+					$old_data = $_SESSION['current_meta_seo_data'][$language_id];
+					
+					if($meta_seo_data && is_array($meta_seo_data)){
+						foreach($old_data as $key => $val){
+							if(isset($new_data[$key]) AND $this->db->escape($new_data[$key]) != $val AND isset($meta_seo_data[$key])){
+								if($val !='' AND $meta_seo_data[$key] == 'ag' AND $new_data[$key] != ''){
+									$meta_seo_data[$key] = 'et'; // edited
+								}elseif($val !='' AND $meta_seo_data[$key] == 'et' AND $new_data[$key] != ''){
+									/*empty*/
+								}else{
+									unset($meta_seo_data[$key]);
+								}
+							}elseif(isset($new_data[$key]) AND $this->db->escape($new_data[$key]) == '' AND isset($meta_seo_data[$key])){
+								unset($meta_seo_data[$key]);
+							}
+						}
+					}else{
+						$meta_seo_data = '';
+					}
+					return !$meta_seo_data ? "" : $this->db->escape(json_encode($meta_seo_data));
+				}
+				/* = */
+				]]>
+            </add>
+        </operation>
+        <operation error = "skip">
+            <search position="replace">
+                <![CDATA[ (int)$manufacturer_id . "') ]]>
+            </search>
+            <add>
+                <![CDATA[						(int)$manufacturer_id . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "')					]]>
+            </add>
+        </operation>
+        <operation error = "skip">
+            <search index="1" position="replace">
+                <![CDATA[ 
+				/* = */
+				$this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE query = 'manufacturer_id=" . (int)$manufacturer_id. "'"); 
+				/* = */
+				]]>
+            </search>
+            <add>
+                <![CDATA[ 
+				/* = */
+				$this->db->query("ALTER TABLE " . DB_PREFIX . "url_alias CHANGE `language_id` `language_id` int(11) NOT NULL DEFAULT '". (int)$this->config->get('config_language_id') ."';");
+				$this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE query = 'manufacturer_id=" . (int)$manufacturer_id. "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+				
+				$urls = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE query = 'manufacturer_id=" . (int)$manufacturer_id. "'");
+				$languages_duplicat = array();
+				foreach($urls->rows as $url){
+					if (in_array($url['language_id'], $languages_duplicat)) {
+						$this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE url_alias_id = " . $url['url_alias_id']);
+					}else{
+						$languages_duplicat[] = $url['language_id'];
+					}
+				}
+				/* = */
+				]]>
+            </add>
+        </operation>
+    </file>
+    <file name="admin/model/catalog/information.php">
+        <operation>
+            <search position="after">
+                <![CDATA[ $this->cache->delete('information'); ]]>
+            </search>
+            <add>
+                <![CDATA[								
+				/* = */
+				require_once DIR_CONFIG .'ssb_library/ssb_data.php';				$this->ssb_data = ssb_data::getInstance();				$ssb_setting = $this->ssb_data->getSetting();				if(isset($data['seodata']) AND is_array($data['seodata']) AND $ssb_setting){					$this->model_catalog_information->setDescripInfo($information_id, $data['seodata'], $data['information_description']);					include_once DIR_CONFIG .'ssb_library/ssb_autogen.php';					$ssb_autogen = ssb_autogen::getInstance();					$ssb_autogen->genAutoSeo('info', $information_id);				} 							
+				/* = */
+				]]>
+            </add>
+        </operation>
+        <operation error = "skip">
+            <search position="after">
+                <![CDATA[ class ModelCatalogInformation extends Model { ]]>
+            </search>
+            <add>
+                <![CDATA[			
+				/* = */
+				public function getDescripInfo($information_id) {			
+				$seodata = array();						$sql = "SELECT language_id, seo_title, meta_keyword, meta_description, tag, meta_seo_data FROM " . DB_PREFIX . "information_description WHERE information_id = '" . (int)$information_id . "'";						$query = $this->db->query($sql);			
+				if(count($query->rows)){
+					$_SESSION['current_meta_seo_data'] = array();
+				}else{
+					unset($_SESSION['current_meta_seo_data']);
+				}
+				foreach ($query->rows as $result) {				$seodata[$result['language_id']] = array(					'seo_title' 		=> $result['seo_title'],					'meta_keyword' 		=> $result['meta_keyword'],					'meta_description'	=> $result['meta_description'],					'tag'				=> $result['tag']				);			
+				$_SESSION['current_meta_seo_data'][$result['language_id']] = $result;
+				} return $seodata;}					
+				
+				public function setDescripInfo($information_id, $data = array(), $oc_data = array()) {
+				if(!count($data)){				$this->load->model('localisation/language');				$languages = $this->model_localisation_language->getLanguages();				$data = array();				foreach ($languages as $l_code => $l_val) {					$data[$l_val['language_id']] = array(						'seo_title' 		=> '',						'meta_keyword' 		=> '',						'meta_description'	=> '',						'tag'				=> ''						);				}			}			foreach($data as $language_id => $val){
+
+				$val['description'] = $oc_data[$language_id]['description'];
+				
+				$query = $this->db->query("SELECT information_id FROM " . DB_PREFIX . "information_description WHERE information_id = '" . (int)$information_id . "' AND language_id = '". (int)$language_id ."';");								
+				if(count($query->rows)){
+				$meta_seo_data = $this->getSeoMetaData($val, $language_id);
+				$meta_seo_data = "meta_seo_data = '" . $meta_seo_data . "'";
+				
+				$sql = "UPDATE " . DB_PREFIX . "information_description SET seo_title = '" . $this->db->escape($val['seo_title']) . "', meta_keyword = '" . $this->db->escape($val['meta_keyword']) . "', meta_description = '" . $this->db->escape($val['meta_description']) . "', tag = '" . $this->db->escape($val['tag']) . "', ". $meta_seo_data ."  WHERE information_id = '" . (int)$information_id . "' AND language_id = '". (int)$language_id ."'";				}else{					$sql = "INSERT INTO " . DB_PREFIX . "information_description SET information_id = '" . (int)$information_id . "', language_id = '" . (int)$language_id . "', seo_title = '" . $this->db->escape($val['seo_title']) . "', meta_keyword = '" . $this->db->escape($val['meta_keyword']) . "', meta_description = '" . $this->db->escape($val['meta_description']) . "', tag = '" . $this->db->escape($val['tag']) . "'";				}				$this->db->query($sql);			}		
+				unset($_SESSION['current_meta_seo_data']);
+				}
+
+				private function getSeoMetaData($new_data, $language_id){
+					if(!isset($_SESSION['current_meta_seo_data'][$language_id])) return '';
+					$meta_seo_data = json_decode($_SESSION['current_meta_seo_data'][$language_id]['meta_seo_data'], true);
+					$old_data = $_SESSION['current_meta_seo_data'][$language_id];
+					
+					if($meta_seo_data && is_array($meta_seo_data)){
+						foreach($old_data as $key => $val){
+							if(isset($new_data[$key]) AND $this->db->escape($new_data[$key]) != $val AND isset($meta_seo_data[$key])){
+								if($val !='' AND $meta_seo_data[$key] == 'ag' AND $new_data[$key] != ''){
+									$meta_seo_data[$key] = 'et'; // edited
+								}elseif($val !='' AND $meta_seo_data[$key] == 'et' AND $new_data[$key] != ''){
+									/*empty*/
+								}else{
+									unset($meta_seo_data[$key]);
+								}
+							}elseif(isset($new_data[$key]) AND $this->db->escape($new_data[$key]) == '' AND isset($meta_seo_data[$key])){
+								unset($meta_seo_data[$key]);
+							}
+						}
+					}else{
+						$meta_seo_data = '';
+					}
+					return !$meta_seo_data ? "" : $this->db->escape(json_encode($meta_seo_data));
+				}		
+				/* = */
+				]]>
+            </add>
+        </operation>
+        <operation error = "skip">
+            <search position="replace">
+                <![CDATA[ WHERE query = 'information_id=" . (int)$information_id . "' ]]>
+            </search>
+            <add>
+                <![CDATA[ WHERE query = 'information_id=" . (int)$information_id . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'	]]>
+            </add>
+        </operation>
+        <operation error = "skip">
+            <search position="replace">
+                <![CDATA[ SET query = 'information_id=" . (int)$information_id . "' ]]>
+            </search>
+            <add>
+                <![CDATA[SET query = 'information_id=" . (int)$information_id . "', language_id = '" . (int)$this->config->get('config_language_id') . "' ]]>
+            </add>
+        </operation>
+        <operation error = "skip">
+            <search position="replace">
+                <![CDATA[ WHERE query = 'information_id=" . (int)$information_id. "' ]]>
+            </search>
+            <add>
+                <![CDATA[ WHERE query = 'information_id=" . (int)$information_id . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'					]]>
+            </add>
+        </operation>
+        <operation error = "skip">
+            <search index="1" position="replace">
+                <![CDATA[ $this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE query = 'information_id=" . (int)$information_id. "'"); ]]>
+            </search>
+            <add>
+                <![CDATA[ 
+				/* = */
+				$this->db->query("ALTER TABLE " . DB_PREFIX . "url_alias CHANGE `language_id` `language_id` int(11) NOT NULL DEFAULT '". (int)$this->config->get('config_language_id') ."';");
+				$this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE query = 'information_id=" . (int)$information_id. "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+				
+				$urls = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE query = 'information_id=" . (int)$information_id. "'");
+				$languages_duplicat = array();
+				foreach($urls->rows as $url){
+					if (in_array($url['language_id'], $languages_duplicat)) {
+						$this->db->query("DELETE FROM " . DB_PREFIX . "url_alias WHERE url_alias_id = " . $url['url_alias_id']);
+					}else{
+						$languages_duplicat[] = $url['language_id'];
+					}
+				}
+				/* = */
+				]]>
+            </add>
+        </operation>
+    </file>
+    <file name="admin/controller/catalog/manufacturer.php">
+        <operation>
+            <search position="after">
+                <![CDATA[$this->data['token'] = $this->session->data['token'];]]>
+            </search>
+            <add>
+                <![CDATA[	
+					/* = */
+					require_once DIR_CONFIG .'ssb_library/ssb_data.php';			
+					$this->ssb_data = ssb_data::getInstance();			
+					$ssb_setting = $this->ssb_data->getSetting();	
+					if($ssb_setting){
+						$this->load->model('localisation/language');
+						$this->data['languages'] = $this->model_localisation_language->getLanguages();
+						if (isset($this->request->post['seodata'])) {
+							$this->data['seodata'] = $this->request->post['seodata'];
+						} elseif (isset($this->request->get['manufacturer_id'])) {
+							$this->data['seodata'] = $this->model_catalog_manufacturer->getDescripManufacturer($this->request->get['manufacturer_id']);
+						}
+					}
+					/* = */
+					]]>
+            </add>
+        </operation>
+    </file>
+    <file name="admin/view/template/catalog/manufacturer_form.tpl">
+        <operation>
+            <search position="replace">
+                <![CDATA[<a href="#tab-general"><?php echo $tab_general; ?></a>]]>
+            </search>
+            <add>
+                <![CDATA[<a href="#tab-general"><?php echo $tab_general; ?></a><a href="#tab-data">Data</a>]]>
+            </add>
+        </operation>
+        <operation>
+            <search position="after">
+                <![CDATA[$('#tabs a').tabs();]]>
+            </search>
+            <add>
+                <![CDATA[$('#languages a').tabs();]]>
+            </add>
+        </operation>
+        <operation>
+            <search position="before">
+                <![CDATA[<?php echo $footer; ?>]]>
+            </search>
+            <add>
+                <![CDATA[
+				<!-- *=* -->
+				<script type="text/javascript" src="view/javascript/ckeditor/ckeditor.js"></script><script type="text/javascript">
+                <!--			
+                <?php foreach ($languages as $language) { ?>CKEDITOR.replace('description<?php echo $language['language_id']; ?>', {	filebrowserBrowseUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>',	filebrowserImageBrowseUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>', filebrowserFlashBrowseUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>', filebrowserUploadUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>', filebrowserImageUploadUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>', filebrowserFlashUploadUrl: 'index.php?route=common/filemanager&token=<?php echo $token; ?>'	});			
+				<?php } ?>			
+				//--></script>			
+				<!-- *=* -->
+				]]>
+            </add>
+        </operation>
+        <operation>
+            <search position="before">
+                <![CDATA[</form>]]>
+            </search>
+            <add>
+                <![CDATA[			
+				<!-- *=* -->
+				<div id="tab-data"><div id="languages" class="htabs"><?php foreach ($languages as $language) { ?><a href="#language<?php echo $language['language_id']; ?>"><img src="view/image/flags/<?php echo $language['image']; ?>" title="<?php echo $language['name']; ?>" /><?php echo $language['name']; ?></a><?php } ?></div><?php foreach ($languages as $language) { ?><div id="language<?php echo $language['language_id']; ?>"><table class="form"><tr><td>Seo Title:</td><td><input type="text" name="seodata[<?php echo $language['language_id']; ?>][seo_title]" size="100" value="<?php echo isset($seodata[$language['language_id']]['seo_title']) ? $seodata[$language['language_id']]['seo_title'] : ''; ?>" /></td></tr>
+				<tr>
+					<td>Seo H1:</td>
+					<td><input type="text" name="seodata[<?php echo $language['language_id']; ?>][seo_h1]" size="100" value="<?php echo isset($seodata[$language['language_id']]['seo_h1']) ? $seodata[$language['language_id']]['seo_h1'] : ''; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td>Seo H2:</td>
+					<td><input type="text" name="seodata[<?php echo $language['language_id']; ?>][seo_h2]" size="100" value="<?php echo isset($seodata[$language['language_id']]['seo_h2']) ? $seodata[$language['language_id']]['seo_h2'] : ''; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td>Seo H3:</td>
+					<td><input type="text" name="seodata[<?php echo $language['language_id']; ?>][seo_h3]" size="100" value="<?php echo isset($seodata[$language['language_id']]['seo_h3']) ? $seodata[$language['language_id']]['seo_h3'] : ''; ?>" />
+					</td>
+				</tr>				
+				<tr><td>Meta Keywords:</td><td><input name="seodata[<?php echo $language['language_id']; ?>][meta_keyword]" size="100" value="<?php echo isset($seodata[$language['language_id']]['meta_keyword']) ? $seodata[$language['language_id']]['meta_keyword'] : ''; ?>"/></td></tr><tr><td>Meta Description:</td><td><input name="seodata[<?php echo $language['language_id']; ?>][meta_description]" size="100" value="<?php echo isset($seodata[$language['language_id']]['meta_description']) ? $seodata[$language['language_id']]['meta_description'] : ''; ?>"/></td></tr><tr><td>Description:</td><td><textarea id="description<?php echo $language['language_id']; ?>" name="seodata[<?php echo $language['language_id']; ?>][description]" cols="40" rows="5"><?php echo isset($seodata[$language['language_id']]['description']) ? $seodata[$language['language_id']]['description'] : ''; ?></textarea></td></tr><tr><td>Tags:</td><td><input name="seodata[<?php echo $language['language_id']; ?>][tag]" size="100" value="<?php echo isset($seodata[$language['language_id']]['tag']) ? $seodata[$language['language_id']]['tag'] : ''; ?>"/></td></tr></table></div><?php } ?></div>			
+				<!-- *=* -->
+				]]>
+            </add>
+        </operation>
+        <operation>
+            <search position="replace">
+                <![CDATA[ value="<?php echo $keyword; ?>" /> ]]>
+            </search>
+            <add>
+                <![CDATA[			value="<?php echo $keyword; ?>" /> 			If you have a few language, to view the all keywords for all language, you can go to "Edit SEO Items" in SEO module.			]]>
+            </add>
+        </operation>
+    </file>
+    <file name="admin/controller/catalog/information.php">
+        <operation>
+            <search position="after">
+                <![CDATA[$this->data['languages'] = $this->model_localisation_language->getLanguages();]]>
+            </search>
+            <add>
+                <![CDATA[	
+					/* = */	
+					require_once DIR_CONFIG .'ssb_library/ssb_data.php';			
+					$this->ssb_data = ssb_data::getInstance();			
+					$ssb_setting = $this->ssb_data->getSetting();			
+					if($ssb_setting){
+						if (isset($this->request->post['seodata'])) {
+							$this->data['seodata'] = $this->request->post['seodata'];
+						} elseif (isset($this->request->get['information_id'])) {
+							$this->data['seodata'] = $this->model_catalog_information->getDescripInfo($this->request->get['information_id']);
+						}
+					}
+					/* = */
+					]]>
+            </add>
+        </operation>
+    </file>
+    <file name="admin/view/template/catalog/information_form.tpl">
+        <operation>
+            <search index="1" position="before">
+                <![CDATA[</table>]]>
+            </search>
+            <add>
+                <![CDATA[			
+				<!-- *=* -->
+				<tr><td>Seo Title:</td><td><input type="text" name="seodata[<?php echo $language['language_id']; ?>][seo_title]" size="100" value="<?php echo isset($seodata[$language['language_id']]['seo_title']) ? $seodata[$language['language_id']]['seo_title'] : ''; ?>" /></td></tr><tr><td>Meta Keywords:</td><td><input name="seodata[<?php echo $language['language_id']; ?>][meta_keyword]" size="100" value="<?php echo isset($seodata[$language['language_id']]['meta_keyword']) ? $seodata[$language['language_id']]['meta_keyword'] : ''; ?>"/></td></tr><tr><td>Meta Description:</td><td><input name="seodata[<?php echo $language['language_id']; ?>][meta_description]" size="100" value="<?php echo isset($seodata[$language['language_id']]['meta_description']) ? $seodata[$language['language_id']]['meta_description'] : ''; ?>"/></td></tr><tr><td>Tags:</td><td><input name="seodata[<?php echo $language['language_id']; ?>][tag]" size="100" value="<?php echo isset($seodata[$language['language_id']]['tag']) ? $seodata[$language['language_id']]['tag'] : ''; ?>"/></td></tr>			
+				<!-- *=* -->
+				]]>
+            </add>
+        </operation>
+        <operation>
+            <search position="replace">
+                <![CDATA[ value="<?php echo $keyword; ?>" /> ]]>
+            </search>
+            <add>
+                <![CDATA[			value="<?php echo $keyword; ?>" /> 			If you have a few language, to view the all keywords for all language, you can go to "Edit SEO Items" in SEO module.			]]>
+            </add>
+        </operation>
+    </file>
+    <file name="admin/controller/catalog/category.php">
+        <operation>
+            <search position="after">
+                <![CDATA[$this->data['languages'] = $this->model_localisation_language->getLanguages();]]>
+            </search>
+            <add>
+                <![CDATA[		
+					/* = */		
+					require_once DIR_CONFIG .'ssb_library/ssb_data.php';			
+					$this->ssb_data = ssb_data::getInstance();			
+					$ssb_setting = $this->ssb_data->getSetting();			if($ssb_setting){							
+						if (isset($this->request->post['seodata'])) {							
+							$this->data['seodata'] = $this->request->post['seodata'];				
+						} elseif (isset($this->request->get['category_id'])) {
+							$this->data['seodata'] = $this->model_catalog_category->getDescripCategory($this->request->get['category_id']);
+						}			
+					}	
+					/* = */
+				]]>
+            </add>
+        </operation>
+    </file>
+    <file name="admin/view/template/catalog/category_form.tpl">
+        <operation>
+            <search index="1" position="before">
+                <![CDATA[</table>]]>
+            </search>
+            <add>
+                <![CDATA[			
+				<!-- *=* -->
+				<tr><td>Seo Title:</td><td><input type="text" name="seodata[<?php echo $language['language_id']; ?>][seo_title]" size="100" value="<?php echo isset($seodata[$language['language_id']]['seo_title']) ? $seodata[$language['language_id']]['seo_title'] : ''; ?>" /></td></tr>
+				<tr>
+					<td>Seo H1:</td>
+					<td><input type="text" name="seodata[<?php echo $language['language_id']; ?>][seo_h1]" size="100" value="<?php echo isset($seodata[$language['language_id']]['seo_h1']) ? $seodata[$language['language_id']]['seo_h1'] : ''; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td>Seo H2:</td>
+					<td><input type="text" name="seodata[<?php echo $language['language_id']; ?>][seo_h2]" size="100" value="<?php echo isset($seodata[$language['language_id']]['seo_h2']) ? $seodata[$language['language_id']]['seo_h2'] : ''; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td>Seo H3:</td>
+					<td><input type="text" name="seodata[<?php echo $language['language_id']; ?>][seo_h3]" size="100" value="<?php echo isset($seodata[$language['language_id']]['seo_h3']) ? $seodata[$language['language_id']]['seo_h3'] : ''; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td>Alt image:</td>
+					<td><input type="text" name="seodata[<?php echo $language['language_id']; ?>][alt_image]" size="100" value="<?php echo isset($seodata[$language['language_id']]['alt_image']) ? $seodata[$language['language_id']]['alt_image'] : ''; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td>Title image:</td>
+					<td><input type="text" name="seodata[<?php echo $language['language_id']; ?>][title_image]" size="100" value="<?php echo isset($seodata[$language['language_id']]['title_image']) ? $seodata[$language['language_id']]['title_image'] : ''; ?>" />
+					</td>
+				</tr>
+				<tr><td>Tags:</td><td><input name="seodata[<?php echo $language['language_id']; ?>][tag]" size="100" value="<?php echo isset($seodata[$language['language_id']]['tag']) ? $seodata[$language['language_id']]['tag'] : ''; ?>"/></td></tr>			
+				<!-- *=* -->
+				]]>
+            </add>
+        </operation>
+        <operation>
+            <search position="replace">
+                <![CDATA[ value="<?php echo $keyword; ?>" /> ]]>
+            </search>
+            <add>
+                <![CDATA[			value="<?php echo $keyword; ?>" /> 			If you have a few language, to view the all keywords for all language, you can go to "Edit SEO Items" in SEO module.			]]>
+            </add>
+        </operation>
+    </file>
+    <file name="admin/controller/catalog/product.php">
+        <operation>
+            <search position="after">
+                <![CDATA[$this->data['languages'] = $this->model_localisation_language->getLanguages();]]>
+            </search>
+            <add>
+                <![CDATA[	
+					/* = */
+					require_once DIR_CONFIG .'ssb_library/ssb_data.php';			
+					$this->ssb_data = ssb_data::getInstance();			
+					$ssb_setting = $this->ssb_data->getSetting();			
+					if($ssb_setting){
+						if (isset($this->request->post['seodata'])) {
+							$this->data['seodata'] = $this->request->post['seodata'];
+						} elseif (isset($this->request->get['product_id'])) {
+							$this->data['seodata'] = $this->model_catalog_product->getDescripProduct($this->request->get['product_id']);
+						}			
+					}		
+					/* = */
+					]]>
+            </add>
+        </operation>
+    </file>
+    <file name="admin/view/template/catalog/product_form.tpl">
+        <operation>
+			<search offset="1" position="before">
+                <![CDATA[<td><?php echo $entry_tag; ?></td>]]>
+			</search>
+            <add>
+                <![CDATA[			
+				<!-- *=* -->
+				<tr><td>Seo Title:</td><td><input type="text" name="seodata[<?php echo $language['language_id']; ?>][seo_title]" size="100" value="<?php echo isset($seodata[$language['language_id']]['seo_title']) ? $seodata[$language['language_id']]['seo_title'] : ''; ?>" /></td></tr>
+				<tr>
+					<td>Seo H1:</td>
+					<td><input type="text" name="seodata[<?php echo $language['language_id']; ?>][seo_h1]" size="100" value="<?php echo isset($seodata[$language['language_id']]['seo_h1']) ? $seodata[$language['language_id']]['seo_h1'] : ''; ?>" />
+					</td>
+				</tr>		
+				<tr>
+					<td>Seo H2:</td>
+					<td><input type="text" name="seodata[<?php echo $language['language_id']; ?>][seo_h2]" size="100" value="<?php echo isset($seodata[$language['language_id']]['seo_h2']) ? $seodata[$language['language_id']]['seo_h2'] : ''; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td>Seo H3:</td>
+					<td><input type="text" name="seodata[<?php echo $language['language_id']; ?>][seo_h3]" size="100" value="<?php echo isset($seodata[$language['language_id']]['seo_h3']) ? $seodata[$language['language_id']]['seo_h3'] : ''; ?>" />
+					</td>
+				</tr>	
+				<tr>
+					<td>Alt image:</td>
+					<td><input type="text" name="seodata[<?php echo $language['language_id']; ?>][alt_image]" size="100" value="<?php echo isset($seodata[$language['language_id']]['alt_image']) ? $seodata[$language['language_id']]['alt_image'] : ''; ?>" />
+					</td>
+				</tr>
+				<tr>
+					<td>Title image:</td>
+					<td><input type="text" name="seodata[<?php echo $language['language_id']; ?>][title_image]" size="100" value="<?php echo isset($seodata[$language['language_id']]['title_image']) ? $seodata[$language['language_id']]['title_image'] : ''; ?>" />
+					</td>
+				</tr>
+				<!-- *=* -->
+				]]>
+            </add>
+        </operation>
+        <operation>
+            <search position="replace">
+                <![CDATA[ value="<?php echo $keyword; ?>" /> ]]>
+            </search>
+            <add>
+                <![CDATA[			value="<?php echo $keyword; ?>" /> 			If you have a few language, to view the all keywords for all language, you can go to "Edit SEO Items" in SEO module.			]]>
+            </add>
+        </operation>
+    </file>
+    <file name="system/engine/front.php">
+        <operation  error = "skip">
+            <search position="after" >
+                <![CDATA[ 	private function execute($action) { ]]>
+            </search>
+            <add>
+                <![CDATA[ 	
+					/* = */
+					$act = $method = $action->getMethod();
+					$act_to_clean = array('copy', 'delete');
+					if (in_array($act , $act_to_clean) OR ($act == 'update' AND count($_POST)) OR ($act == 'insert' AND count($_POST))) {
+						include_once DIR_CONFIG .'ssb_library/ssb_data.php';
+						$ssb_data = ssb_data::getInstance();
+						$ssb_data->clearCache();
+					}
+					if ($act == 'update' AND !count($_POST)) {
+					include_once DIR_CONFIG .'ssb_library/ssb_data.php';
+					$ssb_data = ssb_data::getInstance();
+					$ssb_setting = $ssb_data->getSetting();
+					if(!$ssb_setting){
+						include_once DIR_CONFIG .'ssb_library/ssb_table.php';
+						$ssb_table = ssb_table::getInstance();
+						$ssb_table->changeTables($ssb_data->getDBchange());
+						$default_data = $ssb_data->getDefault();
+						$ssb_data->setSetting($default_data);
+						}
+					}									
+					/* = */
+					]]>
+            </add>
+        </operation>
+    </file>
+    <file name="admin/controller/common/home.php">
+        <operation>
+            <search position="after">
+                <![CDATA[public function login() {]]>
+            </search>
+            <add>
+                <![CDATA[
+				if (isset($this->request->get['route']) AND $this->request->get['route'] != "module/superseobox") {
+					unset($_SESSION['setSetting_']);
+					unset($_SESSION['getFunction_last_error']);
+				}		
+				$_SESSION["ssb_page_type"] = 'admin';		
+
+				$path = DIR_IMAGE . 'ssb_qr_code/';
+				$files = glob($path . '*.png');
+				if ($files and count($files) > 500) {
+					foreach ($files as $file) {
+						if (file_exists($file)) {
+							@unlink($file);
+						}
+					}
+				}
+
+				]]>
+            </add>
+        </operation>
+    </file>
+</modification>

@@ -1,0 +1,292 @@
+<modification>
+    <id>KEYiDEAS admin sizechart</id>
+    <version>0.0.1</version>
+    <vqmver>2.3</vqmver>
+    <author>KEYiDEAS</author>  
+    <file name="admin/controller/catalog/product.php">
+        <operation>
+            <search position="after">
+                <![CDATA[
+                    $this->data['languages'] = $this->model_localisation_language->getLanguages();
+                ]]>
+            </search>
+            <add>            
+                <![CDATA[
+                    $this->load->model('catalog/sizechart'); //Put addition functionality to select size chart
+                    $this->data['sizecharts'] = $this->model_catalog_sizechart->getAllSizecharts();
+                ]]>
+            </add>   
+        </operation>                
+    </file>
+    <file name="admin/view/template/catalog/product_form.tpl">        
+        <operation>
+            <search position="replace">
+               <![CDATA[ 
+                <td><input type="text" name="product_description[<?php echo $language['language_id']; ?>][tag]" value="<?php echo isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['tag'] : ''; ?>" size="80" /></td>
+                ]]>
+            </search>
+            <add>
+                <![CDATA[ 
+                &nbsp;
+                ]]>
+            </add>
+        </operation>
+        <operation>
+            <search position="replace">
+                <![CDATA[
+               <td><?php echo $entry_tag; ?></td>
+                ]]>
+            </search>
+            <add>            
+                <![CDATA[
+                </tr>
+                <tr>
+                    <td><?php echo $entry_tag; ?></td><td><input type="text" name="product_description[<?php echo $language['language_id']; ?>][tag]" value="<?php echo isset($product_description[$language['language_id']]) ? $product_description[$language['language_id']]['tag'] : ''; ?>" size="80" /></td>
+               </tr>                
+              <?php if(!empty($sizecharts)): ?>
+              <tr>
+                  <td>Sizechart:</td>
+                  <td>
+                      <select name="product_description[<?php echo $language['language_id']; ?>][sizechart_id]">
+                       <option value="">Select Sizechart</option>   
+                       <?php foreach($sizecharts[$language['language_id']] as $sizechart):?>                       
+                       <?php 
+                       $selected = "";
+                       if($sizechart['id'] == $product_description[$language['language_id']]['sizechart_id']){ 
+                            $selected = "selected";
+                       }
+                       ?> 
+                       <option value="<?php echo $sizechart['id']; ?>" <?php echo $selected; ?> ><?php echo $sizechart['title']; ?></option>
+                       <?php endforeach; ?>
+                       </select>
+                  </td>
+              </tr>
+              <?php endif; ?>
+                  ]]>
+            </add>   
+        </operation>               
+      </file>
+    <file name="admin/model/catalog/product.php">
+        <operation>
+            <search position="replace">
+                <![CDATA[
+                    tag = '" . $this->db->escape($value['tag']) . "'
+                ]]>
+            </search>
+            <add>
+                <![CDATA[
+                    tag = '" . $this->db->escape($value['tag']) . "',sizechart_id = '" . (int)$value['sizechart_id'] . "'
+                ]]>
+            </add>
+        </operation>
+        <operation>
+            <search position="replace">
+                <![CDATA[
+                'tag'              => $result['tag']
+                ]]>
+            </search>
+            <add>
+                <![CDATA[
+                    'tag'              => $result['tag'],
+                    'sizechart_id'     => $result['sizechart_id'],
+                ]]>
+            </add>
+        </operation>
+    </file>
+    <file name="admin/model/catalog/sizechart.php">
+        <operation>
+            <search position="replace">
+                <![CDATA[
+                    description = '" . $this->db->escape($value['description']) . "'
+                ]]>
+            </search>
+            <add>
+                <![CDATA[
+                    description = '" . $this->db->escape($value['description']) . "',manufacturer = '" . $this->db->escape($value['manufacturer']) . "'
+                ]]>
+            </add>
+        </operation>
+    </file>
+    <file name="admin/controller/common/header.php">
+        <operation>
+            <search position="after">
+                <![CDATA[
+                $this->data['text_information'] = $this->language->get('text_information');
+                ]]>
+            </search>
+            <add>            
+                <![CDATA[
+                $this->data['text_sizechart'] = "Sizechart";
+                  ]]>
+            </add>   
+        </operation>                
+        <operation>
+            <search position="after">
+                <![CDATA[
+                $this->data['information'] = $this->url->link('catalog/information', 'token=' . $this->session->data['token'], 'SSL');
+                ]]>
+            </search>
+            <add>            
+                <![CDATA[
+                $this->data['sizechart'] = $this->url->link('catalog/sizechart', 'token=' . $this->session->data['token'], 'SSL');
+                  ]]>
+            </add>   
+        </operation>
+    </file>           
+    <file name="admin/view/template/common/header.tpl">
+        <operation>
+            <search position="after">
+                <![CDATA[
+                    <li><a href="<?php echo $information; ?>"><?php echo $text_information; ?></a></li>
+                ]]>
+            </search>
+            <add>            
+                <![CDATA[
+                    <li><a href="<?php echo $sizechart; ?>"><?php echo $text_sizechart; ?></a></li>
+                 ]]>
+            </add>   
+        </operation>                
+    </file>
+    <file name="catalog/model/catalog/product.php">
+        <operation>
+            <search position="replace">
+                <![CDATA[p.sort_order FROM]]>
+            </search>
+            <add>
+                <![CDATA[p.sort_order, pd.sizechart_id FROM]]>
+            </add>
+        </operation>
+        <operation>
+            <search position="before">
+                <![CDATA[ 
+                    public function getTotalProductSpecials() {
+                ]]>
+            </search>
+            <add>
+                <![CDATA[
+                 public function getSizechartDetail($sizechart_id,$manufacturer="") {
+					  $result = "";
+					  if($sizechart_id!='' && $sizechart_id!='0'){
+                          $query = $this->db->query("SELECT sizechart_id , description FROM " . DB_PREFIX . "sizechart_description WHERE sizechart_id = '" . (int)$sizechart_id . "' and language_id = '".(int)$this->config->get('config_language_id')."' ");
+                          if(isset($query->row['description'])){
+                                $result =  $query->row['description'];
+                          }
+					  } else if($manufacturer!="")
+					  {
+					     $query = $this->db->query("SELECT sizechart_id , description FROM " . DB_PREFIX . "sizechart_description WHERE manufacturer = '" . (int)$manufacturer . "' and language_id = '".(int)$this->config->get('config_language_id')."' ");
+                         if(isset($query->row['description'])){
+                               $result =  $query->row['description'];
+                         }
+					  }
+					  return $result;
+                  } 
+                ]]>
+            </add>
+        </operation>
+        <operation>
+            <search position="before">
+                <![CDATA['viewed'           => $query->row['viewed']]]>
+            </search>
+            <add>
+                <![CDATA[
+                'sizechart'        => $query->row['sizechart_id'], 
+                ]]>
+            </add>
+        </operation>                         
+    </file>       
+    <file name="catalog/controller/product/product.php">
+        <operation>
+            <search position="after">
+                <![CDATA[$this->data['text_points'] = $this->language->get('text_points');]]>
+            </search>
+            <add>
+                <![CDATA[$this->data['text_sizechart'] = $this->language->get('text_sizechart');]]>
+            </add>
+        </operation>
+        <operation>
+            <search position="after">
+                <![CDATA[
+                $this->data['points'] = $product_info['points'];
+                ]]>
+            </search>
+            <add>
+                <![CDATA[ $this->data['sizechart'] =  $this->model_catalog_product->getSizechartDetail($product_info['sizechart'],$product_info['manufacturer_id']); ]]>
+            </add>
+        </operation>                       
+    </file>    
+    <file name="catalog/language/russian/product/product.php">
+        <operation>
+            <search position="after">
+                <![CDATA[
+                $_['text_tags']         = 'Tags:';
+                ]]>
+            </search>
+            <add>
+                <![CDATA[
+                $_['text_sizechart']    = 'Sizechart: ';
+                ]]>
+            </add>
+        </operation>
+    </file>       
+    <file name="catalog/view/theme/*/stylesheet/stylesheet.css">
+        <operation>
+            <search position="before">
+                <![CDATA[
+                /* banner */
+                ]]>
+            </search>
+            <add>
+                <![CDATA[
+                #sizechart_content{
+                    height:600px;
+                    width:800px;
+                }    
+                ]]>
+            </add>
+        </operation>
+    </file>
+    <file name="catalog/view/theme/*/template/product/product.tpl">
+        <operation>
+            <search position="after">
+                <![CDATA[
+                <span><?php echo $text_stock; ?></span> <?php echo $stock; ?>
+                ]]>
+            </search>
+            <add>
+                <![CDATA[ 
+                ]]>
+            </add>
+        </operation>
+        <operation>
+            <search position="before">
+                <![CDATA[
+                <?php echo $content_bottom; ?>
+                ]]>
+            </search>
+            <add>
+                <![CDATA[
+                <div style="display:none;">
+                <div id="sizechart_content">
+                    <?php echo @html_entity_decode($sizechart, ENT_QUOTES, 'UTF-8'); ?>
+                </div>
+                </div>
+                ]]>
+            </add>
+        </operation>
+        <operation>
+            <search position="before">
+                <![CDATA[
+                $('.colorbox').colorbox({
+                ]]>
+            </search>
+            <add>
+                <![CDATA[
+                    $('.inline-colorbox').colorbox({
+                        inline:true, width:"50%"
+                    });
+                ]]>
+            </add>
+        </operation>      
+           
+    </file>    
+</modification>

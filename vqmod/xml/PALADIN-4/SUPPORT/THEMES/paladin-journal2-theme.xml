@@ -1,0 +1,84 @@
+<modification>
+<id><![CDATA[Paladin SEO Manager- journal2]]></id>
+<version>1.8.0</version>
+<vqmver>1.0.0</vqmver>
+<author><![CDATA[ ROMAN TYMKIV http://smartshopbox.com ]]></author>
+
+	<file name="catalog/view/theme/*/template/module/ssb_language.tpl">
+		<operation>
+			<search position="replace" offset="25"><![CDATA[<?php if (count($languages) > 1) { ?>]]></search>
+			<add><![CDATA[
+<?php $type = $this->journal2->settings->get('cpanel.header_language_currency_language', 'flag'); ?>
+<?php if (count($languages) > 1): ?>
+<?php
+    $current_language = '';
+	
+	if(isset($this->session->data['language'])){
+			$active_lang = $this->session->data['language'];
+		}elseif(isset($_SESSION['language'])){
+			$active_lang = $_SESSION['language'];
+		}else{
+			$active_lang = $this->config->get('config_language');
+		}
+	
+    foreach ($languages as $language) {
+        if ($language['code'] == $active_lang) {
+            switch ($type) {
+                case 'flag':
+                    $current_language = "<img width=\"16\" height=\"11\" src=\"image/flags/{$language['image']}\" alt=\"{$language['name']}\" />";
+                    break;
+                case 'text':
+                    $current_language = "{$language['name']}";
+                    break;
+                case 'full':
+                    $current_language = "<img width=\"16\" height=\"11\" src=\"image/flags/{$language['image']}\" alt=\"{$language['name']}\" /> {$language['name']}";
+                    break;
+            }
+        }
+    }
+?>
+<form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data">
+    <div id="language-paladin">
+        <div class="btn-group">
+            <button class="dropdown-toggle" type="button" data-hover="dropdown">
+                <?php echo $current_language; ?> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <?php foreach ($languages as $language): ?>
+                    <?php if ($type === 'flag'): ?>
+                        <li>
+							<a href="<?php echo $language['href']; ?>" alt="<?php echo $language['name']; ?>" title="<?php echo $language['name']; ?>" >
+								<img width="16" height="11" src="image/flags/<?php echo $language['image']; ?>" alt="<?php echo $language['name']; ?>" title="<?php echo $language['name']; ?>" />
+							</a>
+						</li>
+                    <?php endif; ?>
+                    <?php if ($type === 'text'): ?>
+                        <li>
+						<a href="<?php echo $language['href']; ?>" alt="<?php echo $language['name']; ?>" title="<?php echo $language['name']; ?>" ><?php echo $language['name']; ?>
+								<?php echo $language['name']; ?>
+						</a>
+                    <?php endif; ?>
+                    <?php if ($type === 'full'): ?>
+                        <li>
+						<a href="<?php echo $language['href']; ?>" alt="<?php echo $language['name']; ?>" title="<?php echo $language['name']; ?>" ><?php echo $language['name']; ?>
+								<img width="16" height="11" src="image/flags/<?php echo $language['image']; ?>" alt="<?php echo $language['name']; ?>" title="<?php echo $language['name']; ?>" />
+								<?php echo $language['name']; ?>
+						</a>
+						</li>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+        <input type="hidden" name="language_code" value="" />
+    </div>
+</form>
+<?php endif; ?>			
+			]]></add>
+		</operation>	
+	</file>
+
+</modification>
+
+
+
+

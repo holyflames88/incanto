@@ -1,0 +1,20 @@
+<modification>
+  <id>Latest In Recent Header Data</id>
+  <version>1.1.0</version>
+  <vqmver>2.1</vqmver>
+  <author>sergius_sv</author>
+
+  <file name="catalog/controller/common/header.php" error="skip">
+    <operation error="skip">
+      <search position="after"><![CDATA[$this->language->load('common/header');]]></search> 
+      <add><![CDATA[   $options = $this->config->get('latests_in_recent');
+    if ($options) {
+      $this->data['text_new_arrivals'] = $options['description'][$this->config->get('config_language_id')]['name'];
+      $this->data['new_arrivals'] = $this->url->link('product/latest');
+    } else {
+      $this->data['new_arrivals'] = false;
+    }
+    ]]></add>
+    </operation>
+  </file>
+</modification>

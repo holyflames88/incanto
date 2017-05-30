@@ -1,0 +1,40 @@
+<modification>
+<id><![CDATA[Paladin SEO Manager- journal2]]></id>
+<version>1.8.0</version>
+<vqmver>1.0.0</vqmver>
+<author><![CDATA[ ROMAN TYMKIV http://smartshopbox.com ]]></author>
+
+	<file name="catalog/view/theme/*/template/module/ssb_language.tpl">
+		<operation>
+			<search position="replace" offset="9"><![CDATA[<?php if (count($languages) > 1) { ?>]]></search>
+			<add><![CDATA[
+<?php if ($languages && count($languages) > 1): ?>
+<form id="language_form">
+  <div id="language_switcher" class="s_switcher">
+    <?php foreach ($languages as $language): ?>
+    <?php if ($language['code'] == $language_code): ?>
+    <span class="s_selected"><img src="<?php echo $tbData->theme_images_url; ?>flags/<?php echo $language['image']; ?>" alt="<?php echo $language['name']; ?>" /> <?php echo $language['name']; ?></span>
+    <?php endif; ?>
+    <?php endforeach; ?>
+    <ul class="s_options">
+      <?php foreach ($languages as $language): ?>
+      <li>
+        <a href="<?php echo $language['href']; ?>">
+          <img src="<?php echo $tbData->theme_images_url; ?>flags/<?php echo $language['image']; ?>" alt="<?php echo $language['name']; ?>" /> <?php echo $language['name']; ?>
+        </a>
+      </li>
+      <?php endforeach; ?>
+    </ul>
+  </div>
+</form>
+<?php endif; ?>
+			
+		]]></add>
+		</operation>	
+	</file>
+
+</modification>
+
+
+
+

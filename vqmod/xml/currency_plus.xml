@@ -1,0 +1,1200 @@
+<modification>
+    <id>Валюта Плюс</id>
+    <version>2.6</version>
+    <vqmver>2.4.1</vqmver>
+    <author>louise170 (louise@ya.ru)</author>
+
+    <file name="admin/controller/catalog/product.php">
+        <operation error="skip">
+            <search position="before">
+            <![CDATA[
+                if (isset($this->request->post['status'])) {
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                if (isset($this->request->post['base_price'])) {
+                    $this->data['base_price'] = $this->request->post['base_price'];
+                } else if (isset($product_info['base_price'])) {
+                    $this->data['base_price'] = $product_info['base_price'];
+                } else {
+                    $this->data['base_price'] = '';
+                }
+
+                if (isset($this->request->post['base_currency_code'])) {
+                    $this->data['base_currency_code'] = $this->request->post['base_currency_code'];
+                } else if (isset($product_info['base_currency_code']) and $product_info['base_currency_code'] != '') {
+                    $this->data['base_currency_code'] = $product_info['base_currency_code'];
+                } else {
+                    $this->data['base_currency_code'] = $this->config->get('config_currency');
+                }
+
+                $this->load->model('localisation/currency');
+
+		        $this->data['currencies'] = $this->model_localisation_currency->getCurrencies();
+            ]]>
+            </add>
+        </operation>
+        <operation error="skip">
+            <search position="before">
+            <![CDATA[
+                $this->data['entry_price'] = $this->language->get('entry_price');
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                $this->data['entry_base_price'] = $this->language->get('entry_base_price');
+                $this->data['entry_base_currency'] = $this->language->get('entry_base_currency');
+            ]]>
+            </add>
+        </operation>
+        <operation error="skip">
+            <search position="after">
+            <![CDATA[
+                'price'                   => $product_option_value['price'],
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                'base_price'         => isset($product_option_value['base_price'])? $product_option_value['base_price'] : '',
+            ]]>
+            </add>
+        </operation>
+        <operation error="skip">
+            <search position="after">
+            <![CDATA[
+                if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                $this->load->model('localisation/currency');
+
+		        $this->data['currencies'] = $this->model_localisation_currency->create_fields();
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/catalog/product_form.tpl">
+        <operation error="skip">
+            <search position="after" offset="1">
+            <![CDATA[
+                <td><input type="text" name="price" value="<?php echo $price; ?>" /></td>
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                <tr>
+                  <td><?php echo $entry_base_price; ?></td>
+                  <td><input type="text" name="base_price" value="<?php echo $base_price; ?>" /></td>
+                </tr>
+                <tr>
+                  <td><?php echo $entry_base_currency; ?></td>
+                  <td><select name="base_currency_code">
+                      <?php foreach ($currencies as $currency) { ?>
+                      <?php if ($currency['code'] == $base_currency_code) { ?>
+                      <option value="<?php echo $currency['code']; ?>" selected="selected"><?php echo $currency['title']; ?></option>
+                      <?php } else { ?>
+                      <option value="<?php echo $currency['code']; ?>"><?php echo $currency['title']; ?></option>
+                      <?php } ?>
+                      <?php } ?>
+                    </select></td>
+                </tr>
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace" index="1,2,3">
+            <![CDATA[
+                <td class="right"><?php echo $entry_price; ?></td>
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                <td class="right"><?php echo $entry_price; ?> / <?php echo $entry_base_price; ?></td>
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace" index="1">
+            <![CDATA[
+                html += '        <td class="right"><?php echo $entry_price; ?></td>';
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                html += '        <td class="right"><?php echo $entry_price; ?> / <?php echo $entry_base_price; ?></td>';
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+            <![CDATA[
+                <input type="text" name="product_option[<?php echo $option_row; ?>][product_option_value][<?php echo $option_value_row; ?>][price]" value="<?php echo $product_option_value['price']; ?>" size="5" /></td>
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                <input type="text" name="product_option[<?php echo $option_row; ?>][product_option_value][<?php echo $option_value_row; ?>][price]" value="<?php echo $product_option_value['price']; ?>" size="5" />
+                / <input type="text" name="product_option[<?php echo $option_row; ?>][product_option_value][<?php echo $option_value_row; ?>][base_price]" value="<?php echo $product_option_value['base_price']; ?>" size="5" /></td>
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+            <![CDATA[
+                html += '    <input type="text" name="product_option[' + option_row + '][product_option_value][' + option_value_row + '][price]" value="" size="5" /></td>';
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+    html += '    <input type="text" name="product_option[' + option_row + '][product_option_value][' + option_value_row + '][price]" value="" size="5" />';
+    html += '    / <input type="text" name="product_option[' + option_row + '][product_option_value][' + option_value_row + '][base_price]" value="" size="5" /></td>';
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+            <![CDATA[
+                <td class="right"><input type="text" name="product_discount[<?php echo $discount_row; ?>][price]" value="<?php echo $product_discount['price']; ?>" /></td>
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                <td class="right"><input type="text" name="product_discount[<?php echo $discount_row; ?>][price]" value="<?php echo $product_discount['price']; ?>" />
+                / <input type="text" name="product_discount[<?php echo $discount_row; ?>][base_price]" value="<?php if (isset($product_discount['base_price'])) echo $product_discount['base_price']; ?>" /></td>
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+            <![CDATA[
+                html += '    <td class="right"><input type="text" name="product_discount[' + discount_row + '][price]" value="" /></td>';
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                html += '    <td class="right"><input type="text" name="product_discount[' + discount_row + '][price]" value="" /> / <input type="text" name="product_discount[' + discount_row + '][base_price]" value="" /></td>';
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+            <![CDATA[
+                <td class="right"><input type="text" name="product_special[<?php echo $special_row; ?>][price]" value="<?php echo $product_special['price']; ?>" /></td>
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                <td class="right"><input type="text" name="product_special[<?php echo $special_row; ?>][price]" value="<?php echo $product_special['price']; ?>" />
+                / <input type="text" name="product_special[<?php echo $special_row; ?>][base_price]" value="<?php if (isset($product_special['base_price'])) echo $product_special['base_price']; ?>" /></td>
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+            <![CDATA[
+                html += '    <td class="right"><input type="text" name="product_special[' + special_row + '][price]" value="" /></td>';
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                html += '    <td class="right"><input type="text" name="product_special[' + special_row + '][price]" value="" /> / <input type="text" name="product_special[' + special_row + '][base_price]" value="" /></td>';
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/catalog/quick_edit_product/quick_product_form.tpl">
+        <operation error="skip">
+            <search position="after" offset="1">
+            <![CDATA[
+                <td><input type="text" name="price" value="<?php echo $price; ?>" /></td>
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                <tr>
+                  <td><?php echo $entry_base_price; ?></td>
+                  <td><input type="text" name="base_price" value="<?php echo $base_price; ?>" /></td>
+                </tr>
+                <tr>
+                  <td><?php echo $entry_base_currency; ?></td>
+                  <td><select name="base_currency_code">
+                      <?php foreach ($currencies as $currency) { ?>
+                      <?php if ($currency['code'] == $base_currency_code) { ?>
+                      <option value="<?php echo $currency['code']; ?>" selected="selected"><?php echo $currency['title']; ?></option>
+                      <?php } else { ?>
+                      <option value="<?php echo $currency['code']; ?>"><?php echo $currency['title']; ?></option>
+                      <?php } ?>
+                      <?php } ?>
+                    </select></td>
+                </tr>
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace" index="1,2">
+            <![CDATA[
+                <td class="right"><?php echo $entry_price; ?></td>
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                <td class="right"><?php echo $entry_price; ?> / <?php echo $entry_base_price; ?></td>
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace" index="1">
+            <![CDATA[
+                html += '        <td class="right"><?php echo $entry_price; ?></td>';
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                html += '        <td class="right"><?php echo $entry_price; ?> / <?php echo $entry_base_price; ?></td>';
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+            <![CDATA[
+                <input type="text" name="product_option[<?php echo $option_row; ?>][product_option_value][<?php echo $option_value_row; ?>][price]" value="<?php echo $product_option_value['price']; ?>" size="5" /></td>
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                <input type="text" name="product_option[<?php echo $option_row; ?>][product_option_value][<?php echo $option_value_row; ?>][price]" value="<?php echo $product_option_value['price']; ?>" size="5" />
+                / <input type="text" name="product_option[<?php echo $option_row; ?>][product_option_value][<?php echo $option_value_row; ?>][base_price]" value="<?php echo $product_option_value['base_price']; ?>" size="5" /></td>
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+            <![CDATA[
+                html += '    <input type="text" name="product_option[' + option_row + '][product_option_value][' + option_value_row + '][price]" value="" size="5" /></td>';
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+    html += '    <input type="text" name="product_option[' + option_row + '][product_option_value][' + option_value_row + '][price]" value="" size="5" />';
+    html += '    / <input type="text" name="product_option[' + option_row + '][product_option_value][' + option_value_row + '][base_price]" value="" size="5" /></td>';
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+            <![CDATA[
+                <td class="right"><input type="text" name="product_discount[<?php echo $discount_row; ?>][price]" value="<?php echo $product_discount['price']; ?>" /></td>
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                <td class="right"><input type="text" name="product_discount[<?php echo $discount_row; ?>][price]" value="<?php echo $product_discount['price']; ?>" />
+                / <input type="text" name="product_discount[<?php echo $discount_row; ?>][base_price]" value="<?php if (isset($product_discount['base_price'])) echo $product_discount['base_price']; ?>" /></td>
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+                <![CDATA[
+                html += '    <td class="right"><input type="text" name="product_discount[' + discount_row + '][price]" value="" /></td>';
+            ]]>
+            </search>
+            <add>
+                <![CDATA[
+                html += '    <td class="right"><input type="text" name="product_discount[' + discount_row + '][price]" value="" /> / <input type="text" name="product_discount[' + discount_row + '][base_price]" value="" /></td>';
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+                <![CDATA[
+                <td class="right"><input type="text" name="product_special[<?php echo $special_row; ?>][price]" value="<?php echo $product_special['price']; ?>" /></td>
+            ]]>
+            </search>
+            <add>
+                <![CDATA[
+                <td class="right"><input type="text" name="product_special[<?php echo $special_row; ?>][price]" value="<?php echo $product_special['price']; ?>" />
+                / <input type="text" name="product_special[<?php echo $special_row; ?>][base_price]" value="<?php if (isset($product_special['base_price'])) echo $product_special['base_price']; ?>" /></td>
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+                <![CDATA[
+                html += '    <td class="right"><input type="text" name="product_special[' + special_row + '][price]" value="" /></td>';
+            ]]>
+            </search>
+            <add>
+                <![CDATA[
+                html += '    <td class="right"><input type="text" name="product_special[' + special_row + '][price]" value="" /> / <input type="text" name="product_special[' + special_row + '][base_price]" value="" /></td>';
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="admin/language/russian/catalog/product.php">
+        <operation error="skip">
+            <search position="after">
+            <![CDATA[
+                $_['entry_price']            = 'Цена:';
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                $_['entry_base_price']            = 'Базовая цена:';
+                $_['entry_base_currency']         = 'Базовая валюта:';
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="admin/language/english/catalog/product.php">
+        <operation error="skip">
+            <search position="after">
+            <![CDATA[
+                $_['entry_price']            = 'Price:';
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                $_['entry_base_price']            = 'Base Price:';
+                $_['entry_base_currency']         = 'Base Currency:';
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="admin/model/catalog/product.php">
+        <operation error="skip">
+        <search position="replace">
+            <![CDATA[
+                model =
+            ]]>
+        </search>
+        <add>
+            <![CDATA[
+                base_price = '" . (float)$data['base_price'] . "', base_currency_code = '" . $data['base_currency_code'] . "', model =
+            ]]>
+        </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+            <![CDATA[
+                price = '" . (float)$product_option_value['price'] . "',
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                base_price = '" . (float)$product_option_value['base_price'] . "', price = '" . (float)$product_option_value['price'] . "',
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="after">
+            <![CDATA[
+                'price'                   => $product_option_value['price'],
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                'base_price'         => isset($product_option_value['base_price'])? $product_option_value['base_price'] : '',
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+            <![CDATA[
+                priority = '" . (int)$product_discount['priority'] . "',
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                base_price = '" . (float)$product_discount['base_price'] . "', priority = '" . (int)$product_discount['priority'] . "',
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+            <![CDATA[
+                priority = '" . (int)$product_special['priority'] . "',
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                base_price = '" . (float)$product_special['base_price'] . "', priority = '" . (int)$product_special['priority'] . "',
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+            <![CDATA[
+                priority = '" . (int)$value['priority'] . "',
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                base_price = '" . (float)$value['base_price'] . "', priority = '" . (int)$value['priority'] . "',
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="before">
+            <![CDATA[
+                if (isset($data['image'])) {
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                $this->load->model('localisation/currency');
+                $this->model_localisation_currency->updateCurrencies(true, 'product', array('product_id' => $product_id) );
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+
+    <file name="admin/model/localisation/currency.php">
+        <operation error="skip">
+            <search position="after">
+            <![CDATA[
+                class ModelLocalisationCurrency extends Model {
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                public function create_fields() {
+                    $sql = "SELECT * FROM `" . DB_PREFIX . "product` LIMIT 1";
+                    $query = $this->db->query($sql);
+                    $result = $query->row;
+
+
+                    $query = $this->db->query("SHOW COLUMNS FROM " . DB_PREFIX . "product WHERE field = 'base_price'");
+			        if (count($query->rows) == 0) {
+			            $this->db->query("ALTER TABLE `" . DB_PREFIX . "product` ADD COLUMN `base_price` decimal(15,4) NOT NULL AFTER `price`;");
+			        }
+
+
+                    $query = $this->db->query("SHOW COLUMNS FROM " . DB_PREFIX . "product WHERE field = 'base_currency_code'");
+			        if (count($query->rows) == 0) {
+			            $this->db->query("ALTER TABLE `" . DB_PREFIX . "product` ADD COLUMN `base_currency_code` varchar(3) NOT NULL DEFAULT '".$this->config->get('config_currency')."' AFTER `base_price`;");
+			        }
+
+
+                    $query = $this->db->query("SHOW COLUMNS FROM " . DB_PREFIX . "product_option_value WHERE field = 'base_price'");
+			        if (count($query->rows) == 0) {
+			            $this->db->query("ALTER TABLE `" . DB_PREFIX . "product_option_value` ADD COLUMN `base_price` decimal(15,4) NOT NULL AFTER `price`;");
+			        }
+
+
+                    $query = $this->db->query("SHOW COLUMNS FROM " . DB_PREFIX . "product_discount WHERE field = 'base_price'");
+			        if (count($query->rows) == 0) {
+			            $this->db->query("ALTER TABLE `" . DB_PREFIX . "product_discount` ADD COLUMN `base_price` decimal(15,4) NOT NULL AFTER `price`;");
+			        }
+
+                    $query = $this->db->query("SHOW COLUMNS FROM " . DB_PREFIX . "product_special WHERE field = 'base_price'");
+			        if (count($query->rows) == 0) {
+			            $this->db->query("ALTER TABLE `" . DB_PREFIX . "product_special` ADD COLUMN `base_price` decimal(15,4) NOT NULL AFTER `price`;");
+			        }
+
+			        $query = $this->db->query("SHOW COLUMNS FROM " . DB_PREFIX . "product WHERE field = 'extra_charge'");
+			        if (count($query->rows) == 0) {
+			            $this->db->query("ALTER TABLE `" . DB_PREFIX . "product` ADD COLUMN `extra_charge` int(3) NOT NULL DEFAULT 0 AFTER `price`;");
+			        }
+
+
+                    $query = $this->db->query("SHOW COLUMNS FROM " . DB_PREFIX . "product WHERE field = 'cost'");
+			        if (count($query->rows) == 0) {
+                        $this->db->query("ALTER TABLE `" . DB_PREFIX . "product` ADD `cost` decimal(15,4) NOT NULL DEFAULT '0.0000' AFTER `price`;");
+                    }
+
+
+                    $query = $this->db->query("SHOW COLUMNS FROM " . DB_PREFIX . "product_option_value WHERE field = 'cost'");
+			        if (count($query->rows) == 0) {
+                        $this->db->query("ALTER TABLE `" . DB_PREFIX . "product_option_value` ADD `cost` decimal(15,4) NOT NULL DEFAULT '0.0000' AFTER `price`;");
+                    }
+
+
+                    $query = $this->db->query("SHOW COLUMNS FROM " . DB_PREFIX . "order_product WHERE field = 'cost'");
+			        if (count($query->rows) == 0) {
+                        $this->db->query("ALTER TABLE `" . DB_PREFIX . "order_product` ADD `cost` decimal(15,4) NOT NULL DEFAULT '0.0000' AFTER `price`;");
+                    }
+
+
+                    $query = $this->db->query("SHOW COLUMNS FROM " . DB_PREFIX . "order_option WHERE field = 'cost'");
+			        if (count($query->rows) == 0) {
+                        $this->db->query("ALTER TABLE `" . DB_PREFIX . "order_option` ADD `cost` decimal(15,4) NOT NULL DEFAULT '0.0000';");
+                    }
+                }
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+            <![CDATA[
+                public function updateCurrencies(
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                private function updatePriceValue($result, $value) {
+                    $round_val = $this->roundPriceValue('base_price', $value, $this->config->get('currency_plus_round'));
+                    $round_val_for_cost = $this->roundPriceValue('base_price', $value, 'NO');
+
+                    if (count($result) == 0 or (count($result) > 0 and !isset($result['cost']) and !isset($result['extra_charge']))) {
+                        $update_val = " price = ".$round_val;
+                    }
+                    elseif (count($result) > 0) {
+                        if ( isset($result['cost']) and !isset($result['extra_charge'])) {
+                            $update_val = " price = ".$round_val.", cost = ".$round_val_for_cost;
+                        }
+                        elseif ( !isset($result['cost']) and isset($result['extra_charge'])) {
+                            $update_val = " price = ".$round_val;
+                        }
+                        elseif ( isset($result['cost']) and isset($result['extra_charge'])) {
+                            $round_val_2 = $this->roundPriceValue('base_price', $value, $this->config->get('currency_plus_round'), 'extra_charge');
+
+                            $update_val = " price = ".$round_val_2.", cost = ".$round_val_for_cost;
+                        }
+                    }
+
+                    return $update_val;
+                }
+
+                private function roundPriceValue($name, $value, $round, $extra_charge = '') {
+                    if ($extra_charge != '') {
+                        $name = "(".$name."+(".$name."/100*".$extra_charge."))";
+                    }
+
+                    if ($round == 'digit10') {
+                        $round_val = "ROUND(".$name."*".$value."/10, 0)*10";
+                    }
+                    elseif ($round == 'digit9') {
+                        $round_val = "ROUND(".$name."*".$value."/10, 0)*10" - 1;
+                    }
+                    elseif ($round == 'digit50') {
+                        $round_val = "ROUND(".$name."*".$value."/50, 0)*50";
+                    }
+                    elseif ($round == 'digit100') {
+                        $round_val = "ROUND(".$name."*".$value."/100, 0)*100";
+                    }
+                    elseif ($round == 'digit1') {
+                        $round_val = "ROUND(".$name."*".$value.", 0)";
+                    }
+                    else {
+                        $round_val = "ROUND(".$name."*".$value.", 4)";
+                    }
+
+                    return $round_val;
+                }
+
+
+                private function getCourse($source = 'RUB') {
+                    //echo $source;
+
+                    if ($source == 'RUB' or $source == 'RUR') {
+                        $Request = "http://www.cbr.ru/scripts/XML_daily.asp";
+
+                        $arr = array('title' => 'CharCode', 'nominal' => 'Nominal', 'value' => 'Value');
+                    }
+                    elseif ($source == 'KZT') {
+                        $Request = "http://www.nationalbank.kz/rss/rates_all.xml";
+
+                        $arr = array('title' => 'title', 'nominal' => 'quant', 'value' => 'description');
+                    }
+                    elseif ($source == 'UAH') {
+                        $Request = "http://bank-ua.com/export/currrate.xml";
+
+                        $arr = array('title' => 'char3', 'nominal' => 'size', 'value' => 'rate');
+                    }
+                    elseif ($source == 'BYR') {
+                        $Request = "http://www.nbrb.by/Services/XmlExRates.aspx";
+
+                        $arr = array('title' => 'CharCode', 'nominal' => 'Scale', 'value' => 'Rate');
+                    }
+
+
+                    $curl = curl_init();
+
+                    curl_setopt($curl, CURLOPT_URL, $Request);
+                    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+                    $Response = curl_exec($curl);
+                    //print_r($Response);
+
+                    curl_close($curl);
+
+                    $reader = new XMLReader();
+                    //$reader->open($Request);
+
+                    $arr_base_res = array();
+
+                    if ($Response) {
+                        $reader->xml($Response);
+                        while ($reader->read()) {
+                            switch ($reader->nodeType) {
+                                case (XMLREADER::ELEMENT):
+                                    if ( $reader->localName == $arr['title']) {
+                                        $reader->read();
+                                        $local_name = $reader->value;
+                                    }
+                                    elseif ( $reader->localName == $arr['nominal']) {
+                                        $reader->read();
+                                        $local_nominal = $reader->value;
+
+                                        $arr_nominal[$local_name] = $local_nominal;
+                                    }
+                                    elseif ( $reader->localName == $arr['value']) {
+                                        $reader->read();
+                                        $value = $reader->value;
+
+                                        //echo $value;
+
+                                        if ($source == 'RUB' or $source == 'RUR') {
+                                            $value = (substr($value,0,2).'.'.substr($value,3));
+                                        }
+
+                                        $arr_base_res[$local_name] = $value;
+                                    }
+                            }
+                        }
+                    }
+
+                    //print_r($arr_base_res);
+                    //print_r($arr_nominal);
+                    //echo $this->config->get('config_currency')."\n\n";
+
+                    foreach ($arr_base_res as $k => $v) {
+                        if ($k == $this->config->get('config_currency')) {
+                            $summa = $v/$arr_nominal[$k];
+                            //echo " - summa=".$summa."\n\n";
+
+                            break;
+                        }
+                    }
+
+                    foreach ($arr_base_res as $key => $value) {
+                        if ($key == $this->config->get('config_currency')) {
+                            $arr_new_res[$key] = 1;
+                        }
+                        elseif ($key != $this->config->get('config_currency') and $this->config->get('config_currency') == $source) {
+                            $arr_new_res[$key] = str_replace(",", ".", (1/$value*$arr_nominal[$key]));
+                        }
+                        elseif ($key != $this->config->get('config_currency') and $this->config->get('config_currency') != $source
+                            and isset($arr_nominal[$key]) and $arr_nominal[$key] != 0) {
+                            $res1 = $value/$arr_nominal[$key];
+
+                            //echo "key=".$key." value=".$value." nominal=".$arr_nominal[$key]." res1=".$res1."\n";
+
+                            if (isset($summa) and $summa > 0) {
+                                $res = $res1/$summa;
+                            }
+                            else {
+                                $res = '0';
+                            }
+
+                            if (strlen($key) == 3) {
+                                $arr_new_res[$key] = str_replace(",", ".", 1/$res);
+                            }
+                        }
+                    }
+
+
+                    if ($this->config->get('config_currency') == $source) {
+                        $arr_new_res[$source] = 1;
+                    }
+                    elseif (isset($arr_base_res[$this->config->get('config_currency')])) {
+                        $arr_new_res[$source] = $arr_base_res[$this->config->get('config_currency')]/$arr_nominal[$this->config->get('config_currency')];
+                    }
+                    else {
+                        $arr_new_res[$source] = 0;
+                    }
+
+                    //print_r($arr_new_res);
+
+                    return $arr_new_res;
+                }
+
+
+                public function updateCurrencies($force = false, $type = 'all', $data = array() ) {
+                    $this->create_fields();
+
+                    $arr_res = array();
+                    $arr_base_res = array();
+                    $arr_nominal = array();
+                    $arr_new_res = array();
+
+                    if ($type == 'product' and isset($data['product_id']) and (int)$data['product_id'] > 0) {
+                        $sql_where = " AND product_id = ".(int)$data['product_id'];
+                    }
+                    else {
+                        $sql_where = "";
+                    }
+
+                    $sql = "SELECT code, value FROM " . DB_PREFIX . "currency";
+                    $query = $this->db->query($sql);
+                    foreach ($query->rows as $result) {
+                        $arr_new_res[$result['code']] = $result['value'];
+                    }
+
+                    if ($type == 'currency' or $type == 'all') {
+                        if ($this->config->get('currency_plus_charcode')) {
+                            $source = $this->config->get('currency_plus_charcode');
+                        }
+                        else {
+                            $source = 'RUB';
+                        }
+                        $arr_new_res = $this->getCourse($source);
+                    }
+
+
+                    foreach ($arr_new_res as $key => $value) {
+                        $sql_1 = "UPDATE " . DB_PREFIX . "currency SET `value` = " . $value . ", date_modified=now() WHERE code='".$key."' ";
+                        //echo $sql_1."\n";
+
+                        if ($value) {
+                            $value =  str_replace(",", ".", 1/$value);
+                        }
+                        else {
+                            $value = 0;
+                        }
+
+                        if (!$force) {
+                            $sql_1 .= " AND date_modified < '" .  $this->db->escape(date('Y-m-d H:i:s', strtotime('-1 day'))) . "' ";
+                        }
+
+                        if ($type == 'all' or $type == 'currency') {
+                            $this->db->query($sql_1);
+                        }
+
+                        if ($type == 'product' or $type == 'all') {
+                            $sql = "SELECT value FROM " . DB_PREFIX . "currency WHERE code='".$key."' LIMIT 1";
+                            $query = $this->db->query($sql);
+                            if ($query->num_rows) {
+                                $value = $query->row['value'];
+
+                                if ($value) {
+                                    $value =  str_replace(",", ".", 1/$value);
+                                }
+                                else {
+                                    $value = 0;
+                                }
+
+                                $sql = "SELECT * FROM `" . DB_PREFIX . "product` LIMIT 1";
+                                $query = $this->db->query($sql);
+                                $result = $query->row;
+
+                                $update_val = $this->updatePriceValue($result, $value);
+
+                                $sql_3 = "UPDATE " . DB_PREFIX . "product SET date_modified=now(), ".$update_val."
+                                WHERE base_price > 0 AND base_currency_code='".$key."' ".$sql_where;
+
+                                if (!$force and $type == 'all') {
+                                    $sql_3 .= " AND date_modified < '" .  $this->db->escape(date('Y-m-d H:i:s', strtotime('-1 day'))) . "' ";
+                                }
+
+                                //echo $sql_3;
+                                $this->db->query($sql_3);
+
+                                $sql_4 = "UPDATE " . DB_PREFIX . "product SET price = 0 WHERE price < 0 ";
+                                $this->db->query($sql_4);
+                            }
+                        }
+
+                        if ($type == 'all' or $type == 'product') {
+                            $round_val = $this->roundPriceValue('base_price', $value, $this->config->get('currency_plus_round'));
+
+                            $update_val = $this->updatePriceValue($result, $value);
+
+                            $sql = "SELECT product_id,extra_charge FROM " . DB_PREFIX . "product WHERE base_currency_code='".$key."' ".$sql_where;
+                            if (!$force) {
+                                $sql .= " AND date_modified < '" .  $this->db->escape(date('Y-m-d H:i:s', strtotime('-1 day'))) . "' ";
+                            }
+                            $query = $this->db->query($sql);
+
+
+                            foreach ($query->rows as $result) {
+                                $update = str_replace('extra_charge', $result['extra_charge'], $update_val);
+
+                                $sql_4 = "UPDATE " . DB_PREFIX . "product_option_value SET ".$update."
+                                WHERE base_price > 0 AND product_id = '".$result['product_id']."' ";
+
+                                $this->db->query($sql_4);
+
+                                $sql_5 = "UPDATE " . DB_PREFIX . "product_discount SET price = ".$round_val."
+                                WHERE base_price > 0 AND product_id = '".$result['product_id']."' ";
+                                $this->db->query($sql_5);
+
+                                $sql_6 = "UPDATE " . DB_PREFIX . "product_special SET price = ".$round_val."
+                                WHERE base_price > 0 AND product_id = '".$result['product_id']."' ";
+                                $this->db->query($sql_6);
+                            }
+
+                            $sql_1 = "UPDATE " . DB_PREFIX . "product_option_value SET price = 0 WHERE price < 0 ";
+                            $this->db->query($sql_1);
+
+                            $sql_1 = "UPDATE " . DB_PREFIX . "product_discount SET price = 0 WHERE price < 0 ";
+                            $this->db->query($sql_1);
+
+                            $sql_1 = "UPDATE " . DB_PREFIX . "product_special SET price = 0 WHERE price < 0 ";
+                            $this->db->query($sql_1);
+                        }
+                    }
+
+                    $this->cache->delete('product');
+                    $this->cache->delete('yml');
+                }
+
+                public function updateCurrenciesOLD(
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="admin/controller/setting/setting.php">
+        <operation error="skip">
+            <search position="replace">
+            <![CDATA[
+                $this->model_localisation_currency->updateCurrencies();
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                $this->model_localisation_currency->updateCurrencies(true);
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="admin/controller/localisation/currency.php">
+        <operation error="skip">
+            <search position="before">
+            <![CDATA[
+                public function delete() {
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                public function updatecurrency($type = 'all') {
+                    if (isset($this->request->get['type'])) {
+                        $type = $this->request->get['type'];
+                    }
+
+                    $this->data['token'] = $this->session->data['token'];
+
+                    $this->load->model('localisation/currency');
+                    $this->model_localisation_currency->updateCurrencies(true, $type);
+                }
+            ]]>
+            </add>
+        </operation>
+        <operation error="skip">
+            <search position="after">
+            <![CDATA[
+                $this->load->model('localisation/currency');
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                $this->data['token'] = $this->session->data['token'];
+                $this->data['button_updatecurrency'] = $this->language->get('button_updatecurrency');
+                $this->data['button_updateproduct'] = $this->language->get('button_updateproduct');
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/localisation/currency_list.tpl">
+        <operation error="skip">
+            <search position="replace">
+            <![CDATA[
+                <div class="buttons">
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                <div class="buttons"><a onclick="update_currency('currency');" class="button"><span><?php echo $button_updatecurrency;?></span></a><a onclick="update_currency('product');" class="button"><span><?php echo $button_updateproduct;?></span></a>
+            ]]>
+            </add>
+        </operation>
+        <operation error="skip">
+            <search position="before">
+            <![CDATA[
+                <?php echo $footer; ?>
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+            <script type="text/javascript"><!--
+                function update_currency(type) {
+                    $.ajax({
+                        url: 'index.php?route=localisation/currency/updatecurrency&type='+type+'&token=<?php echo $token; ?>',
+                        dataType: 'json',
+                        success: function(json) {
+                            window.location.href = 'index.php?route=localisation/currency&token=<?php echo $token; ?>';
+                        }
+                    });
+                }
+            //--></script>
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="admin/language/russian/localisation/currency.php">
+        <operation error="skip">
+            <search position="after">
+            <![CDATA[
+                $_['entry_status']         = 'Статус:';
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                $_['button_updatecurrency'] = 'Обновить курсы';
+                $_['button_updateproduct'] = 'Обновить цены товаров';
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="admin/language/english/localisation/currency.php">
+        <operation error="skip">
+            <search position="after">
+            <![CDATA[
+                $_['entry_status']         = 'Status:';
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                $_['button_updatecurrency'] = 'Update currencies';
+                $_['button_updateproduct'] = 'Update product prices';
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="catalog/view/theme/*/template/product/product.tpl">
+        <operation error="skip">
+            <search position="after">
+            <![CDATA[
+                <?php echo $price; ?>
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                <?php if (isset($currency_plus_show_base_price) and $currency_plus_show_base_price > 0 and isset($base_price) and !empty($base_price)) { ?>
+                    <nobr>(<?php echo $base_price; ?>)</nobr>
+                <?php } ?>
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+            <![CDATA[
+                echo $option_value['price'];
+            ]]>
+            </search>
+            <add>
+            <![CDATA[if (isset($currency_plus_show_base_price) and $currency_plus_show_base_price > 0 and isset($option_value['base_price']) and !empty($option_value['base_price'])) {
+                    echo $option_value['price'].' / '.$option_value['base_price'];
+                }
+                else {
+                    echo $option_value['price'];
+                }
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="replace">
+            <![CDATA[
+                <?php echo sprintf($text_discount, $discount['quantity'], $discount['price']); ?><br />
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                <?php
+                $discount_base_price = '';
+
+                if (isset($discount['base_price']) and $discount['base_price'] != '') {
+                    $discount_base_price = ' ('.$discount['base_price'].')';
+                };
+
+                echo sprintf($text_discount, $discount['quantity'], $discount['price'].$discount_base_price); ?><br />
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="catalog/model/catalog/product.php">
+        <operation error="skip">
+            <search position="before">
+            <![CDATA[
+                'special'          => $query->row['special'],
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                'base_price'          => $query->row['base_price'],
+                'base_currency_code'  => $query->row['base_currency_code'],
+            ]]>
+            </add>
+        </operation>
+        <operation error="skip">
+            <search position="before">
+            <![CDATA[
+                'price'                   => $product_option_value['price'],
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                'base_price' => $product_option_value['base_price'],
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="catalog/controller/product/product.php">
+        <operation error="skip">
+            <search position="before">
+            <![CDATA[
+                $this->data['products'] = array();
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                if ($product_info['base_price'] > 0) {
+                    $this->data['base_price'] =  $this->currency->format(1, $product_info['base_currency_code'], $product_info['base_price'], true);
+                }
+                else {
+                    $this->data['base_price'] = '';
+                }
+
+                $this->data['base_currency_code'] = $product_info['base_currency_code'];
+
+                if ($this->config->get('currency_plus_show_base_price')) {
+                    $this->data['currency_plus_show_base_price'] = $this->config->get('currency_plus_show_base_price');
+                }
+                else {
+                    $this->data['currency_plus_show_base_price'] = 0;
+                }
+            ]]>
+            </add>
+        </operation>
+        <operation error="skip">
+            <search position="before">
+            <![CDATA[
+                'special'          => $query->row['special'],
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                'base_price'          => $query->row['base_price'],
+                'base_currency_code'  => $query->row['base_currency_code'],
+            ]]>
+            </add>
+        </operation>
+        <operation error="skip">
+            <search position="after">
+            <![CDATA[
+                'name'                    => $option_value['name'],
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                'base_price' => ($option_value['base_price'] > 0) ? $this->currency->format(1, $product_info['base_currency_code'], $option_value['base_price'], true) : '',
+            ]]>
+            </add>
+        </operation>
+        <operation error="skip">
+            <search position="after">
+            <![CDATA[
+                'quantity' => $discount['quantity'],
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                'base_price' => ($discount['base_price'] > 0) ? $this->currency->format(1, $product_info['base_currency_code'], $discount['base_price'], true) : '',
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="catalog/view/theme/*/template/product/category.tpl">
+        <operation error="skip">
+            <search position="after">
+            <![CDATA[
+                <?php echo $product['price']; ?>
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                <?php if (isset($currency_plus_show_base_price_cat) and $currency_plus_show_base_price_cat > 0 and isset($product['base_price']) and !empty($product['base_price'])) { ?>
+                    <nobr>(<?php echo $product['base_price']; ?>)</nobr>
+                <?php } ?>
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="catalog/controller/product/category.php">
+        <operation error="skip">
+            <search position="before">
+            <![CDATA[
+                'price'       => $price,
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                'base_price'          => ($result['base_price'] > 0 ) ? $this->currency->format(1, $result['base_currency_code'], $result['base_price'], true) : '',
+            ]]>
+            </add>
+        </operation>
+
+        <operation error="skip">
+            <search position="before">
+            <![CDATA[
+                $this->data['products'] = array();
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                if ($this->config->get('currency_plus_show_base_price_cat')) {
+                    $this->data['currency_plus_show_base_price_cat'] = $this->config->get('currency_plus_show_base_price_cat');
+                }
+                else {
+                    $this->data['currency_plus_show_base_price_cat'] = 0;
+                }
+            ]]>
+            </add>
+        </operation>
+    </file>
+</modification>
+

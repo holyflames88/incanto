@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Paladin-information-competition</id>
+	<version>1.0.0</version>
+	<vqmver>1.0.0</vqmver>
+	<author>Tymkiv Roman</author>	
+	
+	<file name="system/config/ssb_library/catalog/controller/common/ssb_seo_url.php">
+		<operation>
+			<search position="before" error="log"><![CDATA[if ($url[0] == 'manufacturer_id') {]]></search>
+			<add><![CDATA[
+					/** ssb-competition **/
+					if ($url[0] == 'competition_id') {
+						$this->query_data['competition_id'] = $this->request->get['competition_id'] = $url[1];
+					}
+					/** ssb-competition **/]]></add>
+		</operation>		
+		<operation>
+			<search position="replace" error="log"><![CDATA[$this->request->get['route'] = 'product/product';]]></search>
+			<add><![CDATA[
+			/** ssb-competition **/
+			$this->request->get['route'] = 'product/product';
+			}elseif (isset($this->request->get['competition_id'])) {
+					$this->request->get['route'] = 'information/competition';
+			/** ssb-competition **/]]></add>
+		</operation>
+		<operation>
+			<search position="before" error="log"><![CDATA[} elseif ($key == 'path') {]]></search>
+			<add><![CDATA[
+			/** ssb-competition
+				var 1:
+				$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($key . '=' . (int)$value) . "' AND language_id = '". $l_id_session ."'");
+			**/
+			} elseif ($data['route'] == 'information/competition' && $key == 'competition_id') {
+				$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($key . '=' . (int)$value) . "'");
+			
+				if ($query->num_rows) {
+					$url .= '/' . $query->rows[0]['keyword'];
+					
+					unset($data[$key]);
+				}
+			/** ssb-competition **/
+			]]></add>
+		</operation>
+	</file>
+</modification>
