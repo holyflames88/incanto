@@ -42,6 +42,12 @@
 					  <input class="form-control" type="password" name="password" value="<?php echo $password; ?>" />
 					  <br />
 					  <a href="<?php echo $forgotten; ?>"><?php echo $text_forgotten; ?></a><br />
+					  <!-- remember -->
+					  <div class="form-group">
+              	<label for="input-remember">
+                <input type="checkbox" name="remember_me" id="input-remember" value="remember_checked" /> <?php echo $remember_me; ?>
+                </label>
+              </div>
 					  <br />
 					  <input type="submit" value="<?php echo $button_login; ?>" class="button" />
 					  <?php if ($redirect) { ?>
