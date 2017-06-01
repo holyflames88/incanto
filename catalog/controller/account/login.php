@@ -63,6 +63,7 @@ class ControllerAccountLogin extends Controller {
 		if ($this->customer->isLogged()) {  
 			$this->redirect($this->url->link('account/account', '', 'SSL'));
 		}
+		
 
 		$this->language->load('account/login');
 
@@ -137,6 +138,7 @@ class ControllerAccountLogin extends Controller {
 
 		$this->data['button_continue'] = $this->language->get('button_continue');
 		$this->data['button_login'] = $this->language->get('button_login');
+		$this->data['remember_me'] = $this->language->get('remember_me');
 
 		if (isset($this->error['warning'])) {
 			$this->data['error_warning'] = $this->error['warning'];
@@ -209,6 +211,12 @@ class ControllerAccountLogin extends Controller {
 		}
 
 		if (!$this->error) {
+			
+					if (isset($this->request->post['remember_me'])) {
+			//$this->session->data['remember_me'] = $activity_data['customer_id'];
+			setcookie("customer_id_cookie", $activity_data['customer_id'], time() + (10 * 365 * 24 * 60 * 60), "/");
+			}
+			
 			return true;
 		} else {
 			return false;

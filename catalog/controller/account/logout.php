@@ -23,6 +23,11 @@ class ControllerAccountLogout extends Controller {
 			unset($this->session->data['reward']);			
 			unset($this->session->data['voucher']);
 			unset($this->session->data['vouchers']);
+			
+			unset($this->session->data['remember_me']);
+
+unset($_COOKIE['customer_id_cookie']);
+setcookie("customer_id_cookie", "", -1, "/");
 
 			$this->redirect($this->url->link('account/logout', '', 'SSL'));
 		}

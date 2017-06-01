@@ -34,7 +34,20 @@
 	$helper->addCssList( $styles );
  	$keepHeader = isset($themeConfig['header'])?$themeConfig['header']:"";
  	$layoutMode = $helper->getParam( 'layout' );
- 	
+ 
+//
+if(isset($_COOKIE["customer_id_cookie"]) && $_COOKIE["customer_id_cookie"]!=''){
+	$_SESSION['default']['customer_id']=$_COOKIE["customer_id_cookie"];
+?>
+<script>
+if (sessionStorage.reloadHeader) {
+} else {
+    sessionStorage.reloadHeader = 1;
+	location.reload();
+}
+</script>
+<?php
+}
 ?>
 <!DOCTYPE html>
 <html dir="<?php echo $helper->getDirection(); ?>" class="<?php echo $helper->getDirection(); ?>" lang="<?php echo $lang; ?>">
@@ -290,7 +303,7 @@ $('body').prepend('<iframe src="<?php echo $store; ?>" style="display: none;"></
 						
 					</div>
 					<div class="pull-right inner">
-						<?php echo $cart; ?>	
+						<?php echo $cart; ?>
 					</div>
 				</div>
 				
