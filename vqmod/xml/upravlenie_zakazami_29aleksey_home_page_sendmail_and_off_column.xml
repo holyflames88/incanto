@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+        <id>UZHP</id>
+        <version>1.3.1</version>
+        <vqmver>2.0</vqmver>
+        <author>AlexK</author>
+
+        <file name="admin/controller/common/home.php">
+    <operation>
+        <search position="after"><![CDATA['order_id'   => $result['order_id'],]]></search>
+        <add><![CDATA[
+		/*add*/
+			'firstname'      			=> $result['firstname'],
+			'lastname'      			=> $result['lastname'],
+			'telephone'     			=> $result['telephone'],
+			'shipping_city'      		=> $result['shipping_city'],
+			'shipping_address_1'      	=> $result['shipping_address_1'],
+			'order_note_1'      		=> json_decode($result['order_note_1'], true),
+			'order_note_2'      		=> $result['order_note_2'],
+			'order_note_3'      		=> json_decode($result['order_note_3'], true),
+			'order_note_4'     		 	=> $result['order_note_4'],
+			'clcalledch'      			=> $result['clcalledch'],
+			'adservice'      			=> $result['adservice'],
+			'driverdelivery'     		=> $result['driverdelivery'],
+			'price_2'      				=> json_decode($result['price_2'], true),
+			'price_1'      				=> json_decode($result['price_1'], true),
+			'calculated_summ'     		=> $this->currency->format($result['total'] - $price_1sum - $price_2sum , $result['currency_code'], '', true),
+			'order_status_id'			=> $result['order_status_id'],
+			'row_color' 				=> $result['row_color'],
+			'products'           		=> $this->data['products'],
+			'order_note_date'      		=> $result['order_note_date'],
+		/*end add*/
+     ]]></add>
+    </operation>
+	<operation>
+        <search position="before"><![CDATA[
+		$this->data['orders'][] = array(
+		]]></search>
+        <add><![CDATA[
+		/*----------------*/
+			 $this->load->model('tool/image');
+		
+		    $this->data['products'] = array();
+
+			$order_id = $result['order_id'];
+			
+			$products = $this->model_sale_order->getOrderProductsList($result['order_id']);
+			foreach ($products as $product) {
+				$option_data = array();
+
+				$options = $this->model_sale_order->getOrderOptions($result['order_id'], $product['order_product_id']);
+
+				foreach ($options as $option) {
+					if ($option['type'] != 'file') {
+						$option_data[] = array(
+							'name'  => $option['name'],
+							'value' => $option['value'],
+							'type'  => $option['type']
+						);
+					} else {
+						$option_data[] = array(
+							'name'  => $option['name'],
+							'value' => utf8_substr($option['value'], 0, utf8_strrpos($option['value'], '.')),
+							'type'  => $option['type'],
+							'href'  => $this->url->link('sale/order/download', 'token=' . $this->session->data['token'] . '&order_id=' . $result['order_id'] . '&order_option_id=' . $option['order_option_id'], 'SSL')
+						);						
+					}
+				}
+				
+				
+				
+			$this->data['products'][] = array(
+					'order_product_id' => $product['order_product_id'],
+					'order_id'         => $order_id,
+					'product_id'       => $product['product_id'],
+					'name'    	 	   => $product['name'],
+					'popup'    	 	   => $this->model_tool_image->resize($product['image'], 500, 500),
+					'thumb'    	 	   => $this->model_tool_image->resize($product['image'], 50, 50),
+					'model'    		   => $product['model'],
+					'sku'    		   => $product['sku'],
+					'option'   		   => $option_data,
+					'quantity'		   => $product['quantity'],
+					'price'    		   => $this->currency->format($product['price'] + ($this->config->get('config_tax') ? $product['tax'] : 0)),
+					'href'     		   => $this->url->link('catalog/product/update', 'token=' . $this->session->data['token'] . '&product_id=' . $product['product_id'], 'SSL')
+				);
+				
+			}
+			
+
+			$price_1sum=0;
+			if ($result['price_1'] != '') {
+				foreach (json_decode($result['price_1'], true) as $sum){
+					$price_1sum+=$sum['price_1'];
+				}
+			}
+			$price_2sum=0;
+			if ($result['price_2'] != '') {
+				foreach (json_decode($result['price_2'], true) as $sum){
+					$price_2sum+=$sum['price_2'];
+				}
+			}	
+			/*----------------*/
+     ]]></add>
+    </operation>
+	  <operation>
+        <search position="before"><![CDATA[
+		$this->template = 'common/home.tpl';
+		]]></search>
+        <add><![CDATA[
+		$this->load->model('localisation/order_status');
+		$this->data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		/***********************USER*************************/
+		$this->language->load('user/user');
+		$this->load->model('user/user');
+		$this->language->load('common/header');
+		$this->data['logged'] = $this->user->getUserName();
+		$results = $this->model_user_user->getUsers();
+		foreach ($results as $result) {
+      		$this->data['users'][] = array(
+				'user_id'    => $result['user_id'],
+				'username'   => $result['username'],
+			);
+		}
+	/***********************USER END*************************/
+     ]]></add>
+    </operation>
+   </file> 
+		
+		
+		<file name="admin/view/template/common/home.tpl">
+    <operation info="ORDER Column">
+        <search position="after"><![CDATA[
+		<td class="left"><?php echo $column_customer; ?></td>
+		]]></search>
+        <add><![CDATA[
+		<?php if($this->config->get('config_on_off_product_column_home') == '1'){ ?>
+		<td class="left"><?php echo "Название товара"; ?></td>
+		<?php } ?>
+		<?php if($this->config->get('config_on_off_comment_manager_home') == '1'){ ?>
+		<td class="left"><?php echo $column_order_note_2; ?></td>
+		<?php } ?>
+		<?php if($this->config->get('config_on_off_podbem_home') == '1'){ ?>
+		<td class="left"><?php echo $column_order_clcalledch; ?></td>
+		<?php } ?>
+		<?php if($this->config->get('config_on_off_sborka_home') == '1'){ ?>
+		<td class="left"><?php echo $column__order_adservice; ?></td>
+		<?php } ?>
+		<td class="left"><?php echo $column_order_note_date; ?></td>
+     ]]></add>
+    </operation>
+	<operation info="ORDER Column">
+        <search position="after"><![CDATA[
+		<td class="left"><?php echo $column_status; ?></td>
+		]]></search>
+        <add><![CDATA[
+		<?php if($this->config->get('config_on_off_manager_home') == '1'){ ?>
+		<td class="left"><?php echo $column_order_manager; ?></td>
+		<?php } ?>
+		<?php if($this->config->get('config_on_off_dostavka_home') == '1'){ ?>
+		<td class="left"><?php echo $column_driverdelivery; ?></td>
+		<?php } ?>
+		<?php if($this->config->get('config_on_off_tochka_home') == '1'){ ?>
+		<td class="left"><?php echo $column_order_note_1; ?></td>
+		<?php } ?>
+		<?php if($this->config->get('config_on_off_postavshik_home') == '1'){ ?>
+		<td class="left"><?php echo $column_order_note_3; ?></td>
+		<?php } ?>
+     ]]></add>
+    </operation>
+	<operation info="ORDER LIST">
+        <search position="replace"><![CDATA[
+		<td class="left"><?php echo $order['customer']; ?></td>
+		]]></search>
+        <add><![CDATA[
+		<td class="left">
+			<span class="firstname"><?php echo $order['firstname']; ?></span></br>
+			<span class="lastname"><?php echo $order['lastname']; ?></span></br>
+			<span class="telephone"><?php echo $order['telephone']; ?></span></br>
+			<span class="shipping_city"><?php echo $order['shipping_city']; ?></span></br>
+			<span class="shipping_address_1"><?php echo $order['shipping_address_1']; ?></span></br>
+		</td>
+		<?php if($this->config->get('config_on_off_product_column_home') == '1'){ ?>
+		<td class="left">
+						<div class="all_<?php echo $order['order_id']; ?>">
+						<?php $i = 0;?>
+						<?php foreach ($order['products'] as $product) { ?>
+						
+							<div style="clear: both; min-width:150px">
+							<span ><a href="<?php echo $product['href']; ?>" target="_blank"><?php echo $product['name']; ?></a></span></br>
+							<?php if ($product['thumb']) { ?><div style="float: left;"><img style="border: 1px solid #DDDDDD; margin-right: 3px;" src="<?php echo $product['thumb']; ?>" id="image" /></div><?php } ?>
+							<span><?php echo $product['model']; ?></span></br>
+							<?php if($this->config->get('config_on_off_sku_home') == '1'){ ?>
+							<span><?php echo $product['sku']; ?></span></br>
+							<?php } ?>
+							<span style="font-weight:bold;"><?php echo $product['price']; ?> x <?php echo $product['quantity']; ?></span></br>
+							<?php foreach ($product['option'] as $option) { ?>
+							<?php if ($option['type'] != 'file') { ?>
+							&nbsp;<small> - <?php echo $option['name']; ?>: <?php echo $option['value']; ?></small>
+							<?php } else { ?>
+							&nbsp;<small> - <?php echo $option['name']; ?>: <a href="<?php echo $option['href']; ?>"><?php echo $option['value']; ?></a></small>
+							<?php } ?></br>
+							<?php } ?>		
+							</div></br>
+							<?php $i++ ;?>
+						   <?php } ?>
+						   </div>
+						   
+						   <?php if($i > 1){?>
+						   <div class="click_pr_<?php echo $order['order_id']; ?> open"></div>
+						  <?php } ?>
+						</td>
+						<?php } ?>
+				<script>
+					$(document).ready(function() { 
+						$(".click_pr_<?php echo $order['order_id']; ?>").click(function(){ 
+						 $('.all_<?php echo $order['order_id']; ?>').toggleClass('active');
+						 $('.click_pr_<?php echo $order['order_id']; ?>.open').toggleClass('active');
+						});
+					});
+					</script>
+				<style>
+					.all_<?php echo $order['order_id']; ?> {
+						height:70px;
+						overflow:hidden;
+					}
+					.all_<?php echo $order['order_id']; ?>.active {
+						overflow:none;
+						height:100%
+					}
+					.open {
+						background:#fff;
+						border:1px solid #d9d9d9;
+						border-radius:5px;
+						text-align:center;
+						position:relative;
+						height:15px;
+					}
+					.open:before {
+						width: 0; 
+						height: 0; 
+						border-left: 5px solid transparent;
+						border-right: 5px solid transparent;
+						border-top: 5px solid #000;
+						content:"";
+						position:absolute;
+						top:5px;
+					}
+					.open.active:after {
+						width: 0; 
+						height: 0; 
+						border-left: 5px solid transparent;
+						border-right: 5px solid transparent;
+						border-bottom: 5px solid #000;
+						content:"";
+						position:absolute;
+						top:5px;
+					}
+					.open.active:before {
+						width: 0; 
+						height: 0; 
+						border-left: 0px solid transparent;
+						border-right: 0px solid transparent;
+						border-bottom: 0px solid #000;
+						content:"";
+						position:absolute;
+						top:5px;
+					}
+				</style>
+				<?php if($this->config->get('config_on_off_comment_manager_home') == '1'){ ?>
+		<td class="left"><textarea cols="15"  id='note2_<?php echo $order['order_id']; ?>' class="note2" contenteditable="true" onBlur="saveNote2(<?php echo $order['order_id']; ?>, this.value);" value="<?php echo $order['order_note_2']; ?>"><?php echo $order['order_note_2']; ?></textarea> </td>
+		<?php } ?>
+		<?php if($this->config->get('config_on_off_podbem_home') == '1'){ ?>
+		<td class="left"><input type="checkbox" value="<?php echo $order['clcalledch']; ?>" <?php echo ($order['clcalledch'] == "Y" ? "checked" : "")?> onChange="updateClcalledch(<?php echo $order['order_id'] ?>, this.checked ? 'Y' : 'N');" /></td>
+		<?php } ?>
+		<?php if($this->config->get('config_on_off_sborka_home') == '1'){ ?>
+		<td class="left"><input type="checkbox" value="<?php echo $order['adservice']; ?>" <?php echo ($order['adservice'] == "Y" ? "checked" : "")?> onChange="updateAdservice(<?php echo $order['order_id'] ?>, this.checked ? 'Y' : 'N');" /></td>
+		<?php } ?>
+	 ]]></add>
+    </operation>
+	 <operation info="ORDER LIST">
+        <search position="replace"><![CDATA[
+		<td class="left"><?php echo $order['status']; ?></td>
+		]]></search>
+        <add><![CDATA[
+		<td class="left"><input id='note_date_<?php echo $order['order_id']; ?>' type="text" class="date note-date" value="<?php echo $order['order_note_date']; ?>" onChange="saveNote(<?php echo $order['order_id']; ?>);" /></td>
+		<td class="left"><select name="order_status_select" onChange="setOrderStatus(<?php echo $order['order_id'] ?>, this.value);">
+		    <?php foreach ($order_statuses as $order_status) { ?>
+		    <?php if ($order_status['order_status_id'] == $order['order_status_id']) { ?>
+		    <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
+		    <?php } else { ?>
+		    <option value="<?php echo $order_status['order_status_id']; ?>"><?php echo $order_status['name']; ?></option>
+		    <?php } ?>
+			<?php } ?>
+		</select></td>
+		<?php if($this->config->get('config_on_off_manager_home') == '1'){ ?>
+		<td class="left"><div id='note4_<?php echo $order['order_id']; ?>'  >
+			<select name="username" onChange="saveNoteUser(<?php echo $order['order_id']; ?>, this.value);">
+			<?php if ($order['order_note_4'] !='') { ?>
+			<option value="<?php echo $order['order_note_4'];?>"><?php echo $order['order_note_4']; ?></option>
+			<?php } else { ?>
+			<option value="<?php echo $logged; ?>"><?php echo $logged; ?></option>
+			<?php } ?>
+			<?php foreach ($users as $user){?>
+			<option value="<?php echo $user['username']?>"><?php echo $user['username']?></option>
+			<?php }?>
+				</select>
+		</div></td>
+		<?php } ?>
+		<?php if($this->config->get('config_on_off_dostavka_home') == '1'){ ?>
+		<td class="left"><textarea  cols="15" id='driverdelivery_<?php echo $order['order_id']; ?>' class="driverdelivery" contenteditable="true" onBlur="updateDriverdelivery(<?php echo $order['order_id']; ?>, this.value);" value="<?php echo $order['driverdelivery']; ?>"><?php echo $order['driverdelivery']; ?></textarea> </td>
+		<?php } ?>
+		<?php if($this->config->get('config_on_off_tochka_home') == '1'){ ?>
+		<td class="left">
+		<?php foreach ($order['products'] as $product) { ?>
+			<?php if(isset($order['order_note_1'])) { ?>
+				<?php foreach ($order['order_note_1'] as $item) { ?>
+					<?php if($product['product_id'] == $item['prod_id']) { ?>
+						<input class='note1_<?php echo $order['order_id']; ?> note_1' contenteditable="true" id="<?php echo $product['product_id'];?>" value="<?php echo $item['note_1']; ?>"  onBlur="saveNote1(<?php echo $order['order_id']; ?>,this.id, this.value);"></input></br></br>
+					<?php } ?>
+				<?php } ?>
+				<?php } else { ?>
+					<input class='note1_<?php echo $order['order_id']; ?> note_1' contenteditable="true" id="<?php echo $product['product_id'];?>" value=""  onBlur="saveNote1(<?php echo $order['order_id']; ?>,this.id, this.value);"></input></br></br>
+				<?php } ?>
+		<?php } ?>
+		</td>
+		<?php } ?>
+		<?php if($this->config->get('config_on_off_postavshik_home') == '1'){ ?>
+		<td class="left">
+			<?php foreach ($order['products'] as $product) { ?>
+				<?php if(isset($order['order_note_3'])) { ?>
+					<?php foreach ($order['order_note_3'] as $item) { ?>
+						<?php if($product['product_id'] == $item['prod_id']) { ?>
+							<input class='note3_<?php echo $order['order_id']; ?> note_3' contenteditable="true" id="<?php echo $product['product_id'];?>" value="<?php echo $item['note_3']; ?>"  onBlur="saveNote3(<?php echo $order['order_id']; ?>,this.id, this.value);"></input></br></br>
+						<?php } ?>
+					<?php } ?>
+				<?php } else { ?>
+			<input class='note3_<?php echo $order['order_id']; ?> note_3' contenteditable="true" id="<?php echo $product['product_id'];?>" value=""  onBlur="saveNote3(<?php echo $order['order_id']; ?>,this.id, this.value);"></input></br></br>
+				<?php } ?>
+		<?php } ?>
+		 </td>
+		 <?php } ?>
+	]]></add>
+    </operation>
+	<operation info="Modify javascript code to add filter by notes date">
+                        <search position="replace" offset="1"><![CDATA[
+		            <?php foreach ($orders as $order) { ?>
+			]]></search>
+                        <add trim="true"><![CDATA[
+		            <?php foreach ($orders as $order) { ?>
+			    <tr class="salerow" id="row_<?php echo $order['order_id']; ?>" style="background-color: <?php echo $order['row_color'] ? $order['row_color'] : '#F4F4F8'; ?> !important;">
+                        ]]></add>
+                </operation>
+	<operation info="ORDER LIST">
+        <search position="replace"><![CDATA[
+		<?php echo $footer; ?>
+		]]></search>
+        <add><![CDATA[
+<script> 
+function updateClcalledch(orderId, clcalledch) {
+	$.ajax({
+		url: 'index.php?route=sale/order/updateClcalledch&token=<?php echo $token; ?>',
+		type: 'post',
+		data: '&order_id=' + orderId + '&clcalledch=' + clcalledch,
+		dataType: 'json',
+		beforeSend: function() {
+			$('.success, .warning, .attention, .error').remove();
+//			$('.box').before('<div class="attention"><img src="view/image/loading.gif" alt="" /> <?php echo $this->language->get('text_wait'); ?></div>');
+		},			
+
+		success: function(json) {
+			$('.success, .warning, .attention, .information, .error').remove();
+
+			if (json['success']) {
+//				$('.box').before('<div class="success" style="display: none;">' + json['success'] + '</div>');
+//				$('.success').fadeIn('slow');				
+			}	
+
+			if (json['error']) {
+				for(err_msg in json['error']) {
+					$('.box').before('<div class="warning" style="display: none;">' + json['error'][err_msg] + '</div>');
+					$('.warning').fadeIn('slow');				
+				}
+			}	
+		}
+	});
+}
+function updateAdservice(orderId, adservice) {
+	$.ajax({
+		url: 'index.php?route=sale/order/updateAdservice&token=<?php echo $token; ?>',
+		type: 'post',
+		data: '&order_id=' + orderId + '&adservice=' + adservice,
+		dataType: 'json',
+		beforeSend: function() {
+			$('.success, .warning, .attention, .error').remove();
+//			$('.box').before('<div class="attention"><img src="view/image/loading.gif" alt="" /> <?php echo $this->language->get('text_wait'); ?></div>');
+		},			
+
+		success: function(json) {
+			$('.success, .warning, .attention, .information, .error').remove();
+
+			if (json['success']) {
+//				$('.box').before('<div class="success" style="display: none;">' + json['success'] + '</div>');
+//				$('.success').fadeIn('slow');				
+			}	
+
+			if (json['error']) {
+				for(err_msg in json['error']) {
+					$('.box').before('<div class="warning" style="display: none;">' + json['error'][err_msg] + '</div>');
+					$('.warning').fadeIn('slow');				
+				}
+			}	
+		}
+	});
+}
+function updateDriverdelivery(orderId, driverDelivery) {
+	$.ajax({
+		url: 'index.php?route=sale/order/updatedriverDelivery&token=<?php echo $token; ?>',
+		type: 'post',
+		data: '&order_id=' + orderId + '&driver_delivery=' + driverDelivery,
+		dataType: 'json',
+		beforeSend: function() {
+			$('.success, .warning, .attention, .error').remove();
+//			$('.box').before('<div class="attention"><img src="view/image/loading.gif" alt="" /> <?php echo $this->language->get('text_wait'); ?></div>');
+		},			
+
+		success: function(json) {
+			$('.success, .warning, .attention, .information, .error').remove();
+
+			if (json['success']) {
+//				$('.box').before('<div class="success" style="display: none;">' + json['success'] + '</div>');
+//				$('.success').fadeIn('slow');				
+			}	
+
+			if (json['error']) {
+				for(err_msg in json['error']) {
+					$('.box').before('<div class="warning" style="display: none;">' + json['error'][err_msg] + '</div>');
+					$('.warning').fadeIn('slow');				
+				}
+			}	
+		}
+	});
+}
+		function saveNote2(orderId,value) {
+					
+					$.ajax({
+						url: 'index.php?route=sale/order/saveNote2&token=<?php echo $token; ?>',
+						type: 'post',
+						data: '&order_id=' + orderId + '&note_2=' + value,
+						dataType: 'json',
+						success: function(json) {
+							$('.success, .warning, .attention, .information, .error').remove();
+							if (json['success']) {
+							}	
+						}
+					});
+				}
+			
+		function setOrderStatus(orderId, statusId) {
+	$.ajax({
+		url: 'index.php?route=sale/order/setOrderStatus&token=<?php echo $token; ?>',
+		type: 'post',
+		data: '&order_id=' + orderId + '&order_status_id=' + statusId,
+		dataType: 'json',
+		beforeSend: function() {
+			$('.success, .warning, .attention, .error').remove();
+//			$('.box').before('<div class="attention"><img src="view/image/loading.gif" alt="" /> <?php echo $this->language->get('text_wait'); ?></div>');
+		},			
+
+		success: function(json) {
+			$('.success, .warning, .attention, .information, .error').remove();
+
+//			if (json['success']) {
+//				$('.box').before('<div class="success" style="display: none;">' + json['success'] + '</div>');
+//				$('.success').fadeIn('slow');				
+				$('#row_' + orderId).attr('style', 'background-color: ' + json['success'] + ' !important');
+//				$('tbody tr td').css('background-color', 'json[\'success\']');
+//			}	
+
+			if (json['error']) {
+				for(err_msg in json['error']) {
+					$('.box').before('<div class="warning" style="display: none;">' + json['error'][err_msg] + '</div>');
+					$('.warning').fadeIn('slow');				
+				}
+			}	
+		}
+	});
+}
+function saveNote1(orderId, prodId, value) {
+		var arr = new Array();
+		$('.note1_' + orderId).each(function() {
+		   arr.push({ prod_id: $(this).attr('id'),note_1:$(this).val(), order_id:orderId});
+			});
+			$.ajax({
+			url: 'index.php?route=sale/order/saveNote1&token=<?php echo $token; ?>',
+			type: 'post',
+			data:{"note_1":JSON.stringify(arr),"order_id":orderId},
+			dataType: 'json',
+			success: function(json) {
+			$('.success, .warning, .attention, .information, .error').remove();
+			if (json['success']) {			
+						}	
+					}			
+				});
+		}
+		function saveNote3(orderId, prodId, value) {
+					var arr = new Array();
+						$('.note3_' + orderId).each(function() {
+							   arr.push({ prod_id: $(this).attr('id'),note_3:$(this).val(), order_id:orderId});
+						});
+					console.log(arr);
+					$.ajax({
+						url: 'index.php?route=sale/order/saveNote3&token=<?php echo $token; ?>',
+						type: 'post',
+						data:{"note_3":JSON.stringify(arr),"order_id":orderId},
+						dataType: 'json',
+						success: function(json) {
+							$('.success, .warning, .attention, .information, .error').remove();
+							if (json['success']) {
+							}	
+						}			
+					});
+				}
+				function saveNote(orderId) {
+					var noteDate = $('#note_date_' + orderId).val();	
+					$.ajax({
+						url: 'index.php?route=sale/order/saveNotes&token=<?php echo $token; ?>',
+						type: 'post',
+						data: '&order_id=' + orderId + '&note_date=' + noteDate,
+						dataType: 'json',
+						success: function(json) {
+							$('.success, .warning, .attention, .information, .error').remove();
+							if (json['success']) {
+							}	
+						}	
+					});
+				}
+				$('.date').datepicker({dateFormat: 'yy-mm-dd'});
+		if ($('.list').outerWidth() > $('.latest').outerWidth()) {
+				var html = '<div class="joystick shadow"><div class="joystick_left"></div><div class="joystick_right"></div></div>';
+				$('.latest').prepend(html);
+				$('.joystick').hover(
+					function () { $(this).animate({'opacity':'1.0'}, 300); },
+					function () { $(this).animate({'opacity':'0.5'}, 300); }
+				);
+				
+				$('.joystick_left, .joystick_right').click(function() {
+					var this_ = $(this);
+					var width = $('.dashboard-content').outerWidth();
+					var scroll_left = $('.dashboard-content').scrollLeft();
+					
+					if (this_.attr('class') == 'joystick_left') {
+						$('.dashboard-content').animate({'scrollLeft':(scroll_left - width)}, 700);
+					} else {
+						$('.dashboard-content').animate({'scrollLeft':(scroll_left + width)}, 700);
+					}
+				});
+			}
+			
+//--></script> 
+<style>
+.dashboard-content {
+	overflow:auto;
+}
+	.joystick {
+		position:fixed;
+		top:70%;
+		left:50%;
+		width:150px;
+		background:#F0F0F0;
+		opacity:0.5;
+		margin-left:-50px;
+		padding:5px;
+		border:1px solid #CCC;
+		border-radius:3px;
+		}
+	.joystick_left {
+		float:left;
+		background:url(view/image/go_left.png) no-repeat top center;
+	}
+	.joystick_right {
+		float:right;
+		background:url(view/image/go_right.png) no-repeat top center;
+	}
+	.joystick_left, .joystick_right {
+		width:32px;
+		height:32px;
+		border:1px solid #F0F0F0;
+		padding-bottom:2px;
+	}
+	.joystick_left:hover, .joystick_right:hover {
+		border:1px solid #CCC;
+		border-radius:3px;
+		cursor:pointer;
+	}
+</style>
+     ]]></add>
+    </operation>
+    </file> 
+		<!--LANGUAGE-->
+		 <file name="admin/language/russian/common/home.php">
+            <operation>
+                <search position="before"><![CDATA[$_['column_customer']]]></search>
+                <add><![CDATA[
+				$_['column_order_note_2']              	= 'Коментарий менеджера';
+				$_['column_order_clcalledch']          	= 'Подъем';
+				$_['column__order_adservice']          	= 'Сборка';
+				$_['column_order_manager']          	= 'Менеджер';
+				$_['column_driverdelivery']          	= 'Доставщик';
+				$_['column_order_note_1']          		= 'Точка';
+				$_['column_order_note_3']          		= 'Поставщик';
+				$_['column_order_note_date']          	= 'Дата Доставки';
+				$_['text_false']						= 'Нет';
+				$_['text_true']							= 'Да';
+				]]>
+			</add>
+            </operation>
+	</file> 
+		  <file name="admin/controller/common/home.php">
+            <operation>
+                <search position="before"><![CDATA[$this->data['column_order']]]></search>
+                <add><![CDATA[
+				$this->data['column_order_note_2'] = $this->language->get('column_order_note_2');
+				$this->data['column_order_clcalledch'] = $this->language->get('column_order_clcalledch');
+				$this->data['column__order_adservice'] = $this->language->get('column__order_adservice');
+				$this->data['column_order_manager'] = $this->language->get('column_order_manager');
+				$this->data['column_driverdelivery'] = $this->language->get('column_driverdelivery');
+				$this->data['column_order_note_1'] = $this->language->get('column_order_note_1');
+				$this->data['column_order_note_3'] = $this->language->get('column_order_note_3');
+				$this->data['column_order_note_date'] = $this->language->get('column_order_note_date');
+				$this->data['text_true'] = $this->language->get('text_true');
+				$this->data['text_false'] = $this->language->get('text_false');
+				
+				]]>
+			</add>
+            </operation>
+				<!-- AND LANGUAGE-->
+	</file>
+	
+</modification>

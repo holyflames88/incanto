@@ -1,0 +1,52 @@
+<modification>
+  <id>Related Options ext. / Связанные опции доп.</id>
+	<version>1.7.5</version>
+	<vqmver>2.X</vqmver>
+	<author>Support: support@liveopencart.com / Поддержка: opencart@19th19th.ru</author>
+  
+	
+	<file name="catalog/view/theme/*/template/common/footer*.tpl">
+		
+		<!-- Product Color Option compatibility -->
+		<operation error="skip">
+			<search position="before"><![CDATA[$this.parent().find('a.color-option').removeClass('color-active');]]></search>
+			<add><![CDATA[
+          // Related Options / Связанные опции <<
+					//console.debug($this);
+          if ($this.attr('disabled')) {
+						return;
+					}
+					// >> Related Options / Связанные опции
+      ]]></add>
+		</operation>
+	</file>
+	
+  
+	<file name="catalog/view/theme/*/template/product/product.tpl">
+  	
+    <!-- Block Option compatibility --> 
+    <operation error="skip">
+			<search position="before"><![CDATA[$this.parent().find('a.block-option, a.block-image-option').removeClass('block-active');]]></search>
+			<add><![CDATA[
+          // Related Options / Связанные опции <<
+          if ($(this).attr('disabled')) {
+						return;
+					}
+					// >> Related Options / Связанные опции
+      ]]></add>
+		</operation>
+    
+    <!-- additional fix for Block Option Module -->
+    <operation error="skip">
+			<search position="replace"><![CDATA[<?php echo $option_value['points_value']; ?>]]></search>
+			<add><![CDATA[<?php /* Related Options / Связанные опции << */  echo isset($option_value['points_value']) ? $option_value['points_value'] : '';  /* >> Related Options / Связанные опции */ ?>]]></add>
+		</operation>
+    <!-- additional fix for Block Option Module -->
+    <operation error="skip">
+			<search position="replace"><![CDATA[<?php echo $option_value['price_value']; ?>]]></search>
+			<add><![CDATA[<?php /* Related Options / Связанные опции << */  echo isset($option_value['price_value']) ? $option_value['price_value'] : '';  /* >> Related Options / Связанные опции */ ?>]]></add>
+		</operation>
+    
+  </file>
+  
+</modification>

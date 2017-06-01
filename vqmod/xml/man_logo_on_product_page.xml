@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+        <id>Manufacturer Logo on Product Page</id>
+        <version>1.0</version>
+        <vqmver>2.X</vqmver>
+        <author>Blagoicho.EU</author>
+		<file name="catalog/view/theme/*/template/product/product.tpl">
+                <operation info="replace">
+                        <search position="replace"><![CDATA[
+                        <span><?php echo $text_manufacturer; ?></span> <a href="<?php echo $manufacturers; ?>"><?php echo $manufacturer; ?></a><br />
+                        ]]>
+						</search>
+						
+                        <add><![CDATA[
+                        <a href="<?php echo $manufacturers; ?>"><?php echo ($manufacturers_img) ? '<img src="'.$manufacturers_img.'" title="'.$manufacturer.'" />' : '' ;?></a><br />
+                        ]]>
+						</add>
+                </operation>
+        </file>
+		<file name="catalog/controller/product/product.php">
+                <operation info="after">
+                        <search position="after"><![CDATA[
+                        $this->load->model('tool/image');
+                        ]]>
+						</search>
+						
+                        <add><![CDATA[
+                        $manufacturer_image = $this->model_catalog_manufacturer->getManufacturer($product_info['manufacturer_id']);
+          
+						 if($manufacturer_image){
+							$this->data['manufacturers_img'] = $this->model_tool_image->resize($manufacturer_image['image'], 100, 75);
+						 }else{
+							$this->data['manufacturers_img'] = false;
+						 }
+                        ]]>
+						</add>
+                </operation>
+        </file>
+</modification>

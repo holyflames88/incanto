@@ -1,0 +1,88 @@
+<modification>
+    <id>Наценка на себестоимость</id>
+    <version>1.0</version>
+    <vqmver>2.4.1</vqmver>
+    <author>louise170 (louise@ya.ru)</author>
+
+    <file name="admin/controller/catalog/product.php">
+        <operation error="skip">
+            <search position="before">
+            <![CDATA[
+                if (isset($this->request->post['status'])) {
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                if (isset($this->request->post['extra_charge'])) {
+                    $this->data['extra_charge'] = $this->request->post['extra_charge'];
+                } else if (isset($product_info['extra_charge'])) {
+                    $this->data['extra_charge'] = $product_info['extra_charge'];
+                } else {
+                    $this->data['extra_charge'] = '';
+                }
+            ]]>
+            </add>
+        </operation>
+        <operation error="skip">
+            <search position="before">
+            <![CDATA[
+                $this->data['entry_price'] = $this->language->get('entry_price');
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                $this->data['entry_extra_charge'] = $this->language->get('entry_extra_charge');
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="admin/view/template/catalog/product_form.tpl">
+        <operation error="skip">
+            <search position="after" offset="1">
+            <![CDATA[
+                <td><input type="text" name="price" value="<?php echo $price; ?>" /></td>
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                <tr>
+                  <td><?php echo $entry_extra_charge; ?></td>
+                  <td><input type="text" name="extra_charge" value="<?php echo $extra_charge; ?>" /></td>
+                </tr>
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="admin/language/russian/catalog/product.php">
+        <operation error="skip">
+            <search position="after">
+            <![CDATA[
+                $_['entry_price']            = 'Цена:';
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                $_['entry_extra_charge'] = 'Наценка в процентах:';
+            ]]>
+            </add>
+        </operation>
+    </file>
+
+    <file name="admin/model/catalog/product.php">
+        <operation error="skip">
+            <search position="replace">
+                <![CDATA[
+                    model =
+                ]]>
+            </search>
+            <add>
+                <![CDATA[
+                    extra_charge = '" . $data['extra_charge'] . "', model =
+                ]]>
+            </add>
+        </operation>
+    </file>
+</modification>
+

@@ -1,0 +1,118 @@
+.iSearchBox {
+	padding: 6px 5px 10px 6px;
+	background: white;
+	display:none;
+	-moz-box-shadow: 0px 4px 10px rgba(12, 12, 12, 0.5);
+	-webkit-box-shadow: 0px 4px 10px rgba(12, 12, 12, 0.5);
+	box-shadow: 0px 4px 10px rgba(12, 12, 12, 0.5);
+	z-index:10003;
+	position:absolute;
+	margin-top:1px;
+	overflow: inherit !important;
+	border: solid 1px #ef6889;
+}
+
+.iSearchBox  li, .iSearchBox ul {
+	list-style:none;
+	padding:0;
+	margin:0;	
+}
+
+.iSearchBox  li {
+	/*margin-bottom: 10px;
+	padding: 0 10px;*/
+	cursor:pointer;	
+	border-top:1px solid #fff;
+	padding: 2px;
+}
+
+.iSearchBox  li:last-child {
+	margin-bottom: 0;
+	font-size: 13px;	
+}
+
+.iSearchBox  li:hover h3, .iSearchBox  li:hover .iSearchModel, .iSearchBox  li:hover .iSearchPrice {
+	color:#444;;
+}
+
+.iSearchBox  li:hover {
+	-moz-box-shadow: 0px 0px 1px #ef6889 inset;
+	-webkit-box-shadow: 0px 0px 1px #ef6889 inset;
+	box-shadow: 0px 0px 1px #ef6889 inset;
+	background-color: #fff8ec;
+}
+
+.iSearchBox li img {
+	float: left;
+	padding: 2px;
+}
+
+.iSearchBox li .iSearchItem {
+	min-height: 50px;
+}
+
+.iSearchBox li h3 {
+	padding: 0;
+	margin: 0;
+	padding:2px 10px;
+	width:42%;
+	float:left;
+	overflow: hidden;
+	white-space:normal !important;
+	line-height: 18px;
+	text-align: left;
+}
+
+.iSearchBox li .iSearchPrice {
+	float: left;
+	/*font-weight: bold;*/
+	color: #107401;
+	font-size: 15px;
+	display: block;
+padding: 0px 10px;
+}
+
+.iSearchBox li .iSearchPrice .specialPrice {
+	color: #808080;
+font-size: 13px;
+	text-decoration:line-through;
+	float: left;
+padding: 0 7px 0 0;
+font-weight: normal;
+}
+
+.iSearchBox li .iSearchModel {
+	color: #555;
+	float: right;
+}
+
+.iSearchBoxWrapper {
+	position:relative;	
+}
+
+
+.iSearchBoxWrapper .clearfix:before,
+.iSearchBoxWrapper .clearfix:after {
+    content:"";
+    display:table;
+}
+.iSearchBoxWrapper .clearfix:after {
+    clear:both;
+}
+
+.iSearchBoxWrapper .clearfix {
+    zoom:1;
+}
+
+.iSearchBoxWrapper #iSearchBoxLoadingImage {
+	background-image: url(../image/isearch/loading.gif);
+	width: 16px;
+	height: 16px;
+	visibility: hidden;
+	display: none !important;
+}
+
+/* Fixes the nivo slider overlap */
+.slideshow .nivo-controlNav {
+	z-index:10;	
+}

@@ -1,0 +1,107 @@
+<modification>
+	<id>My reviews</id>
+	<version>1.1</version>
+	<vqmver>2.X</vqmver>
+	<author>TimeDontWait</author>
+	
+		<file name="admin/controller/setting/setting.php">
+		<operation error="skip">
+				<search position="before"><![CDATA[$this->load->model('sale/customer_group');]]></search>
+				<add><![CDATA[
+				if (isset($this->request->post['config_myreviews_edit'])) {
+					$this->data['config_myreviews_edit'] = $this->request->post['config_myreviews_edit'];
+				} else {
+					$this->data['config_myreviews_edit'] = $this->config->get('config_myreviews_edit');			
+				}
+				if (isset($this->request->post['config_myreviews_moder'])) {
+					$this->data['config_myreviews_moder'] = $this->request->post['config_myreviews_moder'];
+				} else {
+					$this->data['config_myreviews_moder'] = $this->config->get('config_myreviews_moder');			
+				}
+				]]></add>
+			</operation>
+		</file>		
+		
+		<file name="admin/view/template/setting/setting.tpl">
+		<operation error="skip">
+				<search position="after"><![CDATA[<div id="tab-option">]]></search>
+				<add><![CDATA[
+				<h2>Отзывы в Личном кабинете</h2>
+				  <table class="form">
+					<tr>
+					  <td>Редактирование отзывов</td>
+					  <td><?php if ($config_myreviews_edit) { ?>
+						<input type="radio" name="config_myreviews_edit" value="1" checked="checked" />
+						<?php echo $text_yes; ?>
+						<input type="radio" name="config_myreviews_edit" value="0" />
+						<?php echo $text_no; ?>
+						<?php } else { ?>
+						<input type="radio" name="config_myreviews_edit" value="1" />
+						<?php echo $text_yes; ?>
+						<input type="radio" name="config_myreviews_edit" value="0" checked="checked" />
+						<?php echo $text_no; ?>
+						<?php } ?></td>
+					</tr>
+					<tr>
+					  <td>Модерация отредактированного отзыва ?(сразу публиковать или нет)</td>
+					  <td><?php if ($config_myreviews_moder) { ?>
+						<input type="radio" name="config_myreviews_moder" value="1" checked="checked" />
+						<?php echo $text_yes; ?>
+						<input type="radio" name="config_myreviews_moder" value="0" />
+						<?php echo $text_no; ?>
+						<?php } else { ?>
+						<input type="radio" name="config_myreviews_moder" value="1" />
+						<?php echo $text_yes; ?>
+						<input type="radio" name="config_myreviews_moder" value="0" checked="checked" />
+						<?php echo $text_no; ?>
+						<?php } ?></td>
+					</tr>
+					</table>
+				]]></add>
+			</operation>
+		</file>
+	
+		<file name="catalog/language/russian/module/account.php">
+		<operation error="skip">
+				<search position="after"><![CDATA[// Text]]></search>
+				<add><![CDATA[
+					$_['text_reviews'] = 'Мои отзывы';
+				]]></add>
+			</operation>
+		</file>
+		
+		<file name="catalog/language/english/module/account.php">
+		<operation error="skip">
+				<search position="after"><![CDATA[// Text]]></search>
+				<add><![CDATA[
+					$_['text_reviews'] = 'My reviews';
+				]]></add>
+			</operation>
+		</file>
+		
+		<file name="catalog/controller/module/account.php">
+			<operation error="skip">
+				<search position="after"><![CDATA[$this->data['text_newsletter'] = $this->language->get('text_newsletter');]]></search>
+				<add><![CDATA[
+					$this->data['text_reviews'] = $this->language->get('text_reviews');
+				]]></add>
+			</operation>
+			<operation error="skip">
+				<search position="after"><![CDATA[$this->data['newsletter'] = $this->url->link('account/newsletter', '', 'SSL');]]></search>
+				<add><![CDATA[
+					$this->data['reviews'] = $this->url->link('account/reviews', '', 'SSL');
+				]]></add>
+			</operation>	
+			
+		</file>
+		
+		<file name="catalog/view/theme/pav_clothes/template/module/account.tpl">
+		<operation error="skip">
+				<search position="after"><![CDATA[<li><a href="<?php echo $wishlist; ?>"><?php echo $text_wishlist; ?></a></li>]]></search>
+				<add><![CDATA[
+					<li><a href="<?php echo $reviews; ?>"><?php echo $text_reviews; ?></a></li>
+				]]></add>
+			</operation>
+		</file>
+
+</modification>

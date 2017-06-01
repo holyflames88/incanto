@@ -1,0 +1,370 @@
+<modification>
+	<id><![CDATA[Product Block Option Template Default]]></id>
+	<version><![CDATA[2.2.1]]></version>
+	<vqmver><![CDATA[2.3.2]]></vqmver>
+	<author><![CDATA[WeDoWeb.com.au | contact@wedoweb.com.au]]></author>
+	<file name="catalog/view/theme/*/template/product/product.tpl">
+		<operation error="log">
+			<search error="log" position="after" index="1"><![CDATA[foreach ($options as $option)]]></search>
+			<add><![CDATA[<!--BOF Product Block Option -->
+			<?php if ($option['type'] == 'block') { ?>
+			<div rel="<?php echo $option['option_id']; ?>" id="option-<?php echo $option['product_option_id']; ?>" class="option">
+			  <?php if ($option['required']) { ?>
+			  <span class="required">*</span>
+			  <?php } ?>
+			  <b><?php echo $option['name']; ?>:</b><br />
+			  <?php 
+				foreach ($option['option_value'] as $option_value) { 
+			  ?>
+				<a class="block-option"				
+				id="block-option-<?php echo $option_value['product_option_value_id']; ?>" 
+				option-value="<?php echo $option_value['product_option_value_id']; ?>"				
+				title="<?php echo $option_value['name']; ?> <?php if ($option_value['price']) { ?>(<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)<?php } ?>">
+					<?php echo $option_value['name']; ?>
+				</a>
+			  <?php } ?>
+			  <div class="hidden">
+			  <select name="option[<?php echo $option['product_option_id']; ?>]">
+				<option value=""><?php echo $text_select; ?></option>
+				<?php foreach ($option['option_value'] as $option_value) { ?>
+				<option value="<?php echo $option_value['product_option_value_id']; ?>"><?php echo $option_value['name']; ?>
+				<?php if ($option_value['price']) { ?>
+				(<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)
+				<?php } ?>
+				</option>
+				<?php } ?>
+			  </select>
+			  </div>
+			</div>
+
+			<?php } ?>
+			<!--EOF Product Block Option -->
+			]]></add>
+		</operation>
+		<operation error="log">
+			<search error="log" position="replace" index="1"><![CDATA[<?php if ($option['type'] == 'select') { ?>]]></search>
+			<add><![CDATA[
+			<!--BOF Product Block Option -->
+			<?php if ($option['type'] == 'select' && in_array($option['option_id'], $pbo_options)) { ?>
+			<div rel="<?php echo $option['option_id']; ?>" id="option-<?php echo $option['product_option_id']; ?>" class="option">
+			  <?php if ($option['required']) { ?>
+			  <span class="required">*</span>
+			  <?php } ?>
+			  <b><?php echo $option['name']; ?>:</b><br />
+			  <?php 
+				foreach ($option['option_value'] as $option_value) { 
+			  ?>
+				<a class="block-option"				
+				id="block-option-<?php echo $option_value['product_option_value_id']; ?>" 
+				option-value="<?php echo $option_value['product_option_value_id']; ?>"
+				option-text-id="option-text-<?php echo $option['product_option_id']; ?>"			
+				title="<?php echo $option_value['name']; ?> <?php if ($option_value['price']) { ?>(<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)<?php } ?>">
+					<?php echo $option_value['name']; ?>
+				</a>
+			  <?php } ?>
+			  <div class="hidden">
+			  <select name="option[<?php echo $option['product_option_id']; ?>]">
+				<option value=""><?php echo $text_select; ?></option>
+				<?php foreach ($option['option_value'] as $option_value) { ?>
+				<option value="<?php echo $option_value['product_option_value_id']; ?>"
+					points="<?php echo isset($option_value['points_value']) ? $option_value['points_value'] : ''; ?>"
+					price_prefix="<?php echo isset($option_value['price_prefix']) ? $option_value['price_prefix'] : ''; ?>"
+					price="<?php echo isset($option_value['price_value']) ? $option_value['price_value'] : ''; ?>"
+				><?php echo $option_value['name']; ?>
+				<?php if ($option_value['price']) { ?>
+				(<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)
+				<?php } ?>
+				</option>
+				<?php } ?>
+			  </select>
+			  </div>
+			</div>
+			
+			<?php }  elseif ($option['type'] == 'select') { ?>
+			<!--EOF Product Block Option -->
+			]]></add>
+		</operation>
+		<operation error="log">
+			<search error="log" position="replace" index="1"><![CDATA[<?php if ($option['type'] == 'radio']]></search><!--?>-->
+			<add><![CDATA[
+			<!--BOF Product Block Option -->
+			<?php if ($option['type'] == 'radio' && in_array($option['option_id'], $pbo_options)) { ?>
+			<div rel="<?php echo $option['option_id']; ?>" id="option-<?php echo $option['product_option_id']; ?>" class="option">
+			  <?php if ($option['required']) { ?>
+			  <span class="required">*</span>
+			  <?php } ?>
+			  <b><?php echo $option['name']; ?>:</b><br />
+			  <?php 
+				foreach ($option['option_value'] as $option_value) { 
+			  ?>
+				<a class="block-option"				
+				id="block-option-<?php echo $option_value['product_option_value_id']; ?>" 
+				option-value="<?php echo $option_value['product_option_value_id']; ?>"
+				option-text-id="option-text-<?php echo $option['product_option_id']; ?>"
+				title="<?php echo $option_value['name']; ?> <?php if ($option_value['price']) { ?>(<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)<?php } ?>">
+					<?php echo $option_value['name']; ?>
+				</a>
+			  <?php } ?>
+			  <div class="hidden">
+			  <select name="option[<?php echo $option['product_option_id']; ?>]">
+				<option value=""><?php echo $text_select; ?></option>
+				<?php foreach ($option['option_value'] as $option_value) { ?>
+				<option value="<?php echo $option_value['product_option_value_id']; ?>"
+					points="<?php echo $option_value['points_value']; ?>"
+					price_prefix="<?php echo $option_value['price_prefix']; ?>"
+					price="<?php echo $option_value['price_value']; ?>"
+				><?php echo $option_value['name']; ?>
+				<?php if ($option_value['price']) { ?>
+				(<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)
+				<?php } ?>
+				</option>
+				<?php } ?>
+			  </select>
+			  </div>
+			</div>
+			
+			<!--EOF Product Block Option -->
+			<?php }  elseif ($option['type'] == 'radio'
+			]]></add><!--?>-->
+		</operation>
+		<operation error="log">
+			<search error="log" position="replace" index="1"><![CDATA[<?php if ($option['type'] == 'image') { ?>]]></search>
+			<add><![CDATA[
+			<!--BOF Product Block Option -->
+			<?php if ($option['type'] == 'image' && in_array($option['option_id'], $pbo_options)) { ?>
+			<div rel="<?php echo $option['option_id']; ?>" id="option-<?php echo $option['product_option_id']; ?>" class="option">
+			  <?php if ($option['required']) { ?>
+			  <span class="required">*</span>
+			  <?php } ?>
+			  <b><?php echo $option['name']; ?>:</b><br />
+			  <?php 
+				foreach ($option['option_value'] as $option_value) { 
+			  ?>
+				<a class="block-image-option"				
+				id="block-image-option-<?php echo $option_value['product_option_value_id']; ?>" 
+				option-value="<?php echo $option_value['product_option_value_id']; ?>"
+				option-text-id="option-text-<?php echo $option['product_option_id']; ?>"
+				title="<?php echo $option_value['name']; ?> <?php if ($option_value['price']) { ?>(<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)<?php } ?>">
+					<img src="<?php echo $option_value['pbo_image']; ?>" alt="<?php echo $option_value['name']; ?> <?php if ($option_value['price']) { ?>(<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)<?php } ?>" />
+				</a>				
+			  <?php } ?>
+			  <span id="option-text-<?php echo $option['product_option_id']; ?>"></span>
+			  <div class="hidden">
+			  <table class="option-image">
+				<?php foreach ($option['option_value'] as $option_value) { ?>
+				<tr>
+				  <!--
+				  points, price_prefix and price are for Kit Options
+				  optionId, imageLink are for Product Image Color sWapping
+				  optionId, eImageLink are for Product Image Layers
+				  -->
+				  <td style="width: 1px;"><input type="radio" 
+					name="option[<?php echo $option['product_option_id']; ?>]" 
+					value="<?php echo $option_value['product_option_value_id']; ?>" 
+					points="<?php echo isset($option_value['points_value']) ? $option_value['points_value'] : ''; ?>"
+					price_prefix="<?php echo isset($option_value['price_prefix']) ? $option_value['price_prefix'] : ''; ?>"
+					price="<?php echo isset($option_value['price_value']) ? $option_value['price_value'] : ''; ?>"
+					optionId="<?php echo $option['option_id']; ?>" 
+					imageLink="<?php echo $option_value['image']; ?>"
+					eImageLink="<?php echo isset($option_value['e_image_link']) ? $option_value['e_image_link'] : ""; ?>"
+					id="option-value-<?php echo $option_value['product_option_value_id']; ?>" /></td>
+				  <td><label for="option-value-<?php echo $option_value['product_option_value_id']; ?>"><img src="<?php echo $option_value['image']; ?>" alt="<?php echo $option_value['name'] . ($option_value['price'] ? ' ' . $option_value['price_prefix'] . $option_value['price'] : ''); ?>" /></label></td>
+				  <td><label for="option-value-<?php echo $option_value['product_option_value_id']; ?>"><?php echo $option_value['name']; ?>
+					  <?php if ($option_value['price']) { ?>
+					  (<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)
+					  <?php } ?>
+					</label></td>
+				</tr>
+				<?php } ?>
+			  </table>
+			  </div>
+			</div>
+			
+			<?php }  elseif ($option['type'] == 'image') { ?>
+			<!--EOF Product Block Option -->
+			]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/themecontrol/product.tpl">
+		<operation error="log">
+			<search error="log" position="after" index="1"><![CDATA[foreach ($options as $option)]]></search>
+			<add><![CDATA[<!--BOF Product Block Option -->
+			<?php if ($option['type'] == 'block') { ?>
+			<div rel="<?php echo $option['option_id']; ?>" id="option-<?php echo $option['product_option_id']; ?>" class="option">
+			  <?php if ($option['required']) { ?>
+			  <span class="required">*</span>
+			  <?php } ?>
+			  <b><?php echo $option['name']; ?>:</b><br />
+			  <?php 
+				foreach ($option['option_value'] as $option_value) { 
+			  ?>
+				<a class="block-option"				
+				id="block-option-<?php echo $option_value['product_option_value_id']; ?>" 
+				option-value="<?php echo $option_value['product_option_value_id']; ?>"				
+				title="<?php echo $option_value['name']; ?> <?php if ($option_value['price']) { ?>(<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)<?php } ?>">
+					<?php echo $option_value['name']; ?>
+				</a>
+			  <?php } ?>
+			  <div class="hidden">
+			  <select name="option[<?php echo $option['product_option_id']; ?>]">
+				<option value=""><?php echo $text_select; ?></option>
+				<?php foreach ($option['option_value'] as $option_value) { ?>
+				<option value="<?php echo $option_value['product_option_value_id']; ?>"><?php echo $option_value['name']; ?>
+				<?php if ($option_value['price']) { ?>
+				(<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)
+				<?php } ?>
+				</option>
+				<?php } ?>
+			  </select>
+			  </div>
+			</div>
+
+			<?php } ?>
+			<!--EOF Product Block Option -->
+			]]></add>
+		</operation>
+		<operation error="log">
+			<search error="log" position="replace" index="1"><![CDATA[<?php if ($option['type'] == 'select') { ?>]]></search>
+			<add><![CDATA[
+			<!--BOF Product Block Option -->
+			<?php if ($option['type'] == 'select' && in_array($option['option_id'], $pbo_options)) { ?>
+			<div rel="<?php echo $option['option_id']; ?>" id="option-<?php echo $option['product_option_id']; ?>" class="option">
+			  <?php if ($option['required']) { ?>
+			  <span class="required">*</span>
+			  <?php } ?>
+			  <b><?php echo $option['name']; ?>:</b><br />
+			  <?php 
+				foreach ($option['option_value'] as $option_value) { 
+			  ?>
+				<a class="block-option"				
+				id="block-option-<?php echo $option_value['product_option_value_id']; ?>" 
+				option-value="<?php echo $option_value['product_option_value_id']; ?>"
+				option-text-id="option-text-<?php echo $option['product_option_id']; ?>"			
+				title="<?php echo $option_value['name']; ?> <?php if ($option_value['price']) { ?>(<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)<?php } ?>">
+					<?php echo $option_value['name']; ?>
+				</a>
+			  <?php } ?>
+			  <div class="hidden">
+			  <select name="option[<?php echo $option['product_option_id']; ?>]">
+				<option value=""><?php echo $text_select; ?></option>
+				<?php foreach ($option['option_value'] as $option_value) { ?>
+				<option value="<?php echo $option_value['product_option_value_id']; ?>"
+					points="<?php echo isset($option_value['points_value']) ? $option_value['points_value'] : ''; ?>"
+					price_prefix="<?php echo isset($option_value['price_prefix']) ? $option_value['price_prefix'] : ''; ?>"
+					price="<?php echo isset($option_value['price_value']) ? $option_value['price_value'] : ''; ?>"
+				><?php echo $option_value['name']; ?>
+				<?php if ($option_value['price']) { ?>
+				(<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)
+				<?php } ?>
+				</option>
+				<?php } ?>
+			  </select>
+			  </div>
+			</div>
+			
+			<?php }  elseif ($option['type'] == 'select') { ?>
+			<!--EOF Product Block Option -->
+			]]></add>
+		</operation>
+		<operation error="log">
+			<search error="log" position="replace" index="1"><![CDATA[<?php if ($option['type'] == 'radio']]></search><!--?>-->
+			<add><![CDATA[
+			<!--BOF Product Block Option -->
+			<?php if ($option['type'] == 'radio' && in_array($option['option_id'], $pbo_options)) { ?>
+			<div rel="<?php echo $option['option_id']; ?>" id="option-<?php echo $option['product_option_id']; ?>" class="option">
+			  <?php if ($option['required']) { ?>
+			  <span class="required">*</span>
+			  <?php } ?>
+			  <b><?php echo $option['name']; ?>:</b><br />
+			  <?php 
+				foreach ($option['option_value'] as $option_value) { 
+			  ?>
+				<a class="block-option"				
+				id="block-option-<?php echo $option_value['product_option_value_id']; ?>" 
+				option-value="<?php echo $option_value['product_option_value_id']; ?>"
+				option-text-id="option-text-<?php echo $option['product_option_id']; ?>"
+				title="<?php echo $option_value['name']; ?> <?php if ($option_value['price']) { ?>(<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)<?php } ?>">
+					<?php echo $option_value['name']; ?>
+				</a>
+			  <?php } ?>
+			  <div class="hidden">
+			  <select name="option[<?php echo $option['product_option_id']; ?>]">
+				<option value=""><?php echo $text_select; ?></option>
+				<?php foreach ($option['option_value'] as $option_value) { ?>
+				<option value="<?php echo $option_value['product_option_value_id']; ?>"
+					points="<?php echo $option_value['points_value']; ?>"
+					price_prefix="<?php echo $option_value['price_prefix']; ?>"
+					price="<?php echo $option_value['price_value']; ?>"
+				><?php echo $option_value['name']; ?>
+				<?php if ($option_value['price']) { ?>
+				(<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)
+				<?php } ?>
+				</option>
+				<?php } ?>
+			  </select>
+			  </div>
+			</div>
+			
+			<!--EOF Product Block Option -->
+			<?php }  elseif ($option['type'] == 'radio'
+			]]></add><!--?>-->
+		</operation>
+		<operation error="log">
+			<search error="log" position="replace" index="1"><![CDATA[<?php if ($option['type'] == 'image') { ?>]]></search>
+			<add><![CDATA[
+			<!--BOF Product Block Option -->
+			<?php if ($option['type'] == 'image' && in_array($option['option_id'], $pbo_options)) { ?>
+			<div rel="<?php echo $option['option_id']; ?>" id="option-<?php echo $option['product_option_id']; ?>" class="option">
+			  <?php if ($option['required']) { ?>
+			  <span class="required">*</span>
+			  <?php } ?>
+			  <b><?php echo $option['name']; ?>:</b><br />
+			  <?php 
+				foreach ($option['option_value'] as $option_value) { 
+			  ?>
+				<a class="block-image-option"				
+				id="block-image-option-<?php echo $option_value['product_option_value_id']; ?>" 
+				option-value="<?php echo $option_value['product_option_value_id']; ?>"
+				option-text-id="option-text-<?php echo $option['product_option_id']; ?>"
+				title="<?php echo $option_value['name']; ?> <?php if ($option_value['price']) { ?>(<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)<?php } ?>">
+					<img src="<?php echo $option_value['pbo_image']; ?>" alt="<?php echo $option_value['name']; ?> <?php if ($option_value['price']) { ?>(<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)<?php } ?>" />
+				</a>				
+			  <?php } ?>
+			  <span id="option-text-<?php echo $option['product_option_id']; ?>"></span>
+			  <div class="hidden">
+			  <table class="option-image">
+				<?php foreach ($option['option_value'] as $option_value) { ?>
+				<tr>
+				  <!--
+				  points, price_prefix and price are for Kit Options
+				  optionId, imageLink are for Product Image Color sWapping
+				  optionId, eImageLink are for Product Image Layers
+				  -->
+				  <td style="width: 1px;"><input type="radio" 
+					name="option[<?php echo $option['product_option_id']; ?>]" 
+					value="<?php echo $option_value['product_option_value_id']; ?>" 
+					points="<?php echo isset($option_value['points_value']) ? $option_value['points_value'] : ''; ?>"
+					price_prefix="<?php echo isset($option_value['price_prefix']) ? $option_value['price_prefix'] : ''; ?>"
+					price="<?php echo isset($option_value['price_value']) ? $option_value['price_value'] : ''; ?>"
+					optionId="<?php echo $option['option_id']; ?>" 
+					imageLink="<?php echo $option_value['image']; ?>"
+					eImageLink="<?php echo isset($option_value['e_image_link']) ? $option_value['e_image_link'] : ""; ?>"
+					id="option-value-<?php echo $option_value['product_option_value_id']; ?>" /></td>
+				  <td><label for="option-value-<?php echo $option_value['product_option_value_id']; ?>"><img src="<?php echo $option_value['image']; ?>" alt="<?php echo $option_value['name'] . ($option_value['price'] ? ' ' . $option_value['price_prefix'] . $option_value['price'] : ''); ?>" /></label></td>
+				  <td><label for="option-value-<?php echo $option_value['product_option_value_id']; ?>"><?php echo $option_value['name']; ?>
+					  <?php if ($option_value['price']) { ?>
+					  (<?php echo $option_value['price_prefix']; ?><?php echo $option_value['price']; ?>)
+					  <?php } ?>
+					</label></td>
+				</tr>
+				<?php } ?>
+			  </table>
+			  </div>
+			</div>
+			
+			<?php }  elseif ($option['type'] == 'image') { ?>
+			<!--EOF Product Block Option -->
+			]]></add>
+		</operation>
+	</file>
+</modification>

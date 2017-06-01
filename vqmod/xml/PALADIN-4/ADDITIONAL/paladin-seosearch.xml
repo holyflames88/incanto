@@ -1,0 +1,132 @@
+<modification>
+<id><![CDATA[Paladin SEO Manager]]></id>
+<version>2.3.0</version>
+<vqmver>1.0.0</vqmver>
+<author><![CDATA[ ROMAN TYMKIV http://smartshopbox.com ]]></author>
+
+
+	<file name="catalog/view/theme/*/template/common/footer.tpl">
+		<operation info="make SEO search">
+			<search position="top"><![CDATA[<div id="footer">]]></search>
+			<add><![CDATA[
+				<?php 
+					$search_path = "index.php?route=product/search";
+					$ampersand = '&';
+					require_once DIR_CONFIG .'ssb_library/ssb_data.php';
+					$ssb_data = ssb_data::getInstance();
+					if($ssb_data->getEntityStatus('urls', 'STAN_urls')){
+						require_once DIR_CONFIG .'ssb_library/ssb_helper.php';
+						$this->ssb_helper = ssb_helper::getInstance();
+						$l_code = $this->ssb_helper->getDefaultLanguage();
+
+						$l_prefix = $this->session->data['language'] == $l_code ? '': $this->session->data['language'] . '/';
+						
+						$l_id_session = $this->ssb_helper->getLang_Code_Id($this->session->data['language']);
+						$sql = "SELECT * FROM  " . DB_PREFIX . "url_alias WHERE query =  'product/search' AND language_id = '". $l_id_session ."'";
+						$query = $this->db->query($sql);
+						if (!$query->num_rows) {
+							$sql = "SELECT * FROM  " . DB_PREFIX . "url_alias WHERE query =  'product/search'";
+							$query = $this->db->query($sql);
+						}
+						
+						$query = $this->db->query($sql);
+
+						$keyword = isset($query->rows[0]['keyword']) ? $query->rows[0]['keyword'] : '';
+						$ampersand = $keyword ? '?' : '&';
+						$search_path = $keyword ? $l_prefix . $keyword : $search_path;
+					}
+				?>
+				<script type="text/javascript"><!-- /*product/search*/
+				setTimeout(function(){
+					$('.button-search').unbind('click');
+					$('.button-search').bind('click', function() {
+						
+						url = $('base').attr('href') + '<?php echo $search_path; ?>';
+								 
+						var search = $('input[name=\'search\']').attr('value');
+
+						if (search) {
+							url += '<?php echo $ampersand; ?>search=' + encodeURIComponent(search);
+						}else{
+							var search = $('input[name=\'filter_name\']').attr('value');
+							if(search){
+								url += '<?php echo $ampersand; ?>filter_name=' + encodeURIComponent(search);
+							}else{
+								var $input = $(this).closest('#search').find('input');
+								var search = $input.attr('value');
+								var name   = $input.attr('name');
+								if(search){
+									url += '<?php echo $ampersand; ?>'+ name +'=' + encodeURIComponent(search);
+								}
+							}
+						}
+						
+						location = url;
+					});
+					
+					$('#search input, #header input[name=\'search\']').bind('keydown', function(e) {
+						if (e.keyCode == 13) {
+							url = $('base').attr('href') + '<?php echo $search_path; ?>';
+							 
+							var search = $(this).attr('value');
+							var name = $(this).attr('name');
+							
+							if (search) {
+								url += '<?php echo $ampersand; ?>'+ name +'=' + encodeURIComponent(search);
+							}
+							
+							location = url;
+						}
+					});
+				}, 1500);
+				//--></script>
+			]]></add>
+		</operation>		
+	</file>
+	<file name="catalog/view/theme/*/template/product/search.tpl">
+		<operation>
+			<search position="replace"><![CDATA[url = 'index.php?route=product/search';]]></search>
+			<add><![CDATA[
+				<?php 
+					$search_path = "index.php?route=product/search";
+					$ampersand = '&';
+					require_once DIR_CONFIG .'ssb_library/ssb_data.php';
+					$ssb_data = ssb_data::getInstance();
+					if($ssb_data->getEntityStatus('urls', 'STAN_urls')){
+						require_once DIR_CONFIG .'ssb_library/ssb_helper.php';
+						$this->ssb_helper = ssb_helper::getInstance();
+						$l_code = $this->ssb_helper->getDefaultLanguage();
+						
+						$l_prefix = $this->session->data['language'] == $l_code ? '': $this->session->data['language'] . '/';
+						
+						$l_id_session = $this->ssb_helper->getLang_Code_Id($this->session->data['language']);
+						$sql = "SELECT * FROM  " . DB_PREFIX . "url_alias WHERE query =  'product/search' AND language_id = '". $l_id_session ."'";
+						$query = $this->db->query($sql);
+						if (!$query->num_rows) {
+							$sql = "SELECT * FROM  " . DB_PREFIX . "url_alias WHERE query =  'product/search'";
+							$query = $this->db->query($sql);
+						}
+
+						$keyword = isset($query->rows[0]['keyword']) ? $query->rows[0]['keyword'] : '';
+						$ampersand = $keyword ? '?' : '&';
+						$search_path = $keyword ? $l_prefix . $keyword : $search_path;
+					}
+				?>
+				url = '<?php echo $search_path; ?>';
+			]]></add>
+		</operation>
+		<operation error="skip">
+			<search position="replace"><![CDATA[url += '&filter_name=' + encodeURIComponent(filter_name);]]></search>
+			<add><![CDATA[
+				url += '<?php echo $ampersand; ?>filter_name=' + encodeURIComponent(filter_name);
+			]]></add>
+		</operation>	
+		<operation error="skip">
+			<search position="replace"><![CDATA[url += '&search=' + encodeURIComponent(search);]]></search>
+			<add><![CDATA[
+				url += '<?php echo $ampersand; ?>search=' + encodeURIComponent(search);
+			]]></add>
+		</operation>
+	</file>
+
+</modification>

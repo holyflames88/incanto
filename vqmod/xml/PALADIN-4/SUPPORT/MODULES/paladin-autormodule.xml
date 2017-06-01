@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Paladin-autormodule</id>
+	<version>1.0.0</version>
+	<vqmver>1.0.0</vqmver>
+	<author>Tymkiv Roman</author>	
+	
+	<file name="system/config/ssb_library/catalog/controller/common/ssb_seo_url.php">
+		<operation>
+			<search position="before">
+			<![CDATA[if ($url[0] == 'information_id') {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/** Support Autor Module **/
+			if ($url[0] == 'author_id') {
+                $this->query_data['author_id'] = $this->request->get['author_id'] = $url[1];
+            }
+			/** Support Autor Module **/
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="before">
+			<![CDATA[} elseif (isset($this->request->get['information_id'])) {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/** Support Autor Module **/
+			} elseif (isset($this->request->get['author_id'])) {
+				$this->request->get['route'] = 'product/author';
+			/** Support Autor Module **/	
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="before" error="log"><![CDATA[} elseif ($key == 'path') {]]></search>
+			<add><![CDATA[
+			/** Support Autor Module **/
+			} elseif (($data['route'] == 'product/author' || $data['route'] == 'product/product') && $key == 'author_id') {
+				$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($key . '=' . (int)$value) . "'");
+			
+				if ($query->num_rows) {
+					$url .= '/' . $query->rows[0]['keyword'];
+					
+					unset($data[$key]);
+				}
+			/** Support Autor Module **/
+			]]></add>
+		</operation>		
+	</file>
+</modification>

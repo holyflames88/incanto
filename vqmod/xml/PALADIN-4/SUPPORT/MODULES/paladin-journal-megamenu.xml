@@ -1,0 +1,30 @@
+<modification>
+<id><![CDATA[Paladin SEO Manager - journal mega menu]]></id>
+<version>1.0.0</version>
+<vqmver>1.0.0</vqmver>
+<author><![CDATA[ ROMAN TYMKIV http://smartshopbox.com ]]></author>
+
+<file name="/catalog/controller/module/journal_cp.php">
+	<operation>
+		<search position="after"><![CDATA[public function rewrite($link) {]]></search>
+		<add><![CDATA[
+		// ssb-inject
+		require_once DIR_CONFIG .'ssb_library/ssb_data.php';
+		$ssb_data = ssb_data::getInstance();
+		if($ssb_data->getEntityStatus('urls')){
+			global $vqmod;
+			if(isset($vqmod)){
+				require_once $vqmod->modCheck(DIR_CONFIG .'ssb_library/catalog/controller/common/ssb_seo_url.php');
+			}else{
+				require_once VQMod::modCheck(DIR_CONFIG .'ssb_library/catalog/controller/common/ssb_seo_url.php');
+			}
+			
+			$ssb_seo_url = ssb_seo_url::getInstance();
+			return $ssb_seo_url->rewrite($link);
+		}
+		// ssb-inject
+		]]></add>
+	</operation>	
+</file>
+
+</modification>

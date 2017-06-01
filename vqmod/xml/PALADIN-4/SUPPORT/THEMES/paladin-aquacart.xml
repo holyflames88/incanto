@@ -1,0 +1,10 @@
+<modification>
+<id><![CDATA[Paladin SEO Manager -customize for theme aqucart]]></id>
+<version>1.8.0</version>
+<vqmver>1.0.0</vqmver>
+<author><![CDATA[ ROMAN TYMKIV http://smartshopbox.com ]]></author>
+	<file name="catalog/view/theme/*/template/module/ssb_language.tpl">		<operation>			<search position="replace"><![CDATA[<br />]]></search>			<add><![CDATA[							]]></add>		</operation>			<operation>			<search position="before"><![CDATA[<div id="language">]]></search>			<add><![CDATA[				<style>					#language a {						display:inline;						padding: 0px;					}				</style>			]]></add>		</operation>			</file></modification>
+
+
+
+

@@ -1,0 +1,200 @@
+table.form > tbody > tr > td:first-child {
+    width: 150px;
+}
+
+#preview
+{
+	/*background-color: rgba(0,50,200,0.1);*/
+	border: 1px solid rgba(0,0,0,0.2);
+	height: 100px;
+	left: 30px;
+	margin-bottom: 15px;
+	position: relative;
+	width: 100px;
+}
+
+.enabled
+{
+	color: rgb(40,69,122);
+}
+
+.disabled
+{
+	/*color : rgba(197,49,26,0.7);*/
+	opacity: 0.5;
+}
+
+.highlight
+{
+	color: red;
+	font-weight: bold;
+}
+
+.info-featured
+{
+	color: rgb(0,30,150);
+}
+.info-latest
+{
+	color: rgb(73,158,64);
+}
+.info-bestseller
+{
+	color: rgb(135,0,124);
+}
+.info-stock
+{
+	color: rgb(121,0,0);
+}
+.info-manual
+{
+	color: rgb(255,0,200);
+}
+.info-category
+{
+	color: rgb(45,75,80);
+}
+.info-regex
+{
+	color: rgb(20,0,70);
+}
+.info-special
+{
+	color: rgb(255,0,0);
+}
+.info-free_shipping
+{
+	color: rgb(170,0,70);
+}
+.info-weight
+{
+	color: rgb(255,255,255);
+}
+
+.info-rotated
+{
+	color: rgb(50,74,118);
+}
+.info-horizontal
+{
+	color: rgb(0,142,122);
+}
+.info-round
+{
+	color: rgb(100,0,178);
+}
+
+.info-top_left
+{
+	color: rgb(255,135,0);
+}
+.info-top_right
+{
+	color: rgb(100,0,178);
+}
+.info-bottom_left
+{
+	color: rgb(0,100,178);
+}
+.info-bottom_right
+{
+	color: rgb(0,0,100);
+}
+.info-position_manual
+{
+	color: rgb(50,50,100);
+}
+
+.label_info div
+{
+	margin-bottom: 2px;
+}
+
+.module_ipl
+{
+	display: inline-block;
+	padding: 1em;
+	background: rgba(255,255,200,1);
+	border-radius: 1em;
+}
+
+.slider_value
+{
+	background-color:#F7B850;
+	border-radius:5px;
+	color:#272727;
+	font-weight:bold;
+	margin-left:10px;
+	padding:5px;border:1px solid #E79000;
+	visibility: hidden;
+}
+
+.title_module_ipl 
+{
+	font-weight: bold;
+}
+
+.tooltip
+{
+	width: 300px;
+	padding: 10px;
+	background-color: white;
+	border: 3px solid rgb(195,151,51);
+	border-radius: 5px;
+	margin: 5px;
+	display: none;
+	box-shadow: 10px 10px 5px #888;
+	-moz-box-shadow: 10px 10px 5px #888;
+	-webkit-box-shadow: 10px 10px 5px #888;
+	z-index: 1000;
+}
+
+.tooltip li
+{
+	margin-bottom: 10px;
+}
+
+.tooltip span.arrow {
+    border-color: rgb(195,151,51);
+    border-right: 15px solid transparent;
+    border-style: solid solid none;
+    border-width: 10px 15px 0 0;
+    display: block;
+    height: 0;
+    margin-left: 20px;
+    position: absolute;
+    width: 0;
+    top:101%;
+}
+
+.ui-slider-horizontal {
+    display: inline-block;
+    margin: 0 0 0 10px;
+    vertical-align: middle;
+    width: 100px;
+    visibility: hidden;
+}
+
+.vtabs a
+{
+	position: relative;
+	padding: 6px 14px 30px 15px;
+}
+
+.vtabs div.label_info
+{
+	background: rgba(255,255,255,0.5);
+	border-radius: 0.3em;
+	font-size: 10px;
+	font-weight: none;
+	left: 5%;
+	padding: 5px 0px;
+	position: absolute;
+	text-align: left;
+	top: 5%;
+}
+
+[selected] {
+	/*color:red;*/
+	/*font-weight:bold;*/
+}

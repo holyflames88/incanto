@@ -1,0 +1,30 @@
+<modification>
+<id><![CDATA[Paladin SEO Manager]]></id>
+<version>1.8.0</version>
+<vqmver>1.0.0</vqmver>
+<author><![CDATA[ ROMAN TYMKIV http://smartshopbox.com ]]></author>
+
+	<file name="catalog/view/theme/*/template/module/ssb_language.tpl">
+		<operation>
+			<search position="replace" offset="9"><![CDATA[<?php if (count($languages) > 1) { ?>]]></search>
+			<add><![CDATA[
+<?php if (count($languages) > 1) { ?>			
+<li class="dropdown"><a class="dropdown-toggle" ><?php echo $text_language; ?><i class="fa fa-angle-down fa-fw"></i> </a>
+<ul class="dropdown-menu" role="menu">
+<form action="<?php echo $action; ?>" method="post" enctype="multipart/form-data">
+<?php foreach ($languages as $language) { ?>
+	<li><a href="<?php echo $language['href']; ?>" alt="<?php echo $language['name']; ?>" title="<?php echo $language['name']; ?>" ><?php echo $language['name']; ?></a></li>
+<?php } ?>
+</form>
+</ul>
+</li>	
+<?php } ?>		
+			]]></add>
+		</operation>	
+	</file>
+
+</modification>
+
+
+
+

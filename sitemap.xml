@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="sitemaps/index.xsl"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>http://incanto/sitemaps/sitemap/sitemap-brand-1.xml</loc>
+    <lastmod>2017-02-02</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>http://incanto/sitemaps/sitemap/sitemap-category-1.xml</loc>
+    <lastmod>2017-02-02</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>http://incanto/sitemaps/sitemap/sitemap-info-1.xml</loc>
+    <lastmod>2017-02-02</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>http://incanto/sitemaps/sitemap/sitemap-info-ru-1.xml</loc>
+    <lastmod>2017-02-02</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>http://incanto/sitemaps/sitemap/sitemap-product-1.xml</loc>
+    <lastmod>2017-02-02</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>http://incanto/sitemaps/sitemap/sitemap-product-2.xml</loc>
+    <lastmod>2017-02-02</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>http://incanto/sitemaps/sitemap/sitemap-product-3.xml</loc>
+    <lastmod>2017-02-02</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>http://incanto/sitemaps/sitemap/sitemap-product-4.xml</loc>
+    <lastmod>2017-02-02</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>http://incanto/sitemaps/sitemap/sitemap-product-5.xml</loc>
+    <lastmod>2017-02-02</lastmod>
+  </sitemap>
+</sitemapindex>

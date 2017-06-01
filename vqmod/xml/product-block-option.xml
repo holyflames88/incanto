@@ -1,0 +1,337 @@
+<modification>
+	<id><![CDATA[Product Block Option - Core]]></id>
+	<version><![CDATA[2.2.1]]></version>
+	<vqmver><![CDATA[2.3.2]]></vqmver>
+	<author><![CDATA[WeDoWeb.com.au | contact@wedoweb.com.au]]></author>
+	<file name="catalog/view/theme/*/template/product/product.tpl">
+		<operation error="log">
+			<search error="log" position="replace" index="1"><![CDATA[<div]]></search>
+			<add><![CDATA[<!--BOF Product Block Option-->
+
+			<script type="text/javascript"><!--
+			$(document).ready(function(){
+				$("a.block-option, a.block-image-option").click(function(event)
+				{
+					$this = $(this);
+					
+					$this.parent().find('a.block-option, a.block-image-option').removeClass('block-active');
+					$this.addClass('block-active');
+				
+					$optionText = $('#' + $this.attr('option-text-id'));
+					if($optionText.length == 1)
+						$optionText.html($this.attr('title'));
+					
+					$select = $this.parent().find('select');
+					if($select.length > 0)
+					{
+						$select.val($this.attr('option-value'));
+						$select.trigger('change');
+						
+						//option boost
+						if(typeof obUpdate == 'function') {
+							obUpdate($($this.parent().find('select option:selected')), useSwatch);
+						}
+					}
+					else //image option
+					{
+						$this.parent().find("input[type='radio']").prop('checked', false);
+						$radio = $this.parent().find("input#option-value-" + $this.attr('option-value'));
+						
+						$radio.prop('checked', true);
+						$radio.trigger('change').trigger('click');
+						
+						//option boost
+						if(typeof obUpdate == 'function') {
+							obUpdate($radio, useSwatch);
+						}
+					}
+								
+					//option redux
+					if(typeof updatePx == 'function') {
+						updatePx();
+					}
+					
+					//kit options
+					if(typeof recalculateprice == 'function') {
+						recalculateprice();
+					}
+					event.preventDefault();
+				});
+			
+				$("a.block-option").parent('.option').find('.hidden select').change(function()
+				{
+					$this = $(this);
+					var optionValueId = $this.val();
+					$blockOption = $('a#block-option-' + optionValueId);
+					if(!$blockOption.hasClass('block-active'))
+						$blockOption.trigger('click');
+				});
+			});			
+			//--></script> 
+			<!--EOF Product Block Option-->
+			<div]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/module/pbo.tpl">
+		<operation error="log">
+			<search error="log" position="after"><![CDATA[<?php echo $header; ?>]]></search>
+			<add><![CDATA[<!--BOF Product Block Option-->
+			<style>
+			a.block-option,
+			a.block-image-option
+			{
+				cursor: pointer;
+				display: inline-block;
+				vertical-align: middle;
+				text-decoration: none;
+				border-style: solid;
+				margin: 3px;
+			}
+			a.block-image-option img
+			{				
+				vertical-align: middle;
+			}
+			</style>
+			<!--EOF Product Block Option-->]]></add>
+		</operation>
+	</file>
+	<file name="admin/controller/catalog/option.php">
+		<operation error="log">
+			<search error="log" position="after"><![CDATA[function getForm()]]></search>
+			<add><![CDATA[//BOF Product Block Option
+			$this->load->language('catalog/pbo');	
+			$this->data['text_block'] = $this->language->get('text_block');		
+			//EOF Product Block Option]]></add>
+		</operation>
+		<operation error="log">
+			<search error="log" position="replace"><![CDATA[$option['type'] == 'select']]></search>
+			<add><![CDATA[$option['type'] == 'select' || $option['type'] == 'block']]></add>
+		</operation>
+	</file>
+	<file name="admin/controller/catalog/product.php">
+		<operation error="log">
+			<search error="log" position="replace"><![CDATA[$product_option['type'] == 'select']]></search>
+			<add><![CDATA[$product_option['type'] == 'select' || $product_option['type'] == 'block']]></add>
+		</operation>
+		<operation error="skip">
+			<search error="skip" position="replace"><![CDATA[$option_info['type'] == 'select']]></search>
+			<add><![CDATA[$option_info['type'] == 'select' || $option_info['type'] == 'block']]></add>
+		</operation>
+	</file>
+	<file name="admin/model/catalog/product.php">
+		<operation error="log">
+			<search error="log" position="replace"><![CDATA[$product_option['type'] == 'select']]></search>
+			<add><![CDATA[$product_option['type'] == 'select' || $product_option['type'] == 'block']]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/common/header.tpl">
+		<operation error="log">
+			<search error="log" position="after"><![CDATA[view/stylesheet/stylesheet.css]]></search>
+			<add><![CDATA[<!--BOF Product Block Option-->
+			<link rel="stylesheet" type="text/css" href="view/stylesheet/pbo.css" />
+			<!--EOF Product Block Option-->]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/catalog/option_form.tpl">
+		<operation error="log">
+			<search error="log" position="after"><![CDATA[<select name="type">]]></search>
+			<add><![CDATA[<!--BOF Product Block Option-->
+			<?php if ($type == 'block') { ?>
+			<option value="block" selected><?php echo $text_block; ?></option>
+			<?php } else { ?>
+			<option value="block"><?php echo $text_block; ?></option>
+			<?php } ?>
+			<!--EOF Product Block Option-->]]></add>
+		</operation>
+		<operation error="log">
+			<search error="log" position="after"><![CDATA[$('select[name=\'type\']').bind]]></search>
+			<add><![CDATA[//BOF Product Block Option
+			if(this.value == 'block'){
+				//hide image uploads
+				$('#option-value').addClass('block');
+			}
+			else
+			{
+				//show image uploads
+				$('#option-value').removeClass('block');
+			}
+			//EOF Product Block Option]]></add>
+		</operation>
+		<operation error="log">
+			<search error="log" position="replace"><![CDATA[this.value == 'select']]></search>
+			<add><![CDATA[this.value == 'select' || this.value == 'block']]></add>
+		</operation>
+		<operation error="log">
+			<search error="log" position="before"><![CDATA[var option_value_row ]]></search>
+			<add><![CDATA[//BOF Product Block Option
+			$(document).ready(function(){
+				$('select[name=\'type\']').trigger('change');
+			});
+			//EOF Product Block Option]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/catalog/product_form.tpl">
+		<operation error="log">
+			<search error="log" position="replace"><![CDATA[$product_option['type'] == 'select']]></search>
+			<add><![CDATA[$product_option['type'] == 'select' || $product_option['type'] == 'block']]></add>
+		</operation>
+		<operation error="log">
+			<search error="log" position="replace"><![CDATA[ui.item.type == 'select']]></search>
+			<add><![CDATA[ui.item.type == 'select' || ui.item.type == 'block']]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/sale/order_form.tpl">
+		<operation error="log">
+			<search error="log" position="replace"><![CDATA[option['type'] == 'select']]></search>
+			<add><![CDATA[option['type'] == 'select' || option['type'] == 'block']]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/checkout/manual.php">
+		<operation error="log">
+			<search error="log" position="replace"><![CDATA[$option['type'] == 'select']]></search>
+			<add><![CDATA[$option['type'] == 'select' || $option['type'] == 'block']]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/product/product.php">
+		<operation error="log">
+			<search error="log" position="replace"><![CDATA[$option['type'] == 'select']]></search>
+			<add><![CDATA[$option['type'] == 'select' || $option['type'] == 'block']]></add>
+		</operation>
+		<operation error="log">
+			<search error="log" position="before" index="1"><![CDATA[$this->response->setOutput(]]></search>
+			<add><![CDATA[
+			//BOF Product Block Option
+			$this->setData('pbo_text_block_padding', 10);
+			$this->setData('pbo_text_block_border_width', 3);
+			$this->setData('pbo_text_block_border_radius', 0);
+			$this->setData('pbo_text_block_background_color', '#ffffff');
+			$this->setData('pbo_text_block_text_color', '#000000');		
+			$this->setData('pbo_text_block_border_color', '#E7E7E7');
+			$this->setData('pbo_text_block_selected_background_color', '#ffffff');
+			$this->setData('pbo_text_block_selected_text_color', '#000000');
+			$this->setData('pbo_text_block_selected_block_border_color', '#FFA500');			
+			
+			$this->setData('pbo_image_block_padding', 2);
+			$this->setData('pbo_image_block_border_width', 2);
+			$this->setData('pbo_image_block_border_radius', 5);		
+			$this->setData('pbo_image_block_border_color', '#E7E7E7');
+			$this->setData('pbo_image_block_selected_block_border_color', '#FFA500');
+			
+			$this->setData('pbo_options', array());
+			//EOF Product Block Option
+			]]></add>
+		</operation>
+		<operation error="log">
+			<search position="after" error="log"><![CDATA[$option_value_data[] = array(]]></search>
+			<add><![CDATA[
+			'pbo_image' => $this->model_tool_image->resize($option_value['image'], $this->getData('pbo_image_block_width', 50), $this->getData('pbo_image_block_height', 50)),
+			]]></add>
+		</operation>
+		<operation>
+			<search position="before" index="1" error="log"><![CDATA[$this->response->setOutput($this->render());]]></search>
+			<add><![CDATA[
+			//BOF Product Block Option
+			if(file_exists(DIR_SYSTEM . '../catalog/controller/product/options_boost.inc.php'))
+			{
+				foreach ($this->model_catalog_product->getProductOptions($this->request->get['product_id']) as $option) { 
+					if ($option['type'] == 'image') {
+						foreach ($option['option_value'] as $option_value) {
+							foreach($this->data['options'] as &$r_option)
+							{
+								if(is_array($r_option['option_value']))
+								{
+									foreach ($r_option['option_value'] as &$r_option_value)
+									{
+										if($r_option_value['product_option_value_id'] == $option_value['product_option_value_id'])
+										{
+											$r_option_value['pbo_image'] = $this->model_tool_image->resize($option_value['image'], $this->getData('pbo_image_block_width', 50), $this->getData('pbo_image_block_height', 50));
+										}
+									}
+								}
+							}
+						}				
+					}
+				}
+			}
+			//EOF Product Block Option
+			]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/themecontrol/product.php">
+		<operation error="log">
+			<search error="log" position="replace"><![CDATA[$option['type'] == 'select']]></search>
+			<add><![CDATA[$option['type'] == 'select' || $option['type'] == 'block']]></add>
+		</operation>
+		<operation error="log">
+			<search error="log" position="before" index="1"><![CDATA[$this->response->setOutput(]]></search>
+			<add><![CDATA[
+			//BOF Product Block Option
+			$this->setData('pbo_text_block_padding', 10);
+			$this->setData('pbo_text_block_border_width', 3);
+			$this->setData('pbo_text_block_border_radius', 0);
+			$this->setData('pbo_text_block_background_color', '#ffffff');
+			$this->setData('pbo_text_block_text_color', '#000000');		
+			$this->setData('pbo_text_block_border_color', '#E7E7E7');
+			$this->setData('pbo_text_block_selected_background_color', '#ffffff');
+			$this->setData('pbo_text_block_selected_text_color', '#000000');
+			$this->setData('pbo_text_block_selected_block_border_color', '#FFA500');			
+			
+			$this->setData('pbo_image_block_padding', 2);
+			$this->setData('pbo_image_block_border_width', 2);
+			$this->setData('pbo_image_block_border_radius', 5);		
+			$this->setData('pbo_image_block_border_color', '#E7E7E7');
+			$this->setData('pbo_image_block_selected_block_border_color', '#FFA500');
+			
+			$this->setData('pbo_options', array());
+			//EOF Product Block Option
+			]]></add>
+		</operation>
+		<operation error="log">
+			<search position="after" error="log"><![CDATA[$option_value_data[] = array(]]></search>
+			<add><![CDATA[
+			'pbo_image' => $this->model_tool_image->resize($option_value['image'], $this->getData('pbo_image_block_width', 50), $this->getData('pbo_image_block_height', 50)),
+			]]></add>
+		</operation>
+		<operation>
+			<search position="before" index="1" error="log"><![CDATA[$this->response->setOutput($this->render());]]></search>
+			<add><![CDATA[
+			//BOF Product Block Option
+			if(file_exists(DIR_SYSTEM . '../catalog/controller/product/options_boost.inc.php'))
+			{
+				foreach ($this->model_catalog_product->getProductOptions($this->request->get['product_id']) as $option) { 
+					if ($option['type'] == 'image') {
+						foreach ($option['option_value'] as $option_value) {
+							foreach($this->data['options'] as &$r_option)
+							{
+								if(is_array($r_option['option_value']))
+								{
+									foreach ($r_option['option_value'] as &$r_option_value)
+									{
+										if($r_option_value['product_option_value_id'] == $option_value['product_option_value_id'])
+										{
+											$r_option_value['pbo_image'] = $this->model_tool_image->resize($option_value['image'], $this->getData('pbo_image_block_width', 50), $this->getData('pbo_image_block_height', 50));
+										}
+									}
+								}
+							}
+						}				
+					}
+				}
+			}
+			//EOF Product Block Option
+			]]></add>
+		</operation>
+	</file>
+	<file name="catalog/model/catalog/product.php">
+		<operation error="log">
+			<search error="log" position="replace"><![CDATA[$product_option['type'] == 'select']]></search>
+			<add><![CDATA[$product_option['type'] == 'select' || $product_option['type'] == 'block']]></add>
+		</operation>
+	</file>
+	<file name="system/library/cart.php">
+		<operation error="log">
+			<search error="log" position="replace"><![CDATA[$option_query->row['type'] == 'select']]></search>
+			<add><![CDATA[$option_query->row['type'] == 'select' || $option_query->row['type'] == 'block']]></add>
+		</operation>
+	</file>
+</modification>

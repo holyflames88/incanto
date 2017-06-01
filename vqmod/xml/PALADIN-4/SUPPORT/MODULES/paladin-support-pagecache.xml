@@ -1,0 +1,51 @@
+<modification>
+<id><![CDATA[Paladin - support PageCache]]></id>
+<version>1.0.0</version>
+<vqmver>1.0.0</vqmver>
+<author><![CDATA[ ROMAN TYMKIV http://smartshopbox.com ]]></author>
+
+	<file name="admin/model/catalog/product.php">
+		<operation error = "skip"> 
+			<search position="after"><![CDATA[ $this->cache->deleteId('product.'. $product_id); ]]></search>
+			<add><![CDATA[
+				
+				require_once DIR_CONFIG .'ssb_library/ssb_data.php';
+				$this->ssb_data = ssb_data::getInstance();
+				$ssb_setting = $this->ssb_data->getSetting();
+
+				if(isset($data['seodata']) AND is_array($data['seodata']) AND $ssb_setting){
+					$this->cache->set('test_id_2===' . $product_id, $data['seodata']);
+					$this->model_catalog_product->setDescripProduct($product_id, $data['seodata']);
+					include_once DIR_CONFIG .'ssb_library/ssb_autogen.php';
+					$ssb_autogen = ssb_autogen::getInstance();
+					$ssb_autogen->genAutoSeo('product', $product_id);
+				}
+				
+			]]></add>
+		</operation>	
+	</file>
+	
+	<file name="admin/model/catalog/category.php">
+		<operation error = "skip"> 
+			<search position="after"><![CDATA[ $this->cache->deleteId('category.'. $category_id); ]]></search>
+			<add><![CDATA[
+				
+				require_once DIR_CONFIG .'ssb_library/ssb_data.php';
+				$this->ssb_data = ssb_data::getInstance();
+				$ssb_setting = $this->ssb_data->getSetting();
+				if(isset($data['seodata']) AND is_array($data['seodata']) AND $ssb_setting){
+					$this->model_catalog_category->setDescripCategory($category_id, $data['seodata']);
+					include_once DIR_CONFIG .'ssb_library/ssb_autogen.php';
+					$ssb_autogen = ssb_autogen::getInstance();
+					$ssb_autogen->genAutoSeo('category', $category_id);
+				}
+				
+			]]></add>
+		</operation>	
+	</file>	
+
+</modification>
+
+
+
+

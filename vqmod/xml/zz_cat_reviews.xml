@@ -1,0 +1,37 @@
+<modification>
+    <id>Количество просмотров товара в каталоге</id>
+    <version>1.0</version>
+    <vqmver>2.4.1</vqmver>
+    <author>Upd: Lunberg88</author>
+
+    <file name="catalog/controller/product/category.php">
+        <operation>
+            <search position="replace">
+            <![CDATA[
+                'option_images'   => $option_images
+            ]]>
+            </search>
+            <add>
+            <![CDATA[
+                    'option_images'   => $option_images,
+					'sen' => $result['reviews']
+            ]]>
+            </add>
+		</operation>
+    </file>
+	<file name="catalog/view/theme/pav_clothes/template/product/category.tpl">
+	  <operation>
+	    <search position="replace">
+		 <![CDATA[
+		 <div class="rating"><img src="catalog/view/theme/<?php echo $this->config->get('config_template');?>/image/stars-<?php echo $product['rating']; ?>.png" alt="<?php echo $product['reviews']; ?>" /></div>
+		 ]]>
+		</search>
+		<add>
+		<![CDATA[
+		<div class="rating"><img src="catalog/view/theme/<?php echo $this->config->get('config_template');?>/image/stars-<?php echo $product['rating']; ?>.png" alt="<?php echo $product['reviews']; ?>" /> (<?php echo $product['sen']; ?>)</div>
+		]]>
+		</add>
+	  </operation>
+	</file>
+</modification>
+

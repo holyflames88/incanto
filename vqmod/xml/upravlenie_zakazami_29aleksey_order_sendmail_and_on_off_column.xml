@@ -1,0 +1,2515 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+        <id>UZ</id>
+        <version>1.3.1</version>
+        <vqmver>2.0</vqmver>
+        <author>AlexK</author>
+        <file name="admin/view/template/common/header.tpl">
+                <operation>
+                        <search position="before"><![CDATA[
+			</head>
+                        ]]></search>
+
+                        <add><![CDATA[
+						
+			<style type="text/css">
+.list_order a.button {
+	text-decoration: none;
+	color: #FFF;
+	display: inline-block;
+	padding: 5px 15px 5px 15px;
+	background: #003A88;
+	-webkit-border-radius: 10px 10px 10px 10px;
+	-moz-border-radius: 10px 10px 10px 10px;
+	-khtml-border-radius: 10px 10px 10px 10px;
+	border-radius: 10px 10px 10px 10px;
+}
+.list_order {
+	border-collapse: collapse;
+	width: 100%;
+	border-top: 1px solid #DDDDDD;
+	border-left: 1px solid #DDDDDD;
+	margin-bottom: 20px;
+}
+.list_order td {
+	border-right: 1px solid #DDDDDD;
+	border-bottom: 1px solid #DDDDDD;
+}
+.list_order thead td {
+	background-color: #EFEFEF;
+	padding: 0px 5px;
+}
+.list_order thead td a, .list_order thead td {
+	text-decoration: none;
+	color: #222222;
+	font-weight: bold;
+}
+.list_order tbody td a {
+	text-decoration: underline;
+}
+.list_order tbody td {
+	vertical-align: middle;
+	padding: 0px 5px;
+}
+.list_order tbody tr:hover td {
+	background-color: #FFFFCB;
+}
+.list_order tbody tr:nth-child(2n) {
+        background-color: #F4F4F8;
+}
+.list_order .left {
+	text-align: left;
+	padding: 7px;
+}
+.list_order .right {
+	text-align: right;
+	padding: 7px;
+}
+.list_order .center {
+	text-align: center;
+	padding: 7px;
+}
+.list_order tr.filter td, .list_order tr:hover.filter td {
+	padding: 5px;
+	background: #E7EFEF;
+}
+				.joystick {
+					position:fixed;
+					top:50%;
+					left:50%;
+					width:150px;
+					background:#F0F0F0;
+					opacity:0.5;
+					margin-left:-50px;
+					padding:5px;
+					border:1px solid #CCC;
+					border-radius:3px;
+				}
+				.joystick_left {
+					float:left;
+					background:url(view/image/go_left.png) no-repeat top center;
+				}
+				.joystick_right {
+					float:right;
+					background:url(view/image/go_right.png) no-repeat top center;
+				}
+				.joystick_left, .joystick_right {
+					width:32px;
+					height:32px;
+					border:1px solid #F0F0F0;
+					padding-bottom:2px;
+				}
+				.joystick_left:hover, .joystick_right:hover {
+					border:1px solid #CCC;
+					border-radius:3px;
+					cursor:pointer;
+				}
+				.note-date {
+					width: 70px;
+				}
+				
+				.note1 {
+					width: 70px;
+					border: #c6c6c6 solid 1px;
+					background: #ffffff;
+					word-wrap: break-word;
+					height:16px;
+				}
+				
+				.note2 {
+					
+					border: #c6c6c6 solid 1px;
+					background: #ffffff;
+					word-wrap: break-word;
+					
+				}
+
+				.note3 {
+					width: 70px;
+					border: #c6c6c6 solid 1px;
+					background: #ffffff;
+					word-wrap: break-word;
+					height:16px;
+				}
+
+				.note4 {
+					width: 70px;
+					border: #c6c6c6 solid 1px;
+					background: #ffffff;
+					word-wrap: break-word;
+					height:16px;
+				}
+
+				.price_1 {
+					border: #c6c6c6 solid 1px;
+					background: #ffffff;
+					transition: width 0.25s; 
+					width:65px;
+				}
+				.price_2 {
+					border: #c6c6c6 solid 1px;
+					background: #ffffff;
+					word-wrap: break-word;
+					width:65px;
+				}
+				
+				.driverdelivery {
+					
+					border: #c6c6c6 solid 1px;
+					background: #ffffff;
+					word-wrap: break-word;
+				
+					
+				}
+				
+				.list tbody tr:hover td {
+					background-color: inherit;
+				}
+
+				.list tbody tr:nth-child(2n) {
+				        background-color: inherit;
+				}
+				
+				tbody tr td {
+					vertical-align: middle;
+					padding: 0px 5px;
+					background-color: inherit !important;
+				}
+			</style>
+                        ]]></add>
+                </operation>
+        </file> 
+
+        <file name="admin/view/template/localisation/order_status_list.tpl">
+                <operation>
+                        <search position="after"><![CDATA[
+		              <td class="left"><?php echo $order_status['name']; ?></td>
+                        ]]></search>
+                        <add><![CDATA[
+		              <td class="left"><input type="color" value="<?php echo $order_status['row_color']; ?>" name="colorbox" onChange="setOrderStatusColor(<?php echo $order_status['order_status_id']; ?>, this.value)" /></td>
+                        ]]></add>
+                </operation>
+                <operation>
+                        <search position="after"><![CDATA[
+		              <td class="right"><?php echo $column_action; ?></td>
+                        ]]></search>
+                        <add><![CDATA[
+		              <td class="left"><?php echo $column_color; ?></td>
+                        ]]></add>
+                </operation>
+                <operation>
+                        <search position="bottom" offset="1"><![CDATA[
+                        ]]></search>
+                        <add><![CDATA[
+				<script type="text/javascript"><!--
+				function setOrderStatusColor(orderStatusId, rowColor) {
+					$.ajax({
+						url: 'index.php?route=localisation/order_status/setOrderStatusColor&token=<?php echo $this->session->data["token"]; ?>',
+						type: 'post',
+						data: '&order_status_id=' + orderStatusId + '&row_color=' + rowColor,
+						dataType: 'json',
+						beforeSend: function() {
+							$('.success, .warning, .attention, .error').remove();
+//							$('.box').before('<div class="attention"><img src="view/image/loading.gif" alt="" /> <?php echo $this->language->get('text_wait'); ?></div>');
+						},			
+				
+						success: function(json) {
+							$('.success, .warning, .attention, .information, .error').remove();
+				
+							if (json['success']) {
+//								$('.box').before('<div class="success" style="display: none;">' + json['success'] + '</div>');
+//								$('.success').fadeIn('slow');				
+							}	
+				
+							if (json['error']) {
+								$('.box').before('<div class="success" style="display: none;">' + json['error'] + '</div>');
+								$('.warning').fadeIn('slow');				
+							}	
+				
+						}
+					});
+				}
+				//--></script> 
+                        ]]></add>
+                </operation>
+
+        </file> 
+
+
+        <file name="admin/view/template/sale/order_list.tpl">
+				<operation>
+			<search position="before"><![CDATA[<div class="content">]]></search>
+			<add><![CDATA[
+			<div class="success_send" style="display:none;"></div>
+				<style>
+					.success_send {
+					  background: none repeat scroll 0 0 #d3ffb6;
+					  border: 1px solid #3fba01;
+					  border-radius: 6px;
+					  color: #000;
+					  display: none;
+					  height: 15px;
+					  margin: 3px;
+					  padding: 5px;
+					}
+				</style>
+			]]></add>
+		</operation>
+		<operation>
+			<search position="replace"><![CDATA[<a onclick="$('#form').attr('action', '<?php echo $invoice; ?>'); $('#form').attr('target', '_blank'); $('#form').submit();" class="button"><?php echo $button_invoice; ?></a>]]></search>
+			<add><![CDATA[<a onclick="$('form').attr('action', '<?php echo $export; ?>'); $('form').submit();" class="button"><?php echo $button_export; ?></a><a onclick="$('#form').attr('action', '<?php echo $invoice; ?>'); $('#form').attr('target', '_blank'); $('#form').submit();" class="button"><?php echo $button_invoice; ?></a>]]></add>
+		</operation>
+		<operation>
+                        <search position="replace"><![CDATA[
+                         <table class="list">
+                        ]]></search>
+                        <add><![CDATA[
+						 <table class="list_order">
+                        ]]></add>
+                </operation>
+                <operation info="Add column header to the order list table">
+                        <search position="after" offset="1"><![CDATA[
+                        	<a href="<?php echo $sort_customer; ?>"><?php echo $column_customer; ?></a>
+                        ]]></search>
+                        <add><![CDATA[
+						<?php if($this->config->get('config_on_off_product_column') == '1'){ ?>
+							<td class="left"><?php echo "Название товара"; ?></td>
+						<?php } ?>
+						
+						<?php if($this->config->get('config_on_off_comment_manager') == '1'){ ?>
+							<td class="left"><?php echo $column_order_note_2; ?></td>
+						<?php } ?>
+						
+						<?php if($this->config->get('config_on_off_send_mail_user') == '1'){ ?>
+							<td class="left">Напомнить</br>на EMAIL</td>
+						<?php } ?>
+						
+						<?php if($this->config->get('config_on_off_podbem') == '1'){ ?>
+							<td class="left"><?php if ($sort == 'o.clcalledch') { ?>
+							<a href="<?php echo $sort_clcalledch; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_clcalledch; ?></a>
+							<?php } else { ?>
+							<a href="<?php echo $sort_clcalledch; ?>"><?php echo $column_clcalledch; ?></a>
+							<?php } ?></td>
+						<?php } ?>
+						
+						<?php if($this->config->get('config_on_off_sborka') == '1'){ ?>
+							<td class="left"><?php if ($sort == 'o.adservice') { ?>
+							<a href="<?php echo $sort_adservice; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_adservice; ?></a>
+							<?php } else { ?>
+							<a href="<?php echo $sort_adservice; ?>"><?php echo $column_adservice; ?></a>
+							<?php } ?></td>
+						<?php } ?>
+              			<td class="left"><?php if ($sort == 'o.order_note_date') { ?>
+                		<a href="<?php echo $sort_order_note_date; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_order_note_date; ?></a>
+                		<?php } else { ?>
+                		<a href="<?php echo $sort_order_note_date; ?>"><?php echo $column_order_note_date; ?></a>
+                		<?php } ?></td>
+						
+              			
+              			
+                        ]]></add>
+                </operation>
+
+                <operation info="Add column header to the order list table">
+                        <search position="before"><![CDATA[
+				<td class="right"><?php if ($sort == 'o.total') { ?>
+                        ]]></search>
+                        <add><![CDATA[
+						<?php if($this->config->get('config_on_off_manager') == '1'){ ?>
+							<td class="left"><?php echo $column_order_note_4; ?></td>
+						<?php } ?>
+						<?php if($this->config->get('config_on_off_dostavka') == '1'){ ?>
+							<td class="left"><?php echo $column_driverdelivery; ?></td>
+						<?php } ?>
+					<?php if($this->config->get('config_on_off_tochka') == '1'){ ?>
+						<td class="left"><?php echo $column_order_note_1; ?></td>
+					<?php } ?>
+					<?php if($this->config->get('config_on_off_postavshik') == '1'){ ?>
+						<td class="left"><?php echo $column_order_note_3; ?></td>
+					<?php } ?>
+					<?php if($this->config->get('config_on_off_zakupka') == '1'){ ?>
+						<td class="right allowed-user"><?php if ($sort == 'o.price_1') { ?>
+							<a href="<?php echo $sort_price_1; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_price_1; ?></a>
+							<?php } else { ?>
+							<a href="<?php echo $sort_price_1; ?>"><?php echo $column_price_1; ?></a>
+							<?php } ?>
+						</td>
+					<?php } ?>
+                        ]]></add>
+                </operation>
+				<operation info="Add column header to the order list table">
+                        <search position="before"><![CDATA[
+				<td class="right"><?php if ($sort == 'o.total') { ?>
+                        ]]></search>
+                        <add><![CDATA[
+				<?php if($this->config->get('config_on_off_cost_delivery') == '1'){ ?>
+		            <td class="left"><?php echo "Стоимость</br>Доставки"; ?></td>
+				<?php } ?>
+                        ]]></add>
+                </operation>
+
+                <operation info="Add column header to the order list table">
+                        <search position="after" offset="1"><![CDATA[
+				<a href="<?php echo $sort_total; ?>"><?php echo $column_total; ?></a>
+                        ]]></search>
+                        <add><![CDATA[
+						<?php if($this->config->get('config_on_off_profit') == '1'){ ?>
+		             <td class="right allowed-user"><?php if ($sort == 'o.calculated_summ') { ?>
+		                <a href="<?php echo $sort_calculated_summ; ?>" class="<?php echo strtolower($order); ?>"><?php echo $column_calculated_summ; ?></a>
+		                <?php } else { ?>
+		                <a href="<?php echo $sort_calculated_summ; ?>"><?php echo $column_calculated_summ; ?></a>
+		                <?php } ?></td>
+						<?php } ?>
+                        ]]></add>
+                </operation>
+				
+                <operation info="Modify the filter row">
+                        <search position="after"><![CDATA[
+				<td><input type="text" name="filter_customer" value="<?php echo $filter_customer; ?>" /></td>
+                        ]]></search>
+                        <add><![CDATA[
+						<?php if($this->config->get('config_on_off_product_column') == '1'){ ?>
+						<td align="right"></td>
+						<?php } ?>
+						<?php if($this->config->get('config_on_off_comment_manager') == '1'){ ?>
+						<td align="right"></td>
+						<?php } ?>
+						<?php if($this->config->get('config_on_off_send_mail_user') == '1'){ ?>
+						<td align="right"></td>
+						<?php } ?>
+						<?php if($this->config->get('config_on_off_podbem') == '1'){ ?>
+						  <td><select name="filter_clcalledch">
+							  <option value=""></option>
+							  <option value="Y" <?php echo (isset($order['clcalledch']) && $order['clcalledch'] == $filter_clcalledch) ? " selected=\"selected\"" : " "  ?>"><?php echo $text_true; ?></option>
+							  <option value="N" <?php echo (isset($order['clcalledch']) && $order['clcalledch'] == $filter_clcalledch) ? " selected=\"selected\"" : " "  ?>"><?php echo $text_false; ?></option>
+						   </select></td>
+						<?php } ?>
+					<?php if($this->config->get('config_on_off_sborka') == '1'){ ?>
+		              <td><select name="filter_adservice">
+		                  <option value=""></option>
+		                  <option value="Y" <?php echo (isset($order['adservice']) && $order['adservice'] == $filter_adservice) ? " selected=\"selected\"" : " "  ?>"><?php echo $text_true; ?></option>
+		                  <option value="N" <?php echo (isset($order['adservice']) && $order['adservice'] == $filter_adservice) ? " selected=\"selected\"" : " "  ?>"><?php echo $text_false; ?></option>
+		                </select></td>
+					<?php } ?>
+				<td align="right"><input type="text" name="filter_order_note_date" value="<?php echo $filter_order_note_date; ?>" size="12" class="date" /></td>
+				
+                        ]]></add>
+                </operation>
+
+                <operation info="Modify the filter row">
+                        <search position="before"><![CDATA[
+				name="filter_total"
+                        ]]></search>
+                        <add><![CDATA[
+						<?php if($this->config->get('config_on_off_manager') == '1'){ ?>
+							<td align="right"></td>
+						<?php } ?>
+						<?php if($this->config->get('config_on_off_dostavka') == '1'){ ?>
+							<td align="right"></td>
+						<?php } ?>
+						<?php if($this->config->get('config_on_off_tochka') == '1'){ ?>
+							<td align="right"></td>
+						<?php } ?>
+						<?php if($this->config->get('config_on_off_postavshik') == '1'){ ?>
+							<td align="right"></td>
+						<?php } ?>
+						<?php if($this->config->get('config_on_off_zakupka') == '1'){ ?>
+							<td align="right" class="allowed-user"><input type="text" name="filter_price_1" value="<?php echo $filter_price_1; ?>" size="4" style="text-align: right;" /></td>
+						<?php } ?>
+						<?php if($this->config->get('config_on_off_cost_delivery') == '1'){ ?>
+							<td align="right"></td>
+						<?php } ?>
+			]]></add>
+                </operation>
+
+                <operation info="Modify the filter row">
+                        <search position="after"><![CDATA[
+				name="filter_total"
+                        ]]></search>
+                        <add><![CDATA[
+						<?php if($this->config->get('config_on_off_profit') == '1'){ ?>
+		            <td align="right" class="allowed-user"><input type="text" name="filter_calculated_summ" value="<?php echo $filter_calculated_summ; ?>" size="4" style="text-align: right;" /></td>
+			<?php } ?>
+			]]></add>
+                </operation>
+				
+				<operation info="Adding data cells: date and four note cells">
+                        <search position="replace"><![CDATA[
+			        <td class="left"><?php echo $order['customer']; ?></td>
+                        ]]></search>
+                        <add><![CDATA[
+						<td class="left name">
+						<span class="firstname"><?php echo $order['firstname']; ?></span></br>
+						<span class="lastname"><?php echo $order['lastname']; ?></span></br>
+						<span class="telephone"><?php echo $order['telephone']; ?></span></br>
+						<span class="shipping_city"><?php echo $order['shipping_city']; ?></span></br>
+						<span class="shipping_address_1"><?php echo $order['shipping_address_1']; ?></span></br>	
+						</td>
+				]]></add>
+                </operation>
+				
+                <operation info="Adding data cells: date and four note cells">
+                        <search position="after" index="1"><![CDATA[
+			       <span class="shipping_address_1"><?php echo $order['shipping_address_1']; ?></span></br>
+                        ]]></search>
+                        <add><![CDATA[
+						
+						<?php if($this->config->get('config_on_off_product_column') == '1'){ ?>
+						<td class="left">
+						<div class="all_<?php echo $order['order_id']; ?>">
+						<?php $i = 0;?>
+						<?php foreach ($order['products'] as $product) { ?>
+						
+							<div style="clear: both; min-width:150px">
+							
+							<span ><a href="<?php echo $product['href']; ?>" target="_blank"><?php echo $product['name']; ?></a></span></br>
+							<?php if($this->config->get('config_on_off_product_colorbox') == '1'){ ?>
+								<?php if ($product['thumb']) { ?><div style="float: left;"><a href="<?php echo $product['popup']; ?>" class="colorbox"><img style="border: 1px solid #DDDDDD; margin-right: 3px;" src="<?php echo $product['thumb']; ?>" id="image" /></a></div><?php } ?>
+							<?php } else { ?>
+								<?php if ($product['thumb']) { ?><div style="float: left;"><img style="border: 1px solid #DDDDDD; margin-right: 3px;" src="<?php echo $product['thumb']; ?>" id="image" /></div><?php } ?>
+							<?php } ?>
+							<span><?php echo $product['model']; ?></span></br>
+							<?php if($this->config->get('config_on_off_sku') == '1'){ ?>
+							<span><?php echo $product['sku']; ?></span></br>
+							<?php } ?>
+							<span style="font-weight:bold;"><?php echo $product['price']; ?> x <?php echo $product['quantity']; ?></span></br>
+							<?php foreach ($product['option'] as $option) { ?>
+							<?php if ($option['type'] != 'file') { ?>
+							&nbsp;<small> - <?php echo $option['name']; ?>: <?php echo $option['value']; ?></small>
+							<?php } else { ?>
+							&nbsp;<small> - <?php echo $option['name']; ?>: <a href="<?php echo $option['href']; ?>"><?php echo $option['value']; ?></a></small>
+							<?php } ?></br>
+							<?php } ?>		
+							</div></br>
+							<?php $i++ ;?>
+						   <?php } ?>
+						   </div>
+						   
+						   <?php if($i > 1){?>
+						   <div class="click_pr_<?php echo $order['order_id']; ?> open"></div>
+						  <?php } ?>
+						</td>
+				<?php } ?>
+				<script>
+					$(document).ready(function() { 
+						$(".click_pr_<?php echo $order['order_id']; ?>").click(function(){ 
+						 $('.all_<?php echo $order['order_id']; ?>').toggleClass('active');
+						 $('.click_pr_<?php echo $order['order_id']; ?>.open').toggleClass('active');
+						});
+					});
+					</script>
+				<style>
+					.all_<?php echo $order['order_id']; ?> {
+						height:73px;
+						overflow:hidden;
+					}
+					.all_<?php echo $order['order_id']; ?>.active {
+						overflow:none;
+						height:100%
+					}
+					.open {
+						background:#fff;
+						border:1px solid #d9d9d9;
+						border-radius:5px;
+						text-align:center;
+						position:relative;
+						height:15px;
+					}
+					.open:before {
+						width: 0; 
+						height: 0; 
+						border-left: 5px solid transparent;
+						border-right: 5px solid transparent;
+						border-top: 5px solid #000;
+						content:"";
+						position:absolute;
+						top:5px;
+					}
+					.open.active:after {
+						width: 0; 
+						height: 0; 
+						border-left: 5px solid transparent;
+						border-right: 5px solid transparent;
+						border-bottom: 5px solid #000;
+						content:"";
+						position:absolute;
+						top:5px;
+					}
+					.open.active:before {
+						width: 0; 
+						height: 0; 
+						border-left: 0px solid transparent;
+						border-right: 0px solid transparent;
+						border-bottom: 0px solid #000;
+						content:"";
+						position:absolute;
+						top:5px;
+					}
+				</style>
+				<?php if($this->config->get('config_on_off_comment_manager') == '1'){ ?>
+						<td class="left"><textarea cols="15"  id='note2_<?php echo $order['order_id']; ?>' class="note2" contenteditable="true" onBlur="saveNote2(<?php echo $order['order_id']; ?>, this.value);" value="<?php echo $order['order_note_2']; ?>"><?php echo $order['order_note_2']; ?></textarea> </td>
+  				<?php } ?>
+				
+				<?php if($this->config->get('config_on_off_send_mail_user') == '1'){ ?>
+				<td class="center">
+				
+					<a onclick="saveNote5(<?php echo $order['order_id']; ?>);" class="button" style="margin-bottom:5px;">Отправить</a>
+<textarea rows="1"  cols="15" id='number_ttn_<?php echo $order['order_id']; ?>' contenteditable="true" value="<?php echo $order['number_ttn']?>" onBlur="NumberTTN(<?php echo $order['order_id']; ?>, this.value);"><?php echo $order['number_ttn']?></textarea>					
+					<input type="hidden" id="email_<?php echo $order['order_id']; ?>" value="<?php echo $order['email']; ?>"></input>
+					<input type="hidden" id="telephone_<?php echo $order['order_id']; ?>" value="<?php echo $order['telephone']; ?>"></input>
+					
+				</td>
+				<?php } ?>
+				
+				<?php if($this->config->get('config_on_off_podbem') == '1'){ ?>
+					<td class="left"><input type="checkbox" value="<?php echo $order['clcalledch']; ?>" <?php echo ($order['clcalledch'] == "Y" ? "checked" : "")?> onChange="updateClcalledch(<?php echo $order['order_id'] ?>, this.checked ? 'Y' : 'N');" /></td>		
+  				<?php } ?>
+				<?php if($this->config->get('config_on_off_sborka') == '1'){ ?>
+					<td class="left"><input type="checkbox" value="<?php echo $order['adservice']; ?>" <?php echo ($order['adservice'] == "Y" ? "checked" : "")?> onChange="updateAdservice(<?php echo $order['order_id'] ?>, this.checked ? 'Y' : 'N');" /></td>
+				<?php } ?>
+				<td class="left"><input id='note_date_<?php echo $order['order_id']; ?>' type="text" class="date note-date" value="<?php echo $order['order_note_date']; ?>" onChange="saveNote(<?php echo $order['order_id']; ?>);" /></td>
+				
+				]]></add>
+                </operation>
+<operation error="log">
+			<search position="before"><![CDATA[
+<?php echo $footer; ?>
+			]]></search>
+			<add><![CDATA[
+<link rel="stylesheet" type="text/css" href="../catalog/view/javascript/jquery/colorbox/colorbox.css" media="screen" />
+<script type="text/javascript" src="../catalog/view/javascript/jquery/colorbox/jquery.colorbox-min.js"></script>
+<script type="text/javascript"><!--
+$(document).ready(function() {
+	$('.colorbox').colorbox({
+		overlayClose: true,
+		opacity: 0.5,
+		rel: "colorbox"
+	});
+});
+//--></script> 
+			]]></add>
+		</operation>
+                <operation info="Adding data cells: date and four note cells">
+                        <search position="replace"><![CDATA[
+				<td class="left"><?php echo $order['status']; ?></td>
+                        ]]></search>
+                        <add><![CDATA[
+		              <td class="left"><select name="order_status_select" onChange="setOrderStatus(<?php echo $order['order_id'] ?>, this.value);">
+		                  <?php foreach ($order_statuses as $order_status) { ?>
+		                  <?php if ($order_status['order_status_id'] == $order['order_status_id']) { ?>
+		                  <option value="<?php echo $order_status['order_status_id']; ?>" selected="selected"><?php echo $order_status['name']; ?></option>
+		                  <?php } else { ?>
+		                  <option value="<?php echo $order_status['order_status_id']; ?>"><?php echo $order_status['name']; ?></option>
+		                  <?php } ?>
+		                  <?php } ?>
+		                </select></td>
+				<?php if($this->config->get('config_on_off_manager') == '1'){ ?>
+						<td class="left"><div id='note4_<?php echo $order['order_id']; ?>'  >
+							<select name="username" onChange="saveNoteUser(<?php echo $order['order_id']; ?>, this.value);">
+							<?php if ($order['order_note_4'] !='') { ?>
+							<option value="<?php echo $order['order_note_4'];?>"><?php echo $order['order_note_4']; ?></option>
+							<?php } else { ?>
+							<option value="<?php echo $logged; ?>"><?php echo $logged; ?></option>
+							<?php } ?>
+							<?php foreach ($users as $user){?>
+							<option value="<?php echo $user['username']?>"><?php echo $user['username']?></option>
+							<?php }?>
+							</select>
+						</div> </td>
+				<?php } ?>
+				<?php if($this->config->get('config_on_off_dostavka') == '1'){ ?>
+						<td class="left"><textarea  cols="15" id='driverdelivery_<?php echo $order['order_id']; ?>' class="driverdelivery" contenteditable="true" onBlur="updateDriverdelivery(<?php echo $order['order_id']; ?>, this.value);" value="<?php echo $order['driverdelivery']; ?>"><?php echo $order['driverdelivery']; ?></textarea> </td>
+                <?php } ?>
+				<?php if($this->config->get('config_on_off_tochka') == '1'){ ?>
+					 <td class="left">
+					 <?php foreach ($order['products'] as $product) { ?>
+					 <?php if(isset($order['order_note_1'])) { ?>
+						<?php foreach ($order['order_note_1'] as $item) { ?>
+							<?php if($product['product_id'] == $item['prod_id']) { ?>
+								<input class='note1_<?php echo $order['order_id']; ?> note_1' contenteditable="true" id="<?php echo $product['product_id'];?>" value="<?php echo $item['note_1']; ?>"  onBlur="saveNote1(<?php echo $order['order_id']; ?>,this.id, this.value);"></input></br></br>
+							<?php } ?>
+						<?php } ?>
+						<?php } else { ?>
+						<input class='note1_<?php echo $order['order_id']; ?> note_1' contenteditable="true" id="<?php echo $product['product_id'];?>" value=""  onBlur="saveNote1(<?php echo $order['order_id']; ?>,this.id, this.value);"></input></br></br>
+					<?php } ?>
+					<?php } ?>
+					 </td>
+				<?php } ?>   
+                        ]]></add>
+                </operation>
+
+                <operation info="Adding data cells: price_1 cell">
+                        <search position="before"><![CDATA[
+				<td class="right"><?php echo $order['total']; ?></td>
+                        ]]></search>
+                        <add><![CDATA[
+				<?php if($this->config->get('config_on_off_postavshik') == '1'){ ?>
+						<td class="left">
+					 <?php foreach ($order['products'] as $product) { ?>
+					 <?php if(isset($order['order_note_3'])) { ?>
+						<?php foreach ($order['order_note_3'] as $item) { ?>
+							<?php if($product['product_id'] == $item['prod_id']) { ?>
+								<input class='note3_<?php echo $order['order_id']; ?> note_3' contenteditable="true" id="<?php echo $product['product_id'];?>" value="<?php echo $item['note_3']; ?>"  onBlur="saveNote3(<?php echo $order['order_id']; ?>,this.id, this.value);"></input></br></br>
+							<?php } ?>
+						<?php } ?>
+						<?php } else { ?>
+						<input class='note3_<?php echo $order['order_id']; ?> note_3' contenteditable="true" id="<?php echo $product['product_id'];?>" value=""  onBlur="saveNote3(<?php echo $order['order_id']; ?>,this.id, this.value);"></input></br></br>
+					<?php } ?>
+					<?php } ?>
+					 </td>
+			<?php } ?>
+			<?php if($this->config->get('config_on_off_zakupka') == '1'){ ?>	
+			      <td class="right allowed-user">
+				   <?php foreach ($order['products'] as $product) { ?>
+				    <?php if(isset($order['price_1'])) { ?>
+				   			<?php foreach ($order['price_1'] as $item) { ?>
+							<?php if($product['product_id'] == $item['prod_id']) { ?>
+								<input class='price_1_<?php echo $order['order_id']; ?> price_1' id="<?php echo $product['product_id'];?>" value="<?php echo $item['price_1']; ?>" contenteditable="true" onBlur="updateCalculatedSumm(<?php echo $order['order_id']; ?>, this.value);"></input> </br></br>
+							<?php } ?>	
+						<?php } ?>
+					<?php } else { ?>
+						<input class='price_1_<?php echo $order['order_id']; ?> price_1' id="<?php echo $product['product_id'];?>" value="" contenteditable="true" onBlur="updateCalculatedSumm(<?php echo $order['order_id']; ?>, this.value);"></input> </br></br>
+					<?php } ?>
+				  <?php } ?>
+				  
+				  </td>                        
+			<?php } ?>
+			]]></add>
+                </operation>
+				<operation info="Adding data cells: price_2 cell">
+                        <search position="before"><![CDATA[
+				<td class="right"><?php echo $order['total']; ?></td>
+                        ]]></search>
+                        <add><![CDATA[
+			<?php if($this->config->get('config_on_off_cost_delivery') == '1'){ ?>
+					<td class="right allowed-user">
+				   <?php foreach ($order['products'] as $product) { ?>
+				    <?php if(isset($order['price_2'])) { ?>
+				   			<?php foreach ($order['price_2'] as $item) { ?>
+							<?php if($product['product_id'] == $item['prod_id']) { ?>
+								<input class='price_2_<?php echo $order['order_id']; ?> price_2' id="<?php echo $product['product_id'];?>" value="<?php echo $item['price_2']; ?>" contenteditable="true" onBlur="updateCalculatedSumm2(<?php echo $order['order_id']; ?>, this.value);"></input></br></br>
+							<?php } ?>	
+						<?php } ?>
+					<?php } else { ?>
+						<input class='price_2_<?php echo $order['order_id']; ?> price_2' id="<?php echo $product['product_id'];?>" value="" contenteditable="true" onBlur="updateCalculatedSumm2(<?php echo $order['order_id']; ?>, this.value);"></input></br></br>
+					<?php } ?>
+				  <?php } ?>
+				  
+				  </td>
+			<?php } ?>
+			]]></add>
+                </operation>
+
+                <operation info="Adding data cells: calculated summ cell">
+                        <search position="after"><![CDATA[
+				<td class="right"><?php echo $order['total']; ?></td>
+                        ]]></search>
+                        <add><![CDATA[
+						<?php if($this->config->get('config_on_off_profit') == '1'){ ?>
+		              <td class="right allowed-user" id="calculated_summ_<?php echo $order['order_id']; ?>"><?php echo $order['calculated_summ']; ?></td>
+					  <?php } ?>
+			]]></add>
+                </operation>
+
+                <operation info="Correcting colspan from 8 to 13 cell to adjust message NO RESULT to new width">
+                        <search position="replace"><![CDATA[
+		              <td class="center" colspan="8"><?php echo $text_no_results; ?></td>
+                        ]]></search>
+                        <add><![CDATA[
+				<td class="center" colspan="15"><?php echo $text_no_results; ?></td>
+                        ]]></add>
+                </operation>
+
+                <operation info="Modify javascript code to add filter by notes date">
+                        <search position="after" offset="2"><![CDATA[
+				if (filter_date_modified) {
+                        ]]></search>
+                        <add><![CDATA[
+				var filter_order_note_date = $('input[name=\'filter_order_note_date\']').attr('value');
+			
+				if (filter_order_note_date) {
+				url += '&filter_order_note_date=' + encodeURIComponent(filter_order_note_date);
+				}
+
+				var filter_clcalledch = $('select[name=\'filter_clcalledch\']').attr('value');
+			
+				if (filter_clcalledch) {
+					url += '&filter_clcalledch=' + encodeURIComponent(filter_clcalledch);
+				}
+
+				var filter_adservice = $('select[name=\'filter_adservice\']').attr('value');
+			
+				if (filter_adservice) {
+					url += '&filter_adservice=' + encodeURIComponent(filter_adservice);
+				}
+			
+				var filter_price_1 = $('input[name=\'filter_price_1\']').attr('value');
+			
+				if (filter_price_1) {
+					url += '&filter_price_1=' + encodeURIComponent(filter_price_1);
+				}	
+			
+				var filter_calculated_summ = $('input[name=\'filter_calculated_summ\']').attr('value');
+			
+				if (filter_calculated_summ) {
+					url += '&filter_calculated_summ=' + encodeURIComponent(filter_calculated_summ);
+				}	
+                        ]]></add>
+                </operation>
+
+                <operation info="Modify javascript code to add filter by notes date">
+                        <search position="after"><![CDATA[
+				$('.date').datepicker({dateFormat: 'yy-mm-dd'});                        
+			]]></search>
+                        <add><![CDATA[
+				var userId = '<?php echo $this->user->getId(); ?>'
+			
+				if(["1", "12", "13", "14", "15", "16"].indexOf(userId) < 0) { 
+					$('.allowed-user').remove();
+				}
+                        ]]></add>
+                </operation>
+
+                <operation info="Modify javascript code to add filter by notes date">
+                        <search position="replace" offset="1"><![CDATA[
+		            <?php foreach ($orders as $order) { ?>
+			]]></search>
+                        <add trim="true"><![CDATA[
+		            <?php foreach ($orders as $order) { ?>
+			    <tr class="salerow" id="row_<?php echo $order['order_id']; ?>" style="background-color: <?php echo $order['row_color'] ? $order['row_color'] : '#F4F4F8'; ?> !important;">
+                        ]]></add>
+                </operation>
+
+                <operation info="Adding ajax query to update notes">
+                        <search position="before"><![CDATA[
+				<?php echo $footer; ?>
+                        ]]></search>
+                        <add><![CDATA[
+				<script type="text/javascript"><!--
+				
+				if ($('.list_order').outerWidth() > $('.content').outerWidth()) {
+				var html = '<div class="joystick shadow"><div class="joystick_left"></div><div class="joystick_right"></div></div>';
+				$('.content').prepend(html);
+				$('.joystick').hover(
+					function () { $(this).animate({'opacity':'1.0'}, 300); },
+					function () { $(this).animate({'opacity':'0.5'}, 300); }
+				);
+				
+				$('.joystick_left, .joystick_right').click(function() {
+					var this_ = $(this);
+					var width = $('.content').outerWidth();
+					var scroll_left = $('.content').scrollLeft();
+					
+					if (this_.attr('class') == 'joystick_left') {
+						$('.content').animate({'scrollLeft':(scroll_left - width)}, 700);
+					} else {
+						$('.content').animate({'scrollLeft':(scroll_left + width)}, 700);
+					}
+				});
+			}
+				
+				
+				function NumberTTN(orderId,value) {
+					
+					$.ajax({
+						url: 'index.php?route=sale/order/saveNumberTTN&token=<?php echo $token; ?>',
+						type: 'post',
+						data: '&order_id=' + orderId + '&number_ttn=' + value,
+						dataType: 'json',
+						success: function(json) {
+							$('.success, .warning, .attention, .information, .error').remove();
+							if (json['success']) {
+							}	
+						}
+					});
+				}
+				function saveNote5(orderId) {
+					var number_ttn = $('#number_ttn_' + orderId).val();
+					var email_user = $('#email_' + orderId).val();
+					var telephone = $('#telephone_' + orderId).val();
+					$.ajax({
+						url: 'index.php?route=sale/order/saveNotes5&token=<?php echo $token; ?>',
+						type: 'post',
+						data: '&order_id=' + orderId + '&number_ttn=' + number_ttn + '&email_user=' + email_user + '&telephone=' + telephone,
+						dataType: 'json',
+						success: function(json) {
+							$('.success, .warning, .attention, .information, .error').remove();
+							if (json['success']) {
+								$('.success_send').html("Сообщение отправленно клиенту");
+								$('.success_send').show('slow');
+								success = 'true';
+								setTimeout(function () { $('.success_send').hide('slow')},2000);
+							}	
+						}
+					});
+				}
+				
+				function saveNote(orderId) {
+					var noteDate = $('#note_date_' + orderId).val();	
+					$.ajax({
+						url: 'index.php?route=sale/order/saveNotes&token=<?php echo $token; ?>',
+						type: 'post',
+						data: '&order_id=' + orderId + '&note_date=' + noteDate,
+						dataType: 'json',
+						success: function(json) {
+							$('.success, .warning, .attention, .information, .error').remove();
+							if (json['success']) {
+							}	
+						}	
+					});
+				}
+				
+				function saveNote3(orderId, prodId, value) {
+					var arr = new Array();
+						$('.note3_' + orderId).each(function() {
+							   arr.push({ prod_id: $(this).attr('id'),note_3:$(this).val(), order_id:orderId});
+						});
+					console.log(arr);
+					$.ajax({
+						url: 'index.php?route=sale/order/saveNote3&token=<?php echo $token; ?>',
+						type: 'post',
+						data:{"note_3":JSON.stringify(arr),"order_id":orderId},
+						dataType: 'json',
+						success: function(json) {
+							$('.success, .warning, .attention, .information, .error').remove();
+							if (json['success']) {
+							}	
+						}			
+					});
+				}
+				function saveNote1(orderId, prodId, value) {
+					var arr = new Array();
+						$('.note1_' + orderId).each(function() {
+							   arr.push({ prod_id: $(this).attr('id'),note_1:$(this).val(), order_id:orderId});
+						});
+					console.log(arr);
+					$.ajax({
+						url: 'index.php?route=sale/order/saveNote1&token=<?php echo $token; ?>',
+						type: 'post',
+						data:{"note_1":JSON.stringify(arr),"order_id":orderId},
+						dataType: 'json',
+						success: function(json) {
+							$('.success, .warning, .attention, .information, .error').remove();
+							if (json['success']) {			
+							}	
+						}			
+					});
+				}
+				function saveNoteUser(orderId,value) {
+					
+					$.ajax({
+						url: 'index.php?route=sale/order/saveNoteUsers&token=<?php echo $token; ?>',
+						type: 'post',
+						data: '&order_id=' + orderId + '&note_4=' + value,
+						dataType: 'json',
+						success: function(json) {
+							$('.success, .warning, .attention, .information, .error').remove();
+							if (json['success']) {
+							}	
+						}
+					});
+				}
+				function saveNote2(orderId,value) {
+					
+					$.ajax({
+						url: 'index.php?route=sale/order/saveNote2&token=<?php echo $token; ?>',
+						type: 'post',
+						data: '&order_id=' + orderId + '&note_2=' + value,
+						dataType: 'json',
+						success: function(json) {
+							$('.success, .warning, .attention, .information, .error').remove();
+							if (json['success']) {
+							}	
+						}
+					});
+				}
+				
+
+function setOrderStatus(orderId, statusId) {
+	$.ajax({
+		url: 'index.php?route=sale/order/setOrderStatus&token=<?php echo $token; ?>',
+		type: 'post',
+		data: '&order_id=' + orderId + '&order_status_id=' + statusId,
+		dataType: 'json',
+		beforeSend: function() {
+			$('.success, .warning, .attention, .error').remove();
+//			$('.box').before('<div class="attention"><img src="view/image/loading.gif" alt="" /> <?php echo $this->language->get('text_wait'); ?></div>');
+		},			
+
+		success: function(json) {
+			$('.success, .warning, .attention, .information, .error').remove();
+
+//			if (json['success']) {
+//				$('.box').before('<div class="success" style="display: none;">' + json['success'] + '</div>');
+//				$('.success').fadeIn('slow');				
+				$('#row_' + orderId).attr('style', 'background-color: ' + json['success'] + ' !important');
+//				$('tbody tr td').css('background-color', 'json[\'success\']');
+//			}	
+
+			if (json['error']) {
+				for(err_msg in json['error']) {
+					$('.box').before('<div class="warning" style="display: none;">' + json['error'][err_msg] + '</div>');
+					$('.warning').fadeIn('slow');				
+				}
+			}	
+		}
+	});
+}
+
+function updateClcalledch(orderId, clcalledch) {
+	$.ajax({
+		url: 'index.php?route=sale/order/updateClcalledch&token=<?php echo $token; ?>',
+		type: 'post',
+		data: '&order_id=' + orderId + '&clcalledch=' + clcalledch,
+		dataType: 'json',
+		beforeSend: function() {
+			$('.success, .warning, .attention, .error').remove();
+//			$('.box').before('<div class="attention"><img src="view/image/loading.gif" alt="" /> <?php echo $this->language->get('text_wait'); ?></div>');
+		},			
+
+		success: function(json) {
+			$('.success, .warning, .attention, .information, .error').remove();
+
+			if (json['success']) {
+//				$('.box').before('<div class="success" style="display: none;">' + json['success'] + '</div>');
+//				$('.success').fadeIn('slow');				
+			}	
+
+			if (json['error']) {
+				for(err_msg in json['error']) {
+					$('.box').before('<div class="warning" style="display: none;">' + json['error'][err_msg] + '</div>');
+					$('.warning').fadeIn('slow');				
+				}
+			}	
+		}
+	});
+}
+
+function updateAdservice(orderId, adservice) {
+	$.ajax({
+		url: 'index.php?route=sale/order/updateAdservice&token=<?php echo $token; ?>',
+		type: 'post',
+		data: '&order_id=' + orderId + '&adservice=' + adservice,
+		dataType: 'json',
+		beforeSend: function() {
+			$('.success, .warning, .attention, .error').remove();
+//			$('.box').before('<div class="attention"><img src="view/image/loading.gif" alt="" /> <?php echo $this->language->get('text_wait'); ?></div>');
+		},			
+
+		success: function(json) {
+			$('.success, .warning, .attention, .information, .error').remove();
+
+			if (json['success']) {
+//				$('.box').before('<div class="success" style="display: none;">' + json['success'] + '</div>');
+//				$('.success').fadeIn('slow');				
+			}	
+
+			if (json['error']) {
+				for(err_msg in json['error']) {
+					$('.box').before('<div class="warning" style="display: none;">' + json['error'][err_msg] + '</div>');
+					$('.warning').fadeIn('slow');				
+				}
+			}	
+		}
+	});
+}
+
+
+function updateDriverdelivery(orderId, driverDelivery) {
+	$.ajax({
+		url: 'index.php?route=sale/order/updatedriverDelivery&token=<?php echo $token; ?>',
+		type: 'post',
+		data: '&order_id=' + orderId + '&driver_delivery=' + driverDelivery,
+		dataType: 'json',
+		beforeSend: function() {
+			$('.success, .warning, .attention, .error').remove();
+//			$('.box').before('<div class="attention"><img src="view/image/loading.gif" alt="" /> <?php echo $this->language->get('text_wait'); ?></div>');
+		},			
+
+		success: function(json) {
+			$('.success, .warning, .attention, .information, .error').remove();
+
+			if (json['success']) {
+//				$('.box').before('<div class="success" style="display: none;">' + json['success'] + '</div>');
+//				$('.success').fadeIn('slow');				
+			}	
+
+			if (json['error']) {
+				for(err_msg in json['error']) {
+					$('.box').before('<div class="warning" style="display: none;">' + json['error'][err_msg] + '</div>');
+					$('.warning').fadeIn('slow');				
+				}
+			}	
+		}
+	});
+}
+
+function updateCalculatedSumm(orderId, value) {
+	/*if(!$.isNumeric(value)) {
+		$('.box').before('<div class="warning" style="display: none;"> <?php echo $this->language->get('error_float'); ?></div>');
+		$('.warning').fadeIn('slow');				
+		return;
+	}*/
+	var arr = new Array();
+						var sum = 0;
+						$('.price_1_' + orderId).each(function() {
+							   arr.push({ prod_id: $(this).attr('id'),price_1:$(this).val(), order_id:orderId});
+							  sum+=parseFloat($(this).val());
+						});
+						
+					console.log(sum);
+	$.ajax({
+		url: 'index.php?route=sale/order/updateCalculatedSumm&token=<?php echo $token; ?>',
+		type: 'post',
+		data:{"price_1":JSON.stringify(arr),"order_id":orderId, "sump1":sum},
+		dataType: 'json',
+		beforeSend: function() {
+			$('.success, .warning, .attention, .error').remove();
+//			$('.box').before('<div class="attention"><img src="view/image/loading.gif" alt="" /> <?php echo $this->language->get('text_wait'); ?></div>');
+		},			
+
+		success: function(json) {
+			$('.success, .warning, .attention, .information, .error').remove();
+
+			if (json['success']) {
+//				$('.box').before('<div class="success" style="display: none;">' + json['success'] + '</div>');
+//				$('.success').fadeIn('slow');				
+			}	
+
+			if (json['error']) {
+				for(err_msg in json['error']) {
+					$('.box').before('<div class="warning" style="display: none;">' + json['error'][err_msg] + '</div>');
+					$('.warning').fadeIn('slow');				
+				}
+			}	
+
+			if (json['calculated_summ']) {
+				$('#calculated_summ_' + orderId).text(json['calculated_summ']);
+			}
+		}
+		
+	});
+	
+}
+
+function updateCalculatedSumm2(orderId, value) {
+	/*if(!$.isNumeric(value)) {
+		$('.box').before('<div class="warning" style="display: none;"> <?php echo $this->language->get('error_float'); ?></div>');
+		$('.warning').fadeIn('slow');				
+		return;
+	}*/
+	var arr = new Array();
+						var sum = 0;
+						$('.price_2_' + orderId).each(function() {
+							   arr.push({ prod_id: $(this).attr('id'),price_2:$(this).val(), order_id:orderId});
+							  sum+=parseFloat($(this).val());
+						});
+						
+					console.log(sum);
+	$.ajax({
+		url: 'index.php?route=sale/order/updateCalculatedSumm2&token=<?php echo $token; ?>',
+		type: 'post',
+		data:{"price_2":JSON.stringify(arr),"order_id":orderId, "sump2":sum},
+		dataType: 'json',
+		beforeSend: function() {
+			$('.success, .warning, .attention, .error').remove();
+//			$('.box').before('<div class="attention"><img src="view/image/loading.gif" alt="" /> <?php echo $this->language->get('text_wait'); ?></div>');
+		},			
+
+		success: function(json) {
+			$('.success, .warning, .attention, .information, .error').remove();
+
+			if (json['success']) {
+//				$('.box').before('<div class="success" style="display: none;">' + json['success'] + '</div>');
+//				$('.success').fadeIn('slow');				
+			}	
+
+			if (json['error']) {
+				for(err_msg in json['error']) {
+					$('.box').before('<div class="warning" style="display: none;">' + json['error'][err_msg] + '</div>');
+					$('.warning').fadeIn('slow');				
+				}
+			}	
+
+			if (json['calculated_summ']) {
+				$('#calculated_summ_' + orderId).text(json['calculated_summ']);
+			}
+		}
+	});
+}
+
+				//--></script> 
+                        ]]></add>
+                </operation>
+        </file>
+
+ 	<file name="admin/controller/common/header.php">
+		<operation info="Alter table oc_order. Add new columns.">
+			 <search position="after"><![CDATA[
+				function index()
+			 ]]></search>
+			 <add trim="true"><![CDATA[
+				 $query = $this->db->query("DESC `".DB_PREFIX."order` order_note_date");
+				 if (!$query->num_rows) { 
+				     $this->db->query("ALTER TABLE `" . DB_PREFIX . "order` ADD `order_note_date` timestamp null default NULL");
+				 }
+				 $query = $this->db->query("DESC `".DB_PREFIX."order` order_note_1");
+				 if (!$query->num_rows) { 
+				     $this->db->query("ALTER TABLE `" . DB_PREFIX . "order` ADD `order_note_1` text");
+				 }
+				 $query = $this->db->query("DESC `".DB_PREFIX."order` number_ttn");
+				 if (!$query->num_rows) { 
+				     $this->db->query("ALTER TABLE `" . DB_PREFIX . "order` ADD `number_ttn` text");
+				 }
+				 $query = $this->db->query("DESC `".DB_PREFIX."order` order_note_2");
+				 if (!$query->num_rows) { 
+				     $this->db->query("ALTER TABLE `" . DB_PREFIX . "order` ADD `order_note_2` text");
+				 }
+				 $query = $this->db->query("DESC `".DB_PREFIX."order` order_note_3");
+				 if (!$query->num_rows) { 
+				     $this->db->query("ALTER TABLE `" . DB_PREFIX . "order` ADD `order_note_3` text");
+				 }
+				 $query = $this->db->query("DESC `".DB_PREFIX."order` order_note_4");
+				 if (!$query->num_rows) { 
+				     $this->db->query("ALTER TABLE `" . DB_PREFIX . "order` ADD `order_note_4` text");
+				 }
+				 $query = $this->db->query("DESC `".DB_PREFIX."order` clcalledch");
+				 if (!$query->num_rows) { 
+				     $this->db->query("ALTER TABLE `" . DB_PREFIX . "order` ADD `clcalledch` CHAR default 'N'");
+				 }
+				 $query = $this->db->query("DESC `".DB_PREFIX."order` driverdelivery");
+				 if (!$query->num_rows) { 
+				     $this->db->query("ALTER TABLE `" . DB_PREFIX . "order` ADD `driverdelivery` varchar(255) default ''");
+				 }
+				 $query = $this->db->query("DESC `".DB_PREFIX."order` price_1");
+				 if (!$query->num_rows) { 
+				     $this->db->query("ALTER TABLE `" . DB_PREFIX . "order` ADD `price_1` text");
+				 }
+				 $query = $this->db->query("DESC `".DB_PREFIX."order` price_2");
+				 if (!$query->num_rows) { 
+				     $this->db->query("ALTER TABLE `" . DB_PREFIX . "order` ADD `price_2` text");
+				 }
+				 $query = $this->db->query("DESC `".DB_PREFIX."order` calculated_summ");
+				 if (!$query->num_rows) { 
+				     $this->db->query("ALTER TABLE `" . DB_PREFIX . "order` ADD `calculated_summ` decimal(15,4) default 0");
+				 }
+				 $query = $this->db->query("DESC `".DB_PREFIX."order_status` row_color");
+				 if (!$query->num_rows) { 
+				     $this->db->query("ALTER TABLE `" . DB_PREFIX . "order_status` ADD `row_color` VARCHAR(20) default null");
+				 }
+				 $query = $this->db->query("DESC `".DB_PREFIX."order` adservice");
+				 if (!$query->num_rows) { 
+				     $this->db->query("ALTER TABLE `" . DB_PREFIX . "order` ADD `adservice` CHAR default 'N'");
+				 }
+			]]></add>
+		</operation>
+        </file>
+
+ 	<file name="admin/controller/localisation/order_status.php">
+		<operation info="">
+			 <search position="before"><![CDATA[
+				function index()
+			 ]]></search>
+			 <add trim="true"><![CDATA[
+				public function setOrderStatusColor() {
+					$json = array();
+			
+					$this->language->load('localisation/order_status');
+			
+					$this->load->model('localisation/order_status');
+			
+					if (isset($this->request->post['order_status_id'])) {
+						$order_status_id = $this->request->post['order_status_id'];
+					} else {
+						$order_status_id = -1;
+						$json['error'] = $this->language->get('error_color');
+					}
+			
+					if (!$json) {									
+						$this->model_localisation_order_status->setOrderStatusColor($order_status_id, $this->request->post['row_color']);
+						$json['success'] = $this->language->get('text_success');
+					} 
+					
+					$this->response->setOutput(json_encode($json));		
+				}
+			]]></add>
+		</operation>
+		<operation info="">
+			 <search position="after"><![CDATA[
+				'action'          => $action			 
+			]]></search>
+			 <add trim="true"><![CDATA[
+				,'row_color' 	=> $result['row_color']
+			]]></add>
+		</operation>
+		<operation info="">
+			 <search position="after"><![CDATA[
+				$this->data['column_action'] = $this->language->get('column_action');		
+			]]></search>
+			 <add trim="true"><![CDATA[
+				$this->data['column_color'] = $this->language->get('column_color');		
+			]]></add>
+		</operation>
+        </file>
+
+
+ 	<file name="admin/controller/sale/order.php">
+				<operation>
+			<search position="before" offset="0"><![CDATA[$this->data['invoice'] = $this->url->link('sale/order/invoice', 'token=' . $this->session->data['token'], 'SSL');]]></search>
+			<add><![CDATA[
+$this->data['export'] = $this->url->link('sale/order/export', 'token=' . $this->session->data['token'], 'SSL');]]></add>
+		</operation>
+        
+	
+        	<operation>
+			<search position="before" offset="0"><![CDATA[$this->data['button_invoice'] = $this->language->get('button_invoice');]]></search>
+            <add><![CDATA[$this->data['button_export'] = $this->language->get('button_export');]]></add>
+		</operation>
+        
+        
+        	<operation>
+			<search position="before" offset="0"><![CDATA[protected function getList() {]]></search>
+            <add><![CDATA[public function export() {
+        
+		$data = array();
+                
+        $orders = array();
+        
+        $orders_column=array();
+		
+       
+		
+        $this->load->model('sale/order');
+
+        if (isset($this->request->post['selected'])) {
+			foreach ($this->request->post['selected'] as $order_id) {
+				 $results[] = $this->model_sale_order->getOrdersexport($order_id, $data);
+			}
+foreach ($results as $result) {
+
+        foreach ($result as $result1) {
+
+        $new_result[] = $result1;
+        }
+}
+
+        $orders_list = array();
+
+        	foreach ($new_result as $result) {
+
+			$orders_list[] = array(
+				'order_id'      => $result['order_id'],
+				'order_note_4'      => $result['order_note_4'],
+				//'customer_group'=> $result['customer_group'],
+				'customer_name'      => $result['customer_name'],
+				'email'=> $result['email'],
+				'telephone'      => $result['telephone'],
+				'payment_address'=> $result['payment_address'],
+				'shipping_address'      => $result['shipping_address'],
+				'payment_method'=> $result['payment_method'],
+				'shipping_method'        => $result['shipping_method'],
+				'total'         => $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),
+				'currency_code'    => $result['currency_code'],
+				'date_added'  =>  $result['date_added'],
+				'order_status' => $result['order_status'],
+				
+			);
+		}
+
+
+        
+       
+        $orders_column = array('№ Заказа', 'Менеджер', 'Имя Клиента', 'Email', 'Телефон', 'адрес оплаты', 'Адрес Доставки', 'Способ оплаты', 'Способ доставки', 'Итого', 'Валюта', 'Дата Заказа', 'Статус Заказа');
+            
+        $orders[0]=   $orders_column;   
+        
+        foreach($orders_list as $orders_row)
+        {
+            $orders[] =   $orders_row;            
+        }
+        require_once(DIR_SYSTEM . 'library/excel_xml.php');
+
+        $xls = new Excel_XML('UTF-8', false, 'Orders List');
+		
+        $xls->addArray($orders);
+        
+        $xls->generateXML('orderslist_'.date('Y-m-d _ H:i:s'));	
+}
+	}]]></add>
+		</operation>
+                <operation info="Modify controller code">
+                        <search position="after"><![CDATA[
+				function getList()
+                        ]]></search>
+                        <add><![CDATA[
+		/***********************USER*************************/
+		$this->language->load('user/user');
+		$this->load->model('user/user');
+		$this->language->load('common/header');
+		$this->data['logged'] = $this->user->getUserName();
+		$results = $this->model_user_user->getUsers();
+		foreach ($results as $result) {
+      		$this->data['users'][] = array(
+				'user_id'    => $result['user_id'],
+				'username'   => $result['username'],
+			);
+		}
+	/***********************USER END*************************/
+			
+						
+				if (isset($this->request->get['filter_order_note_date'])) {
+					$filter_order_note_date = $this->request->get['filter_order_note_date'];
+				} else {
+					$filter_order_note_date = null;
+				}
+
+			  	if (isset($this->request->get['filter_clcalledch'])) {
+					$filter_clcalledch = $this->request->get['filter_clcalledch'];
+				} else {
+					$filter_clcalledch = null;
+				}
+
+			  	if (isset($this->request->get['filter_adservice'])) {
+					$filter_adservice = $this->request->get['filter_adservice'];
+				} else {
+					$filter_adservice = null;
+				}
+		
+	  			if (isset($this->request->get['filter_price_1'])) {
+					$filter_price_1 = $this->request->get['filter_price_1'];
+				} else {
+					$filter_price_1 = null;
+				}
+		
+		  	  	if (isset($this->request->get['filter_calculated_summ'])) {
+					$filter_calculated_summ = $this->request->get['filter_calculated_summ'];
+				} else {
+					$filter_calculated_summ = null;
+				}
+                        ]]></add>
+                </operation>
+
+                <operation info="Modify controller code">
+                        <search position="before" index="4,5,6"><![CDATA[
+				'&filter_order_id='
+                        ]]></search>
+                        <add><![CDATA[
+				if (isset($this->request->get['filter_order_note_date'])) {
+					$url .= '&filter_order_note_date=' . $this->request->get['filter_order_note_date'];
+				}
+
+				if (isset($this->request->get['filter_clcalledch'])) {
+					$url .= '&filter_clcalledch=' . $this->request->get['filter_clcalledch'];
+				}
+
+				if (isset($this->request->get['filter_adservice'])) {
+					$url .= '&filter_adservice=' . $this->request->get['filter_adservice'];
+				}
+		
+				if (isset($this->request->get['filter_price_1'])) {
+					$url .= '&filter_price_1=' . $this->request->get['filter_price_1'];
+				}
+		
+				if (isset($this->request->get['filter_calculated_summ'])) {
+					$url .= '&filter_calculated_summ=' . $this->request->get['filter_calculated_summ'];
+				}
+			
+				
+                        ]]></add>
+                </operation>
+                
+                <operation info="Modify controller code">
+                        <search position="after"><![CDATA[
+				$this->data['sort_order']
+                        ]]></search>
+                        <add><![CDATA[
+				$this->data['sort_order_note_date'] = $this->url->link('sale/order', 'token=' . $this->session->data['token'] . '&sort=o.order_note_date' . $url, 'SSL');
+				$this->data['sort_clcalledch'] = $this->url->link('sale/order', 'token=' . $this->session->data['token'] . '&sort=o.clcalledch' . $url, 'SSL');
+				$this->data['sort_adservice'] = $this->url->link('sale/order', 'token=' . $this->session->data['token'] . '&sort=o.adservice' . $url, 'SSL');
+				$this->data['sort_price_1'] = $this->url->link('sale/order', 'token=' . $this->session->data['token'] . '&sort=o.price_1' . $url, 'SSL');
+				$this->data['sort_calculated_summ'] = $this->url->link('sale/order', 'token=' . $this->session->data['token'] . '&sort=o.calculated_summ' . $url, 'SSL');
+			]]></add>
+                </operation>                
+                
+                <operation info="Modify controller code">
+                        <search position="before"><![CDATA[
+				'filter_customer'	     => $filter_customer,
+                        ]]></search>
+                        <add><![CDATA[
+				'filter_order_note_date'        => $filter_order_note_date,
+				'filter_clcalledch'	=> $filter_clcalledch,
+				'filter_adservice'	=> $filter_adservice,
+				'filter_price_1'	=> $filter_price_1,
+				'filter_calculated_summ'	=> $filter_calculated_summ,
+                        ]]></add>
+                </operation>
+		<operation error="log">
+			<search position="before"><![CDATA[
+		$action = array();
+			]]></search>
+			<add><![CDATA[
+		    $this->load->model('tool/image');
+		
+		    $this->data['products'] = array();
+
+			$order_id = $result['order_id'];
+			
+			$products = $this->model_sale_order->getOrderProductsList($result['order_id']);
+
+				foreach ($products as $product) {
+				$option_data = array();
+
+				$options = $this->model_sale_order->getOrderOptions($result['order_id'], $product['order_product_id']);
+
+				foreach ($options as $option) {
+					if ($option['type'] != 'file') {
+						$option_data[] = array(
+							'name'  => $option['name'],
+							'value' => $option['value'],
+							'type'  => $option['type']
+						);
+					} else {
+						$option_data[] = array(
+							'name'  => $option['name'],
+							'value' => utf8_substr($option['value'], 0, utf8_strrpos($option['value'], '.')),
+							'type'  => $option['type'],
+							'href'  => $this->url->link('sale/order/download', 'token=' . $this->session->data['token'] . '&order_id=' . $result['order_id'] . '&order_option_id=' . $option['order_option_id'], 'SSL')
+						);						
+					}
+				}
+				
+				
+				
+				$this->data['products'][] = array(
+					'order_product_id' => $product['order_product_id'],
+					'order_id'         => $order_id,
+					'product_id'       => $product['product_id'],
+					'name'    	 	   => $product['name'],
+					'popup'    	 	   => $this->model_tool_image->resize($product['image'], 500, 500),
+					'thumb'    	 	   => $this->model_tool_image->resize($product['image'], 50, 50),
+					'model'    		   => $product['model'],
+					'sku'    		   => $product['sku'],
+					'option'   		   => $option_data,
+					'quantity'		   => $product['quantity'],
+					'price'    		   => $this->currency->format($product['price'] + ($this->config->get('config_tax') ? $product['tax'] : 0)),
+					'href'     		   => $this->url->link('catalog/product/update', 'token=' . $this->session->data['token'] . '&product_id=' . $product['product_id'], 'SSL')
+				);
+				
+			}
+			$price_1sum=0;
+			if ($result['price_1'] != '') {
+				foreach (json_decode($result['price_1'], true) as $sum){
+					$price_1sum+=$sum['price_1'];
+				}
+			}
+			$price_2sum=0;
+			if ($result['price_2'] != '') {
+				foreach (json_decode($result['price_2'], true) as $sum){
+					$price_2sum+=$sum['price_2'];
+				}
+			}
+			
+
+			]]></add>
+		</operation>
+                <operation info="Modify controller code">
+                        <search position="after" index="1"><![CDATA[
+				$this->data['orders'][] = array(
+                        ]]></search>
+                        <add><![CDATA[
+				'order_note_date'      		=> $result['order_note_date'],
+				'firstname'      			=> $result['firstname'],
+				'lastname'      			=> $result['lastname'],
+				'telephone'     			=> $result['telephone'],
+				'shipping_city'      		=> $result['shipping_city'],
+				'shipping_address_1'      	=> $result['shipping_address_1'],
+				'order_note_1'      		=> json_decode($result['order_note_1'], true),
+				'order_note_2'      		=> $result['order_note_2'],
+				'email'      				=> $result['email'],
+				'number_ttn'      				=> $result['number_ttn'],
+				'order_note_3'      		=> json_decode($result['order_note_3'], true),
+				'order_note_4'     		 	=> $result['order_note_4'],
+				'clcalledch'      			=> $result['clcalledch'],
+				'adservice'      			=> $result['adservice'],
+				'driverdelivery'     		=> $result['driverdelivery'],
+				'price_2'      				=> json_decode($result['price_2'], true),
+				'price_1'      				=> json_decode($result['price_1'], true),
+				'calculated_summ'     		=> $this->currency->format($result['total'] - $price_1sum - $price_2sum , $result['currency_code'], '', true),
+				'order_status_id'			=> $result['order_status_id'],
+				'row_color' 				=> $result['row_color'],
+				'products'           		=> $this->data['products'],
+                        ]]></add>
+                </operation>
+
+                <operation info="Modify controller code">
+                        <search position="after"><![CDATA[
+				$this->language->get('column_order_id');
+                        ]]></search>
+                        <add><![CDATA[
+				$this->data['column_order_note_date'] = $this->language->get('column_order_note_date');
+				$this->data['column_order_note_1'] = $this->language->get('column_order_note_1');
+				$this->data['column_order_note_2'] = $this->language->get('column_order_note_2');
+				$this->data['column_order_note_3'] = $this->language->get('column_order_note_3');
+				$this->data['column_order_note_4'] = $this->language->get('column_order_note_4');
+				$this->data['column_clcalledch'] = $this->language->get('column_clcalledch');
+				$this->data['column_adservice'] = $this->language->get('column_adservice');
+				$this->data['column_driverdelivery'] = $this->language->get('column_driverdelivery');
+				$this->data['text_true'] = $this->language->get('text_true');
+				$this->data['text_false'] = $this->language->get('text_false');
+				$this->data['column_calculated_summ'] = $this->language->get('column_calculated_summ');
+				$this->data['column_price_1'] = $this->language->get('column_price_1');
+                        ]]></add>
+                </operation>
+
+                <operation info="Modify controller code">
+                        <search position="before"><![CDATA[
+				function invoice()
+                        ]]></search>
+                        <add><![CDATA[
+				public function saveNotes() {
+					$this->language->load('sale/order');
+					
+					$json = array();
+					$order_id = null;
+					$note_date = null;
+					
+					
+		
+					if (isset($this->request->post['order_id'])) {
+						$order_id = $this->request->post['order_id'];
+					} else {
+						$order_id = null;
+					}
+			
+					if (isset($this->request->post['note_date'])) {
+						$note_date = $this->request->post['note_date'];
+					} else {
+						$note_date = null;
+					}
+					
+					
+					$this->load->model('sale/order');
+									
+					$this->model_sale_order->updateNotes($order_id, $note_date);
+					
+					if (!$json) {
+						$json['success'] = sprintf($order_id);
+					} else {
+						$json['redirect'] = "bad";
+					}
+		
+					$this->response->setOutput(json_encode($json));		
+				}
+				public function saveNoteUsers() {
+					$this->language->load('sale/order');
+					
+					$json = array();
+					$order_id = null;
+					$note_4 = "";
+		
+					if (isset($this->request->post['order_id'])) {
+						$order_id = $this->request->post['order_id'];
+					} else {
+						$order_id = null;
+					}
+					if (isset($this->request->post['note_4'])) {
+						$note_4 = $this->request->post['note_4'];
+					} else {
+						$note_4 = "";
+					}
+					
+					$this->load->model('sale/order');
+									
+					$this->model_sale_order->updateNoteUsers($order_id, $note_4);
+					
+					if (!$json) {
+						$json['success'] = sprintf($order_id);
+					} else {
+						$json['redirect'] = "bad";
+					}
+		
+					$this->response->setOutput(json_encode($json));		
+				}
+				public function saveNote2() {
+					$this->language->load('sale/order');
+					
+					$json = array();
+					$order_id = null;
+					$note_2 = "";
+		
+					if (isset($this->request->post['order_id'])) {
+						$order_id = $this->request->post['order_id'];
+					} else {
+						$order_id = null;
+					}
+					if (isset($this->request->post['note_2'])) {
+						$note_2 = $this->request->post['note_2'];
+					} else {
+						$note_2 = "";
+					}
+					
+					$this->load->model('sale/order');
+									
+					$this->model_sale_order->updateNote2($order_id, $note_2);
+					
+					if (!$json) {
+						$json['success'] = sprintf($order_id);
+					} else {
+						$json['redirect'] = "bad";
+					}
+		
+					$this->response->setOutput(json_encode($json));		
+				}
+				public function saveNumberTTN() {
+					$this->language->load('sale/order');
+					
+					$json = array();
+					$order_id = null;
+					$number_ttn = "";
+		
+					if (isset($this->request->post['order_id'])) {
+						$order_id = $this->request->post['order_id'];
+					} else {
+						$order_id = null;
+					}
+					if (isset($this->request->post['number_ttn'])) {
+						$number_ttn = $this->request->post['number_ttn'];
+					} else {
+						$number_ttn = "";
+					}
+					
+					$this->load->model('sale/order');
+									
+					$this->model_sale_order->updateNumberTTN($order_id, $number_ttn);
+					
+					if (!$json) {
+						$json['success'] = sprintf($order_id);
+					} else {
+						$json['redirect'] = "bad";
+					}
+		
+					$this->response->setOutput(json_encode($json));		
+				}
+				public function saveNotes5() {
+					$this->language->load('sale/order');
+					
+					$json = array();
+					$order_id = null;
+					$number_ttn = "";
+		
+					if (isset($this->request->post['order_id'])) {
+						$order_id = $this->request->post['order_id'];
+					} else {
+						$order_id = null;
+					}
+					if (isset($this->request->post['number_ttn'])) {
+						$number_ttn = $this->request->post['number_ttn'];
+					} else {
+						$number_ttn = '';
+					}
+					if (isset($this->request->post['email_user'])) {
+						$email_user = $this->request->post['email_user'];
+					} else {
+						$email_user = '';
+					}
+					if (isset($this->request->post['telephone'])) {
+						$telephone = $this->request->post['telephone'];
+					} else {
+						$telephone = '';
+					}
+					
+					$this->load->model('sale/order');
+									
+					$this->sendMail($number_ttn, $email_user, $telephone);
+					if (!$json) {
+						$json['success'] = sprintf($order_id);
+					} else {
+						$json['redirect'] = "bad";
+					}
+		
+					$this->response->setOutput(json_encode($json));		
+				}
+	private function sendMail($number_ttn, $email_user, $telephone) {
+		$subject = "Ваш Заказ";
+		$text 	= "Информация о заказе" . ":\n";
+		$text 	.= $number_ttn . "\n";
+		//$text     .= $this->language->get('comment_buyer') . $data['comment_buyer'] . "\n";
+		//$text     .= $this->language->get('url_callback') ."\n". $data['url_site'] . "\n";
+
+		$mail = new Mail(); 
+		$mail->protocol = $this->config->get('config_mail_protocol');
+		$mail->parameter = $this->config->get('config_mail_parameter');
+		$mail->hostname = $this->config->get('config_smtp_host');
+		$mail->username = $this->config->get('config_smtp_username');
+		$mail->password = $this->config->get('config_smtp_password');
+		$mail->port = $this->config->get('config_smtp_port');
+		$mail->timeout = $this->config->get('config_smtp_timeout');
+		$mail->setTo($email_user);
+		$mail->setFrom($this->config->get('config_email'));
+		$mail->setSender($this->config->get('config_name'));
+		$mail->setSubject(html_entity_decode($subject, ENT_QUOTES, 'UTF-8'));
+		$mail->setText(html_entity_decode($text, ENT_QUOTES, 'UTF-8'));
+		$mail->send();
+		
+		if($this->config->get('config_send_sms_on_off_order') == '1'){ 
+		//$root = $_SERVER['DOCUMENT_ROOT'];
+		include_once('/smsc_api.php');
+		//$tel = $telephone;
+		list($sms_id, $sms_cnt, $cost, $balance) = send_sms($telephone, $number_ttn, 0, 0, 0, 0, false, "maxsms=3");
+		 } 
+		// Send to additional alert emails
+		$emails = explode(',', $this->config->get('config_alert_emails'));
+				
+		foreach ($emails as $email) {
+			if ($email && preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $email)) {
+				$mail->setTo($email);
+				$mail->send();
+			}
+		}	
+
+	}
+	
+				
+				
+				
+				public function saveNote1() {
+					$this->language->load('sale/order');
+					
+					$json = array();
+					$order_id = null;
+					$note_1 = "";
+				
+					if (isset($this->request->post['order_id'])) {
+						$order_id = $this->request->post['order_id'];
+					} else {
+						$order_id = null;
+					}
+					
+					if (isset($this->request->post['note_1'])) {
+					
+						$note_1 = $this->request->post['note_1'];
+					} else {
+						$note_1 = "";
+					}
+					
+					$this->load->model('sale/order');
+									
+					$this->model_sale_order->updateNote1($order_id, $note_1);
+					
+					
+					if (!$json) {
+						$json['success'] = sprintf($order_id);
+					} else {
+						$json['redirect'] = "bad";
+					}
+					
+					$this->response->setOutput(json_encode($json));		
+				}
+				public function saveNote3() {
+					$this->language->load('sale/order');
+					
+					$json = array();
+					$order_id = null;
+					$note_3 = "";
+				
+					if (isset($this->request->post['order_id'])) {
+						$order_id = $this->request->post['order_id'];
+					} else {
+						$order_id = null;
+					}
+					
+					if (isset($this->request->post['note_3'])) {
+						$note_3 = $this->request->post['note_3'];
+					} else {
+						$note_3 = "";
+					}
+					
+					$this->load->model('sale/order');
+									
+					$this->model_sale_order->updateNote3($order_id, $note_3);
+					
+					
+					if (!$json) {
+						$json['success'] = sprintf($order_id);
+					} else {
+						$json['redirect'] = "bad";
+					}
+					
+					$this->response->setOutput(json_encode($json));		
+				}
+
+	public function setOrderStatus() {
+		$json = array();
+
+		$this->language->load('sale/order');
+
+		$this->load->model('sale/order');
+
+		if (isset($this->request->post['order_id'])) {
+			$order_id = $this->request->post['order_id'];
+		} else {
+			$order_id = -1;
+			$json['error']['order'] = $this->language->get('error_order');
+		}
+
+		if (isset($this->request->post['order_status_id'])) {
+			$order_status_id = $this->request->post['order_status_id'];
+		} else {
+			$order_status_id = -1;
+			$json['error']['order_status_id'] = $this->language->get('error_order_status');
+		}
+		
+		if (!$json) {									
+			$res = $this->model_sale_order->setOrderStatus($order_id, $order_status_id);
+
+			if ($res < 0) {
+				$json['error']['order_status_id'] = $this->language->get('error_order_status_not_found') + $res;
+			} else {
+				$json['success'] = $res;
+			}
+		} 
+		
+		$this->response->setOutput(json_encode($json));		
+
+	}
+
+	public function updateClCalledCh() {
+
+		$json = array();
+
+		$this->language->load('sale/order');
+
+		$this->load->model('sale/order');
+
+		if (isset($this->request->post['order_id'])) {
+			$order_id = $this->request->post['order_id'];
+		} else {
+			$order_id = -1;
+			$json['error']['order'] = $this->language->get('error_order');
+		}
+
+		if (isset($this->request->post['clcalledch']) && ($this->request->post['clcalledch'] == "Y" || $this->request->post['clcalledch'] == "N")) {
+			$clcalledch = $this->request->post['clcalledch'];
+		} else {
+			//$clcalledch = -1;
+			$json['error']['clcalledch'] = $this->language->get('error_clcalledch');
+		}
+
+		if (!$json) {									
+			$this->model_sale_order->updateClCalledCh($order_id, $clcalledch);
+			$json['success'] = $this->language->get('success_clcalledch_update');
+		} 
+		
+		$this->response->setOutput(json_encode($json));		
+	}
+
+	public function updateAdservice() {
+
+		$json = array();
+
+		$this->language->load('sale/order');
+
+		$this->load->model('sale/order');
+
+		if (isset($this->request->post['order_id'])) {
+			$order_id = $this->request->post['order_id'];
+		} else {
+			$order_id = -1;
+			$json['error']['order'] = $this->language->get('error_order');
+		}
+
+		if (isset($this->request->post['adservice']) && ($this->request->post['adservice'] == "Y" || $this->request->post['adservice'] == "N")) {
+			$adservice = $this->request->post['adservice'];
+		} else {
+			//$adservice = -1;
+			$json['error']['adservice'] = $this->language->get('error_adservice');
+		}
+
+		if (!$json) {									
+			$this->model_sale_order->updateAdservice($order_id, $adservice);
+			$json['success'] = $this->language->get('success_adservice_update');
+		} 
+		
+		$this->response->setOutput(json_encode($json));		
+	}
+
+	public function updateDriverDelivery() {
+
+		$json = array();
+
+		$this->language->load('sale/order');
+
+		$this->load->model('sale/order');
+
+		if (isset($this->request->post['order_id'])) {
+			$order_id = $this->request->post['order_id'];
+		} else {
+			$order_id = -1;
+			$json['error']['order'] = $this->language->get('error_order');
+		}
+
+		if (isset($this->request->post['driver_delivery'])) {
+			$driver_delivery = $this->request->post['driver_delivery'];
+		} else {
+			$driver_delivery = "";
+			$json['error']['driver_delivery'] = $this->language->get('error_driver_delivery');
+		}
+
+		if (!$json) {									
+			$this->model_sale_order->updateDriverDelivery($order_id, $driver_delivery);
+			$json['success'] = $this->language->get('success_driver_delivery_update');
+		} 
+		
+		$this->response->setOutput(json_encode($json));		
+	}
+
+	public function updateCalculatedSumm() {
+
+		$json = array();
+		$this->language->load('sale/order');
+
+		$this->load->model('sale/order');
+
+		if (isset($this->request->post['order_id'])) {
+			$order_id = $this->request->post['order_id'];
+		} else {
+			$order_id = -1;
+			$json['error']['order'] = $this->language->get('error_order');
+		}
+
+		if (isset($this->request->post['price_1'])) {
+			$price_1 = $this->request->post['price_1'];
+		} else {
+			$price_1 = 0;
+			$json['error']['price_1'] = $this->language->get('error_price_1');
+		}
+		if (isset($this->request->post['sump1'])) {
+			$sump1 = $this->request->post['sump1'];
+		} else {
+			$sump1 = 0;
+		}
+
+		if (!$json) {									
+			$calculated_summ = $this->model_sale_order->updateCalculatedSumm($order_id, $price_1, $sump1);
+			if(!$calculated_summ) {
+				$json['error']['calculated_summ'] = $this->language->get('error_price_1');
+			} else {
+				$json['calculated_summ'] = $this->currency->format($calculated_summ,'', false);
+				$json['success'] = $this->language->get('success_calculated_summ_update');
+			}
+		} 
+		
+		$this->response->setOutput(json_encode($json));		
+	}
+	public function updateCalculatedSumm2() {
+
+		$json = array();
+		$this->language->load('sale/order');
+
+		$this->load->model('sale/order');
+
+		if (isset($this->request->post['order_id'])) {
+			$order_id = $this->request->post['order_id'];
+		} else {
+			$order_id = -1;
+			$json['error']['order'] = $this->language->get('error_order');
+		}
+
+		if (isset($this->request->post['price_2'])) {
+			$price_2 = $this->request->post['price_2'];
+		} else {
+			$price_2 = 0;
+			$json['error']['price_2'] = $this->language->get('error_price_1');
+		}
+		if (isset($this->request->post['sump2'])) {
+			$sump2 = $this->request->post['sump2'];
+		} else {
+			$sump2 = 0;
+		}
+
+		if (!$json) {									
+			$calculated_summ = $this->model_sale_order->updateCalculatedSumm2($order_id, $price_2, $sump2);
+			if(!$calculated_summ) {
+				$json['error']['calculated_summ'] = $this->language->get('error_price_1');
+			} else {
+				$json['calculated_summ'] = $this->currency->format($calculated_summ,'', false);
+				$json['success'] = $this->language->get('success_calculated_summ_update');
+			}
+		} 
+		
+		$this->response->setOutput(json_encode($json));		
+	}
+                        ]]></add>
+                </operation>
+                <operation>
+                        <search position="after"><![CDATA[
+				$this->data['filter_order_id'] = $filter_order_id;
+                        ]]></search>
+
+                        <add><![CDATA[
+				$this->data['filter_order_note_date'] = $filter_order_note_date;
+				$this->data['filter_clcalledch'] = $filter_clcalledch;
+				$this->data['filter_adservice'] = $filter_adservice;
+				$this->data['filter_price_1'] = $filter_price_1;
+				$this->data['filter_calculated_summ'] = $filter_calculated_summ;
+			]]></add>
+                </operation>
+        </file>
+
+
+        <file name="admin/language/russian/sale/order.php">
+                <operation>
+                        <search position="after"><![CDATA[
+				$_['column_action']
+                        ]]></search>
+
+                        <add><![CDATA[
+				$_['column_order_note_date'] = 'Дата доставки';
+				$_['column_order_note_1'] = 'Точка';
+				$_['column_order_note_2'] = 'Комментарий менеджера';
+				$_['column_order_note_3'] = 'Поставщик';
+				$_['column_order_note_4'] = 'Менеджер';
+				$_['column_clcalledch']				= 'Подъем';
+				$_['column_adservice']				= 'Сборка';
+				$_['column_driverdelivery']			= 'Доставщик';
+				$_['column_price_1']				= 'Закупка';
+				$_['column_calculated_summ']			= 'Прибыль</br>ГРОСС';
+                        ]]></add>
+                        
+                </operation>
+
+                <operation>
+                        <search position="after"><![CDATA[
+				$_['text_error']
+                        ]]></search>
+
+                        <add><![CDATA[
+				$_['success_set_order_status']          = 'Статус заказа обновлен!';
+				$_['text_false']			= 'Нет';
+				$_['text_true']				= 'Да';
+				$_['success_clcalledch_update']		= 'Данные обновлены!';
+				$_['success_adservice_update']		= 'Данные обновлены!';
+				$_['success_driver_delivery_update']	= 'Данные обновлены!';
+				$_['success_calculated_summ_update']	= 'Стоимость обновлена!';
+                        ]]></add>
+                        
+                </operation>
+
+                <operation>
+                        <search position="after"><![CDATA[
+				$_['error_action']
+                        ]]></search>
+
+                        <add><![CDATA[
+				$_['error_order']                        	= 'Не указан номер заказа!';
+				$_['error_order_status']                     	= 'Не указан новый статус заказа!';
+				$_['error_order_status_not_found']              = 'Укаказ не корректный статус заказа!';
+				$_['error_driver_delivery']		= 'Не удалось обновить данные!';
+				$_['error_clcalledch'] 			= 'Не удалось обновить данные!';
+				$_['error_adservice'] 			= 'Не удалось обновить данные!';
+				$_['error_price_1'] 			= 'Во время обновления стоимости возникла ошибка!';
+				$_['error_float'] 			= 'Введенное значение не является числом с плаваюей точкой!';
+                        ]]></add>
+                        
+                </operation>
+        </file> 
+
+        <file name="admin/language/english/localisation/order_status.php">
+                <operation>
+                        <search position="after"><![CDATA[
+				$_['error_order']
+                        ]]></search>
+                        <add><![CDATA[
+				$_['error_color']      = 'Can not change the color!';
+				$_['column_color']    = 'Color';
+				$_['text_wait']        = 'Please, wait!';
+                        ]]></add>
+                </operation>
+	</file>
+
+        <file name="admin/language/russian/localisation/order_status.php">
+                <operation>
+                        <search position="after"><![CDATA[
+				$_['error_order']
+                        ]]></search>
+                        <add><![CDATA[
+				$_['error_color']      = 'Не удалось изменить цвет статуса!';
+				$_['column_color']    = 'Цвет строки';
+				$_['text_wait']        = 'Пожалуйста, подождите!';
+                        ]]></add>
+                </operation>
+	</file>
+
+
+        <file name="admin/language/english/sale/order.php">
+                <operation>
+                        <search position="after"><![CDATA[
+				$_['column_action']
+                        ]]></search>
+
+                        <add><![CDATA[
+				$_['column_order_note_date'] = 'Delivery </br>date';
+				$_['column_order_note_1'] = 'Point';
+				$_['column_order_note_2'] = 'Comment manager';
+				$_['column_order_note_3'] = 'Provider';
+				$_['column_order_note_4'] = 'Manager';
+				$_['column_clcalledch']				= 'Client</br>phoned';
+				$_['column_adservice']				= 'Additional</br>Service';
+				$_['column_driverdelivery']			= 'Courier';
+				$_['column_price_1']				= 'Purchase</br>Cost';
+				$_['column_calculated_summ']			= 'Profit</br>GROSS ';
+                        ]]></add>
+                </operation>
+
+                <operation>
+                        <search position="after"><![CDATA[
+				$_['text_error']
+                        ]]></search>
+
+                        <add><![CDATA[
+				$_['success_set_order_status']                  = 'Order status has updated!';
+				$_['text_false']	= 'No';
+				$_['text_true']	= 'Yes'; 
+				$_['success_clcalledch_update']		= 'Update successfull!';
+				$_['success_adservice_update']		= 'Update successfull!';
+				$_['success_driver_delivery_update']	= 'Update successfull!';
+				$_['success_calculated_summ_update']	= 'Price updated!';
+                        ]]></add>
+                        
+                </operation>
+
+                <operation>
+                        <search position="after"><![CDATA[
+				$_['error_action']
+                        ]]></search>
+
+                        <add><![CDATA[
+				$_['error_order']                        	= 'Order ID did not specified!';
+				$_['error_order_status']                     	= 'New order status did not specified!';
+				$_['error_order_status_not_found']              = 'Specified order status is incorrect!';
+				$_['error_driver_delivery']		= 'Can not update data!';
+				$_['error_adservice'] 			= 'Can not update data!';
+				$_['error_price_1'] 			= 'An error has occured while price updating!';
+				$_['error_float'] 			= 'The value has been entered is not float!';
+                        ]]></add>
+                        
+                </operation>
+
+        </file> 
+
+        <file name="admin/model/localisation/order_status.php">
+                <operation>
+                        <search position="before"><![CDATA[
+				function addOrderStatus(
+			]]></search>
+
+                        <add><![CDATA[
+				public function setOrderStatusColor($order_status_id, $color) {
+				      	$query = $this->db->query("UPDATE `" . DB_PREFIX . "order_status` SET row_color = '" . $color . "' WHERE order_status_id = '" . (int)$order_status_id . "'");
+				}	
+			]]>
+			</add>
+                </operation>
+	</file>
+
+        <file name="admin/model/sale/order.php">
+                <operation>
+                        <search position="replace"><![CDATA[
+				$sql = "SELECT o.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, (SELECT os.name FROM " . DB_PREFIX . "order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS status, o.total, o.currency_code, o.currency_value, o.date_added, o.date_modified FROM `" . DB_PREFIX . "order` o";
+			]]></search>
+
+                        <add><![CDATA[
+				$sql = "SELECT o.order_id, date_format(o.order_note_date, '%Y-%m-%d') as order_note_date, o.firstname, o.lastname, o.telephone, o.shipping_city, o.shipping_address_1, o.email, o.order_note_1, o.order_note_2, o.number_ttn, o.order_note_3, o.order_note_4, o.clcalledch, o.adservice, o.driverdelivery, o.price_1, o.price_2, o.calculated_summ, CONCAT(o.firstname, ' ' ,o.lastname,' ',o.telephone,' ', o.shipping_city, ' ', o.shipping_address_1) AS customer, 
+				(SELECT os.row_color FROM " . DB_PREFIX . "order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS row_color, o.order_status_id, 
+				(SELECT os.name FROM " . DB_PREFIX . "order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS status, o.total, o.currency_code, o.currency_value, o.date_added, o.date_modified FROM `" . DB_PREFIX . "order` o";
+				
+				
+			
+			]]>
+			</add>
+                </operation>
+				<operation error="log">
+			<search position="before"><![CDATA[
+public function getOrderProducts($order_id) {
+			]]></search>
+			<add><![CDATA[
+	public function getOrderProductsList($order_id) {
+		$query = $this->db->query("SELECT op.*, p.image, p.sku FROM " . DB_PREFIX . "order_product op LEFT JOIN " . DB_PREFIX . "product p ON op.product_id = p.product_id WHERE op.order_id = '" . (int)$order_id . "'");
+		
+		return $query->rows;
+	}
+			]]></add>
+		</operation>
+		<operation>
+			<search position="before" offset="0"><![CDATA[public function getOrders($data = array()) {]]></search>
+			<add><![CDATA[public function getOrdersexport($order_id, $data = array()) {
+ $sql = "SELECT o.order_id,o.order_note_4, CONCAT(o.firstname, ' ', o.lastname) AS customer_name,
+email, telephone, CONCAT(o.payment_firstname, ' ', o.payment_lastname,',',o.payment_address_1,',',o.payment_address_2,',',o.payment_city,'-',o.payment_postcode) AS payment_address,
+CONCAT(o.shipping_firstname, ' ', o.shipping_lastname,',',o.shipping_address_1,',',o.shipping_address_2,',', o.shipping_city,'-',o.shipping_postcode) AS shipping_address,
+ o.payment_method, o.shipping_method, o.total, o.currency_code,o.currency_value,
+ o.date_added, oos.name as order_status
+FROM `" . DB_PREFIX . "order` o
+LEFT JOIN " . DB_PREFIX . "order_status oos ON (o.order_status_id = oos.order_status_id) WHERE order_id = '" . (int)$order_id . "'";
+
+		$query = $this->db->query($sql);
+		return $query->rows;
+
+	}]]></add>
+		</operation>
+
+                <operation>
+                        <search position="before" index="1"><![CDATA[
+				!empty($data['filter_customer'])
+                        ]]></search>
+
+                        <add><![CDATA[
+		if (!empty($data['filter_order_note_date'])) {
+			$sql .= " AND DATE(o.order_note_date) = DATE('" . $this->db->escape($data['filter_order_note_date']) . "')";
+		}
+
+		if (!empty($data['filter_clcalledch'])) {
+			$sql .= " AND o.clcalledch = '" . $data['filter_clcalledch'] . "'";
+		}
+
+		if (!empty($data['filter_adservice'])) {
+			$sql .= " AND o.adservice = '" . $data['filter_adservice'] . "'";
+		}
+
+		if (!empty($data['filter_price_1'])) {
+			$sql .= " AND o.price_1 = '" . (float)$data['filter_price_1'] . "'";
+		}
+
+		if (!empty($data['filter_calculated_summ'])) {
+			$sql .= " AND o.calculated_summ = '" . (float)$data['filter_calculated_summ'] . "'";
+		}
+			]]>
+			</add>
+                </operation>
+				<operation>
+                        <search position="replace"><![CDATA[
+				$sql .= " AND CONCAT(o.firstname, ' ', o.lastname) LIKE '%" . $this->db->escape($data['filter_customer']) . "%'";
+                        ]]></search>
+                        <add><![CDATA[
+							$sql .= " AND CONCAT(o.firstname,  ' ', o.lastname,' ', o.telephone) LIKE '%" . $this->db->escape($data['filter_customer']) . "%'";
+						]]>
+						</add>
+                </operation>
+
+                <operation>
+                        <search position="after"><![CDATA[
+				'o.order_id',
+			]]></search>
+
+                        <add><![CDATA[
+				'o.order_note_date',
+				'o.clcalledch',
+				'o.adservice',
+				'o.price_1', 
+				'o.calculated_summ',
+        		]]>
+			</add>
+                </operation>
+
+                <operation>
+                        <search position="before"><![CDATA[
+				function addOrder(
+                        ]]></search>
+
+                        <add><![CDATA[
+				public function updateNotes($order_id, $note_date) {
+					if($note_date) 
+						$timestamp = mysql_real_escape_string($note_date);
+					else
+						$timestamp = mysql_real_escape_string(Date());
+			
+					$this->db->query("UPDATE `" . DB_PREFIX . "order` SET order_note_date = '" . $timestamp . "' WHERE order_id = '" . (int) $order_id . "'");
+				}
+				public function updateNoteUsers($order_id, $note_4) {
+					
+					$this->db->query("UPDATE `" . DB_PREFIX . "order` SET  order_note_4 = '" . $note_4 . "' WHERE order_id = '" . (int) $order_id . "'");
+				}
+				public function updateNote2($order_id, $note_2) {
+					
+					$this->db->query("UPDATE `" . DB_PREFIX . "order` SET  order_note_2 = '" . $note_2 . "' WHERE order_id = '" . (int) $order_id . "'");
+				}
+				public function updateNumberTTN($order_id, $number_ttn) {
+					
+					$this->db->query("UPDATE `" . DB_PREFIX . "order` SET  number_ttn = '" . $number_ttn . "' WHERE order_id = '" . (int) $order_id . "'");
+				}
+				public function updateNote1($order_id, $note_1) {
+					
+					$this->db->query("UPDATE `" . DB_PREFIX . "order` SET  order_note_1 = '" . htmlspecialchars_decode($note_1). "' WHERE order_id = '" . (int) $order_id . "'");
+				}
+				public function updateNote3($order_id, $note_3) {
+					
+					$this->db->query("UPDATE `" . DB_PREFIX . "order` SET  order_note_3 = '" . htmlspecialchars_decode($note_3). "' WHERE order_id = '" . (int) $order_id . "'");
+				}
+
+				public function setOrderStatus($order_id, $order_status_id) {
+					$order_status = $this->db->query("SELECT * FROM `" . DB_PREFIX . "order_status` os WHERE os.order_status_id = " . (int)$order_status_id);
+			
+					if($order_status->num_rows) {
+						$this->db->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = " . (int)$order_status_id . " WHERE order_id = '" . (int)$order_id . "'");
+
+						if(!$this->db->countAffected()) {
+							return -1;
+						} else {
+							return $order_status->rows[0]['row_color'];
+						}
+					}
+					return -2;
+				}
+			
+				public function updateClCalledCh($order_id, $cl_called_ch) {
+					$this->db->query("UPDATE `" . DB_PREFIX . "order` SET clcalledch = '" . $cl_called_ch . "' WHERE order_id = '" . (int) $order_id . "'");
+				}
+
+				public function updateAdservice($order_id, $adservice) {
+					$this->db->query("UPDATE `" . DB_PREFIX . "order` SET adservice = '" . $adservice . "' WHERE order_id = '" . (int) $order_id . "'");
+				}
+
+				public function updateDriverDelivery($order_id, $driver_delivery) {
+					$this->db->query("UPDATE `" . DB_PREFIX . "order` SET driverdelivery = '" . $driver_delivery . "' WHERE order_id = '" . (int) $order_id . "'");
+				}
+
+				public function updateCalculatedSumm($order_id, $price_1, $sump1) {
+				
+					if(!$this->db->query("UPDATE `" . DB_PREFIX . "order` SET price_1 = '" . htmlspecialchars_decode($price_1) . "', calculated_summ = (total - ". $sump1 .") WHERE order_id = '" . (int) $order_id . "'")) {
+						return false;
+					}
+					
+					$result = $this->db->query("SELECT o.calculated_summ FROM `" . DB_PREFIX . "order` o WHERE o.order_id = " . (int)$order_id);
+					return $result->row['calculated_summ'];
+				}
+				public function updateCalculatedSumm2($order_id, $price_2, $sump2) {
+				
+					if(!$this->db->query("UPDATE `" . DB_PREFIX . "order` SET price_2 = '" . htmlspecialchars_decode($price_2) . "', calculated_summ = (total - ". $sump2 .") WHERE order_id = '" . (int) $order_id . "'")) {
+						return false;
+					}
+					
+					$result = $this->db->query("SELECT o.calculated_summ FROM `" . DB_PREFIX . "order` o WHERE o.order_id = " . (int)$order_id);
+					return $result->row['calculated_summ'];
+				}
+
+			]]>
+			</add>
+                </operation>
+        </file>
+		<file name="admin/language/english/english.php">
+		<operation>
+			<search position="after" offset="0"><![CDATA[$_['button_approve']                = 'Approve';]]></search>
+			<add><![CDATA[$_['button_export']                = 'Export';]]></add>
+		</operation>
+	</file>
+	<file name="admin/language/russian/russian.php">
+		<operation>
+			<search position="after" offset="0"><![CDATA[$_['button_delete']           = 'Удалить';]]></search>
+			<add><![CDATA[$_['button_export']                = 'Экспорт';]]></add>
+		</operation>
+	</file>
+	<file name="admin/view/template/common/header.tpl">
+    <operation errors="skip">                           
+      <search position="after"><![CDATA[$logged; ?></div>]]></search>
+      <add>
+        <![CDATA[
+		
+        <?php
+        ////////////////////////////////////////////////////
+        // 0 - отключить показ иконки
+        // 1 - включить показ иконки
+        // 2 - показывать иконку только при наличии события 
+        $AZ_order = 2;    //  Заказы отгрузка на сегодня
+
+        ////////////////////////////////////////////////////
+        ?>
+        <style>
+          .az-divInfo-order{
+            float:right;
+            position: relative;
+            margin-right:20px;
+          }
+          .az-divInfo-order a{text-decoration: none;}
+          .az-nav-ic-order{
+           float: right;
+			height: 35px;
+			margin: 10px;
+			position: relative;
+			width: 45px;
+          }
+          .az-nav-ic-order:hover{opacity: 0.5;
+          }
+          
+          .order_icon{
+           background: url("view/image/order/order_icon.png") no-repeat scroll 0px -12px rgba(0, 0, 0, 0);
+          }
+          
+          .az-divInfo-order .az-nav-ic-order span { 
+            background-color: #FC6B0C;
+            -webkit-border-radius:10px;
+            -moz-border-radius:10px;
+            border-radius:10px;
+            color: #FFFFFF;
+            display: block;
+            font-size: 11px;
+            height: 14px;
+            line-height: 14px;
+            position: absolute;
+            right: -8px;
+            text-align: center;
+            top: -8px;
+            min-width: 14px;
+            margin:4px;
+            padding:2px;
+          }
+        </style>
+		
+        <?php
+		  /*********************************************************************************/
+		  function AZORDER($query, $j, $p, $n) {
+			$p = "Заказы на сегодня";
+            $otvet = $query->row['countorderdate'];
+            if($n == 1 || ($n == 2 && $otvet)){
+              echo "<a href=".$j." title=".$p."><div class=\"az-nav-ic-order order_icon\">";
+              if($otvet){
+                echo "<span>".$otvet."</span>";
+              }
+              echo"</div></a>";
+            }
+          }
+		  /*********************************************************************************/
+		  
+        ?>
+
+        <div class="az-divInfo-order">
+          <?php
+		  /*///////*/
+		  if($AZ_order){
+          AZORDER($this->db->query("SELECT COUNT(order_note_date) AS countorderdate FROM `".DB_PREFIX."order` WHERE order_note_date = '". date("Y-m-d") ."'"),$order_link ,$text_order_link, $AZ_order);
+          }
+		  /*/////////*/
+          ?>
+
+        </div> 
+        ]]>
+      </add>
+    </operation>
+  </file>
+  <file name="admin/controller/common/header.php">
+		<operation>
+			<search position="after" error="log"><![CDATA[$this->data['order']]]></search>
+			<add><![CDATA[
+			$this->data['order_link'] = $this->url->link('sale/order', 'token=' . $this->session->data['token'], 'SSL');//!
+			$this->data['text_order_link'] = $this->language->get('text_order_link');//!
+			
+			]]></add>
+		</operation>
+	</file>
+	<file name="admin/language/russian/common/header.php">
+		<operation>
+			<search position="after" error="log"><![CDATA[$_['text_order']]]></search>
+			<add><![CDATA[
+	$_['text_order_link']            = 'Заказы на сегодня';
+			]]></add>
+		</operation>
+	</file>
+</modification>

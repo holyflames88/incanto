@@ -1,0 +1,56 @@
+<modification>
+<id><![CDATA[Paladin - Pav support]]></id>
+<version>1.8.0</version>
+<vqmver>1.0.0</vqmver>
+<author><![CDATA[ ROMAN TYMKIV http://smartshopbox.com ]]></author>
+
+<file name="catalog/view/theme/*/template/product/product_collection.tpl">
+	<operation>
+		<search position="after"><![CDATA[<?php echo $pagination; ?>]]></search>
+		<add><![CDATA[
+		<!-- ssb-inject -->
+				<?php if (isset($tags) AND $tags) { ?>
+				<div class="tags gen-area gen-tags"><b><?php echo $text_tags; ?></b>
+				<?php for ($i = 0; $i < count($tags); $i++) { ?>
+				<?php if ($i < (count($tags) - 1)) { ?>
+				<a href="<?php echo $tags[$i]['href']; ?>"><?php echo $tags[$i]['tag']; ?></a>,
+				<?php } else { ?>
+				<a href="<?php echo $tags[$i]['href']; ?>"><?php echo $tags[$i]['tag']; ?></a>
+				<?php } ?>
+				<?php } ?>
+				</div>
+				<?php } ?>
+		<!-- ssb-inject -->	
+		]]></add>
+	</operation>	
+</file>
+
+<file name="catalog/view/theme/*/template/product/category-info.tpl">
+	<operation>
+		<search position="replace"><![CDATA[alt="<?php echo $heading_title; ?>"]]></search>
+		<add><![CDATA[
+			alt="<?php echo $category_alt_image ? $category_alt_image : $heading_title; ?>" title="<?php echo $category_title_image ? $category_title_image : ''; ?>"
+		]]></add>
+	</operation>	
+</file>
+
+<file name="catalog/view/theme/*/template/product/product-list.tpl">
+	<operation>
+		<search position="replace"><![CDATA[title="<?php echo $product['name']; ?>"]]></search>
+		<add><![CDATA[
+			title="<?php echo $product['title_image'] ? $product['title_image'] : $product['name']; ?>"
+		]]></add>
+	</operation>
+	<operation>
+		<search position="replace"><![CDATA[alt="<?php echo $product['name']; ?>"]]></search>
+		<add><![CDATA[
+			alt="<?php echo $product['alt_image'] ? $product['alt_image'] : $product['name']; ?>"
+		]]></add>
+	</operation>
+</file>
+
+</modification>
+
+
+
+

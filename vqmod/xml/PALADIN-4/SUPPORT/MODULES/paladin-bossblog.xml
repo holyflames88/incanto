@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Paladin-bossblog</id>
+	<version>1.0.0</version>
+	<vqmver>1.0.0</vqmver>
+	<author>Tymkiv Roman</author>	
+	
+	<file name="system/config/ssb_library/catalog/controller/common/ssb_seo_url.php">
+		<operation>
+			<search position="before">
+			<![CDATA[if ($url[0] == 'manufacturer_id') {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/*boss blog*/
+			if ($url[0] == 'blog_category_id') {
+				if (!isset($this->request->get['path'])) {
+					$this->request->get['path'] = $url[1];
+				} else {
+					$this->request->get['path'] .= '_' . $url[1];
+				}
+				$this->query_data['blog_category_id'] = $this->request->get['blog_category_id'] = $url[1];
+			}
+			if ($url[0] == 'blog_article_id') {
+				$this->query_data['blog_article_id'] = $this->request->get['blog_article_id'] = $url[1];
+			}
+			/*boss blog*/
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="before">
+			<![CDATA[} elseif (isset($this->request->get['path'])) {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/*boss blog*/}elseif (isset($this->request->get['blog_article_id'])) {
+				$this->request->get['route'] = 'bossblog/article';}elseif (isset($this->request->get['blog_category_id'])) {
+				$this->request->get['route'] = 'bossblog/blogcategory';
+			/*boss blog*/	
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="replace">
+			<![CDATA[if (($data['route'] == 'product/product' && $key == 'product_id') || (($data['route'] == 'product/manufacturer/info' || $data['route'] == 'product/product') && $key == 'manufacturer_id') || ($data['route'] == 'information/information' && $key == 'information_id')) {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/*boss blog*/
+			if (($data['route'] == 'product/product' && $key == 'product_id') || (($data['route'] == 'product/manufacturer/info' || $data['route'] == 'product/product') && $key == 'manufacturer_id') || ($data['route'] == 'information/information' && $key == 'information_id') ||
+				($data['route'] == 'bossblog/article' && ($key == 'blog_article_id' || $key == 'path')) ||
+				($data['route'] == 'bossblog/blogcategory' && $key == 'path')) {
+			/*boss blog*/
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="replace">
+			<![CDATA[$data = $this->startPathManager($data);]]>
+			</search>
+			<add>
+			<![CDATA[
+			/*boss blog*/
+			if(isset($data['route']) AND $data['route'] != 'bossblog/blogcategory' AND $data['route'] != 'bossblog/article'){
+				$data = $this->startPathManager($data);
+			}
+			/*boss blog*/
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="replace">
+			<![CDATA[$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($key . '=' . (int)$value) . "' AND language_id = '". $l_id ."'");]]>
+			</search>
+			<add>
+			<![CDATA[
+			/*boss blog*/
+			if(($data['route'] == 'bossblog/blogcategory' || $data['route'] == 'bossblog/article') && $key == 'path'){
+				$search_key ='blog_category_id';
+			}else{
+				$search_key = $key;
+			}
+			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($search_key . '=' . (int)$value) . "' AND language_id = '". $l_id ."'");
+			/*boss blog*/
+			]]>
+			</add>
+		</operation>
+	</file>
+</modification>

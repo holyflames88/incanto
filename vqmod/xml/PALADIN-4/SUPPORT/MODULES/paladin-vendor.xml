@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Paladin-vendor</id>
+	<version>1.0.0</version>
+	<vqmver>1.0.0</vqmver>
+	<author>Tymkiv Roman</author>	
+	
+	<file name="system/config/ssb_library/catalog/controller/common/ssb_seo_url.php">
+		<operation>
+			<search position="before">
+			<![CDATA[if ($url[0] == 'manufacturer_id') {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/**vendor START (1)**/
+			if($url[0] == 'vendor_id'){
+			  $this->query_data['vendor_id'] = $this->request->get['vendor_id'] = $url[1];
+		    } 
+			/**vendor END**/
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="before">
+			<![CDATA[} elseif (isset($this->request->get['information_id'])) {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/**vendor START (2)**/
+			}elseif(isset($this->request->get['vendor_id'])){
+                $this->request->get['route'] = 'module/vendorlogo/getVendorProducts';
+			/**vendor END**/	
+			]]>
+			</add>
+		</operation>	
+		<operation>
+			<search position="replace" error="log"><![CDATA[} elseif ($key == 'path') {]]></search>
+			<add><![CDATA[
+			/** articles url **/
+			} elseif ($key == 'vendor_id') {
+				$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = '" . $this->db->escape($key . '=' . (int)$value) . "'");
+                
+				if ($query->num_rows) {
+				  $url .= '/' . $query->row['keyword'];
+				  
+				  unset($data[$key]);
+				}
+			} elseif ($key == 'path') {
+			/** articles url **/
+			]]></add>
+		</operation>
+	</file>
+</modification>

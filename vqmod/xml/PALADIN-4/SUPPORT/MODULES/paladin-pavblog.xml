@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<modification>
+	<id>Paladin-pavblog</id>
+	<version>1.0.0</version>
+	<vqmver>1.0.0</vqmver>
+	<author>Tymkiv Roman</author>	
+	
+	<file name="system/config/ssb_library/catalog/controller/common/ssb_seo_url.php">
+		<operation>
+			<search position="before">
+			<![CDATA[if ($url[0] == 'manufacturer_id') {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/** BEGIN PROCESSING TO DECORD REQUET SEO URL FOR  PAVO BLOG MODULE **/
+			if( count($url) == 2 && ( preg_match( "#pavblog#", $url[0] ))  ){
+				$this->request->get['route'] =  $url[0];
+				$this->request->get['id'] = $url[1];
+			}
+			/** END OF PROCESSING TO DECORD REQUET SEO URL FOR  PAVO BLOG MODULE **/
+			]]>
+			</add>
+		</operation>
+		<operation>
+			<search position="before" index="1">
+			<![CDATA[foreach ($parts as $part) {]]>
+			</search>
+			<add>
+			<![CDATA[
+			/** BEGIN PROCESSING TO DECORD REQUET SEO URL FOR  PAVO BLOG MODULE **/
+				$blogConfig = $this->config->get('pavblog');
+			 	$seo = isset($blogConfig['keyword_listing_blogs_page'])?trim($blogConfig['keyword_listing_blogs_page']):"blogs"; 
+
+				if( $this->request->get['_route_'] ==  $seo ){
+					$this->request->get['route'] =  'pavblog/blogs';
+					return new Action($this->request->get['route']);
+				} 
+			/** END OF PROCESSING TO DECORD REQUET SEO URL FOR  PAVO BLOG MODULE **/
+			]]>
+			</add>
+		</operation>		
+				<operation>
+		  <search position="before">
+			<![CDATA[} elseif ($key == 'route' AND $value != 'product/product' AND $value != 'product/category') {]]>
+		  </search>
+		  <add>
+			<![CDATA[//FULL lAYERED MENU WITH SEO
+				} elseif ($data['route'] == 'pavblog/blog' && $key == 'id') {
+					
+					$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "url_alias WHERE `query` = 'pavblog/blog=" . $value . "'");
+				
+					if ($query->num_rows) {
+							$url .= '/' . $query->rows[0]['keyword'];
+						
+						unset($data[$key]);
+					}
+			  ]]>
+		  </add>
+		</operation> 	
+	</file>
+</modification>
